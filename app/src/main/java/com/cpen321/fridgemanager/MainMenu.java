@@ -16,8 +16,8 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
     }
 
-    public void openCamera(View view){
-        Intent intent = new Intent(this, openCameraActivity.class);
+    public void scanReceipt(View view){
+        Intent intent = new Intent(this, scanReceipt.class);
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
