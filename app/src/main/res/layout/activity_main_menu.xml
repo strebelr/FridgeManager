@@ -24,11 +24,28 @@
     </TableRow>
 
     <TableRow>
+        <ImageButton
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/camera_icon"
+            android:id="@+id/imageButton3"
+            android:onClick="expenditures" />
 
+        <ImageButton
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/camera_icon"
+            android:id="@+id/imageButton4"
+            android:onClick="foodToExpire" />
     </TableRow>
 
     <TableRow>
-
+        <ImageButton
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/camera_icon"
+            android:id="@+id/imageButton5"
+            android:onClick="freshFood" />
     </TableRow>
 </TableLayout>
 
