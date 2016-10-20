@@ -12,15 +12,15 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:drawableRight="@drawable/camera_icon"
-        android:text="Scan Receipt"
+        android:text="@string/button_scanReceipt"
         android:id="@+id/imageButton1"
         android:onClick="OcrCaptureActivity" />
 
     <Button
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:drawableRight="@drawable/ic_foodStock"
-        android:text="Food Stock"
+        android:drawableRight="@drawable/ic_food_stock"
+        android:text="@string/button_foodStock"
         android:id="@+id/imageButton2"
         android:onClick="foodStock" />
 
@@ -28,24 +28,25 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:drawableRight="@drawable/ic_expenditures"
-        android:text="Expenditures"
+        android:text="@string/button_spendings"
         android:id="@+id/imageButton3"
         android:onClick="expenditures" />
 
     <Button
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:drawableRight="@drawable/ic_foodToExpire"
-        android:text="Food to Expire"
+        android:drawableRight="@drawable/ic_food_to_expire"
+        android:text="@string/button_foodToExpire"
         android:id="@+id/imageButton4"
         android:onClick="foodToExpire" />
 
     <Button
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:drawableRight="@drawable/ic_freshFood"
-        android:text="Fresh Food"
+        android:drawableRight="@drawable/ic_fresh_food"
+        android:text="@string/button_freshFood"
         android:id="@+id/imageButton5"
+        android:gravity="center"
         android:onClick="freshFood" />
 
 

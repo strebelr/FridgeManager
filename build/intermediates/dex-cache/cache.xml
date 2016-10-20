@@ -43,7 +43,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
-        sha1="f8f5fc2952b6126f75b783fcf40e2f2f0433827f">
+        sha1="649a2c6c55cfca88ac24ff887ee8c54245bd88d8">
         <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\instant-run_124572ed77a87e3dfc1be24c05465e7d78b7918d.jar" />
     </item>
     <item
@@ -151,7 +151,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
-        sha1="a1a7744180d667df39453fb2fffc1eb35ae13887">
+        sha1="3dfb31d2a49af37ec979579f14aa9b33a34ac0d2">
         <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_296a89404f8fdf826d9b62fb56577585fe07732b.jar" />
     </item>
     <item

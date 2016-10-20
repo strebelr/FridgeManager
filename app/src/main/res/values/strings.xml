@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Fridge Manager</string>
-    <string name="button_scanReceipt">Scan grocery bill</string>
+    <string name="button_scanReceipt">Scan Receipt</string>
     <string name="button_foodStock">Your food stock</string>
-    <string name="button_spendings">Spendings summary</string>
+    <string name="button_spendings">Expenditures</string>
+    <string name="button_foodToExpire">Food To Expire</string>
+    <string name="button_freshFood">Fresh Food</string>
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
