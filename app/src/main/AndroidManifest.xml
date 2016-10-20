@@ -22,11 +22,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".OcrCaptureActivity" />
-        <activity android:name=".foodStock" />
-        <activity android:name=".expenditures" />
-        <activity android:name=".foodToExpire" />
-        <activity android:name=".freshFood"></activity>
+        <activity android:name=".OcrCaptureActivity"
+            android:label="@string/button_scanReceipt" />
+        <activity android:name=".foodStock"
+            android:label="@string/button_foodStock" />
+        <activity android:name=".expenditures"
+            android:label="@string/button_spendings" />
+        <activity android:name=".foodToExpire"
+            android:label="@string/button_foodToExpire" />
+        <activity android:name=".freshFood"
+            android:label="@string/button_freshFood" ></activity>
     </application>
 
 </manifest>

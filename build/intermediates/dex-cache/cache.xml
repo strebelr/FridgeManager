@@ -151,7 +151,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
-        sha1="3dfb31d2a49af37ec979579f14aa9b33a34ac0d2">
+        sha1="2429d630e9781658281c923acb83c99aa486193e">
         <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_296a89404f8fdf826d9b62fb56577585fe07732b.jar" />
     </item>
     <item
