@@ -1,10 +1,13 @@
 package com.cpen321.fridgemanager;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
 import static android.R.id.button1;
 import static android.R.id.message;
@@ -12,16 +15,21 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainMenu extends AppCompatActivity {
 
-    private ImageButton imageButton1;
+    TableRow row1;
+    ImageButton imageButton1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+        //row1 = (TableRow) findViewById(R.id.row1);
         imageButton1 = (ImageButton) findViewById(R.id.imageButton1);
-        imageButton1.setMinimumHeight(imageButton1.getMeasuredWidth());
+        imageButton1.getLayoutParams().height = imageButton1.getLayoutParams().width;
+        imageButton1.requestLayout();
 
+        //imageButton1 = (ImageButton) findViewById(R.id.imageButton1);
+        //imageButton1.getLayoutParams().height = 100;
     }
 
     public void OcrCaptureActivity(View view){
