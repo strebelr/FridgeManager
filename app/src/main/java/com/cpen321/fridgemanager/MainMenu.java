@@ -24,8 +24,8 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
-    public void scanReceipt(View view){
-        Intent intent = new Intent(this, scanReceipt.class);
+    public void OcrCaptureActivity(View view){
+        Intent intent = new Intent(this, OcrCaptureActivity.class);
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }

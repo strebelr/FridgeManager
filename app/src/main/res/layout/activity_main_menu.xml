@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:stretchColumns="1">
 
-    <TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ImageButton
             android:layout_weight="1"
@@ -20,10 +22,13 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/camera_icon"
             android:id="@+id/imageButton2"
-            android:onClick="scanReceipt" />
+            android:onClick="OcrCaptureActivity" />
     </TableRow>
 
-    <TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <ImageButton
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -40,6 +45,7 @@
     </TableRow>
 
     <TableRow>
+
         <ImageButton
             android:layout_weight="1"
             android:layout_height="wrap_content"

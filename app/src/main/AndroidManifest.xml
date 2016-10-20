@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".scanReceipt" />
+        <activity android:name=".OcrCaptureActivity" />
         <activity android:name=".foodStock" />
         <activity android:name=".expenditures" />
         <activity android:name=".foodToExpire" />

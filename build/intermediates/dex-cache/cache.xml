@@ -2,157 +2,220 @@
 <items version="2" >
 
     <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.2.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-24.2.1_bf0abec53ad40a2438118331408ae60baa642ddc.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AppData\Local\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\24.2.1\support-annotations-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\support-annotations-24.2.1_3cb4dae3e6f8abb5cf415dae493360ecb9e2c27c.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\24.2.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-24.2.1_fd3dea1ecf10a1e2429127cd4467c9e824a8c063.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\com.android.support-support-compat-24.2.1_c7a53a18828f4ceee0f7f5fec9c5bc550dd10288.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\libs\internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\internal_impl-24.2.1_2e35f55eb25ba0948d34e7fffb225343c1de9d06.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\internal_impl-24.2.1_0e6272e8a1aca6186ff9fcd857f08ff862779da4.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\24.2.1\jars\libs\internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\internal_impl-24.2.1_a09072310ec58065bf39d8859049d9de0969716d.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\24.2.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-ui-24.2.1_71ed13f13361a4b7339973b6d67fb99649fccfc5.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="205bed8af6922250c2c92c70aa58f72ff7e9ddc9">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_296a89404f8fdf826d9b62fb56577585fe07732b.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="f8f5fc2952b6126f75b783fcf40e2f2f0433827f">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\instant-run_124572ed77a87e3dfc1be24c05465e7d78b7918d.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.2.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-24.2.1_2ec3bf2d94d4cc493239ffa4c73a2d571fe13515.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\com.android.support-support-fragment-24.2.1_de1ceb09e5cd83e8190d6e3cb8f9bbf58db91149.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\24.2.1\jars\classes.jar"
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\24.2.1\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-utils-24.2.1_a130f0b03e0824c4431835d386c7b5ab52e9e8b5.jar" />
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-utils-24.2.1_5619428183563014eb7579665d56303cadc9c15a\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\classes.jar"
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
-        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\com.android.support-support-media-compat-24.2.1_5ef9cb6878dbbaf041ad60e9d9b0cbc0cc3bfb3c.jar" />
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_ac97432297eb369281e1b50c5166b4e274ac8baf\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\24.2.1\jars\classes.jar"
+        is-multidex="true"
+        jar="C:\Users\wyc_j\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\24.2.1\support-annotations-24.2.1.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
-        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-24.2.1_393618dac0c94b272a46b36f0d83d10f3b874b40.jar" />
+        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-24.2.1_8cdc35e464d361521d8c145a73b2f16e0bac2611\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
-        sha1="867dad63c33388ff8c7644b236579355036d075f">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\internal_impl-24.2.1_f3abc02762859338116c4cd89a177c231eb2da8b.jar" />
+        sha1="470de18d861c680f0e092400bdf0dc6cf14b5e4d">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_14f012698b1ceb648c7efefd105cac547605cd48\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\9.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="cc178928721f3222b3b06bdfbd9497378ccb9792">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-basement-9.0.0_50a7611b7b3c0e1ed482db9e46a0776fb9145f26\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\24.2.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="c755536e5a100d9c76c8ea0b72f76c018f7a9de2">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-24.2.0_ad554e2cbc3bc8a4e653f931dda759453bb2303e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\9.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="6f65c144283b31b4b9a70e6e7aa4c4a1c897d4b8">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-base-9.0.0_7a9fe1a64f6b48c38b2cf6c4f51c141763f4f5b1\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-24.2.1_54848d2ee2ae1b631771925575197513b37e6e4f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.google.firebase\firebase-common\9.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="42df48c7305b08b14fa0e84561091b0c24d70d26">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-common-9.0.0_e4d8efeb3e7bfc498591b47297ff7fefb4bb7b93\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tasks\9.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="1941832901fc4e7a93300b53762e9f65d7650b99">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-tasks-9.0.0_9feb55fddceabf37cf07032adf2e4fe203ebb877\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-24.2.1_d400e99793958b7dff073972dc5e00ff89cab748\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
-        <dex dex="C:\Users\Raphael Strebel\AndroidStudioProjects\FridgeManager\app\build\intermediates\pre-dexed\debug\internal_impl-24.2.1_e5d5b73344b82eba9228aad9f64a4f886090ddb5.jar" />
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_d5ebe0e2c1a2ae8e1f8e1197426c3123c21aed36\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="4c43102f12eadb2ba96b414d961ea05cd8d23852">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_1cf736d5a0940902ac92bd79472149e1d2d654aa\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="867dad63c33388ff8c7644b236579355036d075f">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_7bd0e138f78dcb1ce7e7c87889d44bd2665d7818\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_7c68dddccce9468c91520fccd03781cc7c683650\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-24.2.1_4d172eaa471d1c962aed68ce7ae7f1604c4c99b9\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-vision\9.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="f4e85eafa876cd7d7641244867dac3f88d71e866">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-vision-9.0.0_287396b1fa3a88ac3cd3ccad9ae0871a569c8609\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-24.2.1_a78d61db360487b2cf579fe8ae4f5fbe291b433e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\design\24.2.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="23eb0d2998a782213b56168cbf23a0688b9111d9">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-24.2.0_ee8ff393d4616de25e894cc6d1d53d43ce55fa16\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-24.2.1_07aeb46acb89eef1358bc4bc92dcd97bcc72bc9d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-24.2.1_cc1f35b64bd0edcff0d90a0039bce5f95fb0d734\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-24.2.1_400eb39a290e8c90ebb7c6849777923a162bc9f5\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-fragment-24.2.1_a53e109a15efa4f6a9ec17b1724cb0a452efc5f1\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
+        <dex dex="C:\Users\wyc_j\Desktop\cpen321\project\FridgeManager\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_6734c5333f2e71380b662c27a460f1ea9ee960c3\classes.dex" />
     </item>
 
 </items>
