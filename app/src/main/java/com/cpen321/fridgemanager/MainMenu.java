@@ -5,6 +5,7 @@ import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -22,14 +23,7 @@ public class MainMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
-        //row1 = (TableRow) findViewById(R.id.row1);
-        imageButton1 = (ImageButton) findViewById(R.id.imageButton1);
-        imageButton1.getLayoutParams().height = imageButton1.getLayoutParams().width;
-        imageButton1.requestLayout();
-
-        //imageButton1 = (ImageButton) findViewById(R.id.imageButton1);
-        //imageButton1.getLayoutParams().height = 100;
+        
     }
 
     public void OcrCaptureActivity(View view){

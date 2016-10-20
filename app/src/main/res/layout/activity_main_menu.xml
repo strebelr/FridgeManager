@@ -1,59 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TableRow
-        android:id="@+id/row1">
-
-        <ImageButton
-            android:layout_weight="1"
-
-            app:srcCompat="@drawable/camera_icon"
-            android:id="@+id/imageButton1"
-            android:onClick="foodStock" />
-
-        <ImageButton
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/camera_icon"
-            android:id="@+id/imageButton2"
-            android:onClick="OcrCaptureActivity" />
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/row2">
-
-        <ImageButton
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/camera_icon"
-            android:id="@+id/imageButton3"
-            android:onClick="expenditures" />
-
-        <ImageButton
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/camera_icon"
-            android:id="@+id/imageButton4"
-            android:onClick="foodToExpire" />
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/row3">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
-        <ImageButton
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/camera_icon"
-            android:id="@+id/imageButton5"
-            android:onClick="freshFood" />
-    </TableRow>
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:drawableRight="@drawable/camera_icon"
+        android:text="Scan Receipt"
+        android:id="@+id/imageButton1"
+        android:onClick="OcrCaptureActivity" />
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:drawableRight="@drawable/ic_foodStock"
+        android:text="Food Stock"
+        android:id="@+id/imageButton2"
+        android:onClick="foodStock" />
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:drawableRight="@drawable/ic_expenditures"
+        android:text="Expenditures"
+        android:id="@+id/imageButton3"
+        android:onClick="expenditures" />
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:drawableRight="@drawable/ic_foodToExpire"
+        android:text="Food to Expire"
+        android:id="@+id/imageButton4"
+        android:onClick="foodToExpire" />
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:drawableRight="@drawable/ic_freshFood"
+        android:text="Fresh Food"
+        android:id="@+id/imageButton5"
+        android:onClick="freshFood" />
 
 
-</TableLayout>
+
+</LinearLayout>
 
 
