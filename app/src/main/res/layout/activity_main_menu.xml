@@ -35,7 +35,7 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/camera_icon"
                         android:layout_width="fill_parent"
-                        android:onClick=""
+                        android:onClick="foodStock"
                         android:padding="10dp"
                         android:layout_gravity="center" />
                 </LinearLayout>
@@ -54,7 +54,7 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/camera_icon"
                         android:layout_width="fill_parent"
-                        android:onClick=""
+                        android:onClick="freshFood"
                         android:padding="10dp"
                         android:layout_gravity="center" />
                 </LinearLayout>
@@ -80,7 +80,7 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/camera_icon"
                         android:layout_width="fill_parent"
-                        android:onClick=""
+                        android:onClick="foodToExpire"
                         android:padding="10dp"
                         android:layout_gravity="center" />
                 </LinearLayout>
@@ -99,7 +99,7 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/camera_icon"
                         android:layout_width="fill_parent"
-                        android:onClick=""
+                        android:onClick="expenditures"
                         android:padding="10dp"
                         android:layout_gravity="center" />
                 </LinearLayout>
@@ -133,6 +133,7 @@
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
                         android:src="@drawable/camera_icon"
+                        android:onClick="OcrCaptureActivity"
                         android:layout_width="fill_parent"
                         android:padding="10dp"
                         android:layout_gravity="center" />
