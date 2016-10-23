@@ -110,7 +110,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
     private TextToSpeech tts;
 
     // A Database Interaction Object
-    private DatabaseInteraction di;
+    private TextRecognitionInteraction ti;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -121,7 +121,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
         setContentView(R.layout.ocr_capture);
 
         // Create an instance of Database Interaction
-        di = new DatabaseInteraction(getApplicationContext());
+        ti = new TextRecognitionInteraction(getApplicationContext());
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<OcrGraphic>) findViewById(R.id.graphicOverlay);
@@ -368,7 +368,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
                 Log.d(TAG, "text data is being spoken! " + text.getValue());
                 // TODO: Speak the string.
                 tts.speak(text.getValue(), TextToSpeech.QUEUE_ADD, null, "DEFAULT");
-                di.writeToStorage(text.getValue());
+                ti.addFoodToStorage(text.getValue());
             }
             else {
                 Log.d(TAG, "text data is null");
