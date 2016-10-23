@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageButton;
 
-import static com.cpen321.fridgemanager.R.id.imageButton1;
+
 
 public class foodStock extends AppCompatActivity {
 
