@@ -149,6 +149,27 @@ public class DatabaseInteraction {
     }
 
     /*
+      Reads the Library JSON file and returns an JSONArray
+      @return raw JSON formatted string
+     */
+    public JSONArray getStorageArray() {
+        String jsonRoot = readFile(0);
+
+        String data = "";
+
+        try {
+            JSONObject  jsonRootObject = new JSONObject(jsonRoot);
+
+            // Get the food array from root object
+            JSONArray jsonArray = jsonRootObject.optJSONArray("Foods");
+
+            return jsonArray;
+        } catch (JSONException e) {}
+
+        return null;
+    }
+
+    /*
       Reads the JSON file and returns it as string
       @param destination to read
              0 for storage
