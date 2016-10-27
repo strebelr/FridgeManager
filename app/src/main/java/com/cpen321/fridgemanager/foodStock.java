@@ -1,26 +1,30 @@
 package com.cpen321.fridgemanager;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+
+import com.cpen321.fridgemanager.R;
 
 
-import static android.R.id.message;
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
+public class foodStock extends Fragment{
 
-
-public class foodStock extends AppCompatActivity {
+    public foodStock() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_food_stock);
     }
 
-    public void OcrCaptureActivity(View view){
-        Intent intent = new Intent(this, OcrCaptureActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_food_stock, container, false);
     }
+
 }
