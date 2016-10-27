@@ -8,12 +8,12 @@ import android.view.View;
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-public class freshFood extends AppCompatActivity {
+public class scanResults extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fresh_food);
+        setContentView(R.layout.activity_scan_result);
     }
     public void OcrCaptureActivity(View view){
         Intent intent = new Intent(this, OcrCaptureActivity.class);

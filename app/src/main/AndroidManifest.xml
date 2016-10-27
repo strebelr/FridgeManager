@@ -30,8 +30,8 @@
             android:label="@string/button_spendings" />
         <activity android:name=".foodToExpire"
             android:label="@string/button_foodToExpire" />
-        <activity android:name=".freshFood"
-            android:label="@string/button_freshFood" ></activity>
+        <activity android:name=".scanResults"
+            android:label="Scan Results" ></activity>
     </application>
 
 </manifest>

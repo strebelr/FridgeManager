@@ -40,6 +40,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Locale;
 
 import android.Manifest;
@@ -78,6 +79,10 @@ import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Set;
+
+import static android.R.id.message;
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 /**
  * Activity for the Ocr Detecting app.  This app detects text and displays the value with the
@@ -142,7 +147,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        Snackbar.make(mGraphicOverlay, "Tap to Speak. Pinch/Stretch to zoom",
+        Snackbar.make(mGraphicOverlay, "Pinch/Stretch to zoom, make key words as large as possible",
                 Snackbar.LENGTH_LONG)
                 .show();
 
@@ -352,32 +357,28 @@ public class OcrCaptureActivity extends AppCompatActivity {
     }
 
     /**
-     * onTap is called to speak the tapped TextBlock, if any, out loud.
+     * onTap is called add all texts from all existing TextBlocks to databaseInteraction
      *
      * @param rawX - the raw position of the tap
      * @param rawY - the raw position of the tap.
      * @return true if the tap was on a TextBlock
      */
     private boolean onTap(float rawX, float rawY) {
-        // TODO: Speak the text when the user taps on screen.
-        OcrGraphic graphic = mGraphicOverlay.getGraphicAtLocation(rawX, rawY);
-        TextBlock text = null;
-        if (graphic != null) {
-            text = graphic.getTextBlock();
-            if (text != null && text.getValue() != null) {
-                Log.d(TAG, "text data is being spoken! " + text.getValue());
-                // TODO: Speak the string.
-                tts.speak(text.getValue(), TextToSpeech.QUEUE_ADD, null, "DEFAULT");
-                ti.addFoodToStorage(text.getValue());
-            }
-            else {
-                Log.d(TAG, "text data is null");
-            }
+        TextBlock textBlock = null;
+
+        Set<OcrGraphic> graphics = mGraphicOverlay.getAllGraphics();
+
+        for (OcrGraphic graphic : graphics) {
+            textBlock = graphic.getTextBlock();
+            ti.addFoodToStorage(textBlock.getValue());
         }
-        else {
-            Log.d(TAG,"no text detected");
-        }
-        return text != null;
+
+        //starts scanResult activity
+        Intent intent = new Intent(this, scanResults.class);
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+
+        return true;
     }
 
     private class CaptureGestureListener extends GestureDetector.SimpleOnGestureListener {
