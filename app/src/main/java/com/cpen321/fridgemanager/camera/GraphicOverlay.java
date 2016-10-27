@@ -177,6 +177,13 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     }
 
     /**
+     * Returns all the graphic objects, each containing a textblock
+     */
+    public Set<T> getAllGraphics(){
+        return mGraphics;
+    }
+
+    /**
      * Sets the camera attributes for size and facing direction, which informs how to transform
      * image coordinates later.
      */
