@@ -50,8 +50,8 @@ public class MainMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void freshFood(View view) {
-        Intent intent = new Intent(this, freshFood.class);
+    public void scanResults(View view) {
+        Intent intent = new Intent(this, scanResults.class);
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }

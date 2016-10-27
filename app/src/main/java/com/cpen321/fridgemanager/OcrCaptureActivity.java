@@ -81,6 +81,9 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Set;
 
+import static android.R.id.message;
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
+
 /**
  * Activity for the Ocr Detecting app.  This app detects text and displays the value with the
  * rear facing camera. During detection overlay graphics are drawn to indicate the position,
@@ -144,7 +147,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        Snackbar.make(mGraphicOverlay, "Tap to Speak. Pinch/Stretch to zoom",
+        Snackbar.make(mGraphicOverlay, "Pinch/Stretch to zoom, make key words as large as possible",
                 Snackbar.LENGTH_LONG)
                 .show();
 
@@ -369,6 +372,11 @@ public class OcrCaptureActivity extends AppCompatActivity {
             textBlock = graphic.getTextBlock();
             ti.addFoodToStorage(textBlock.getValue());
         }
+
+        //starts scanResult activity
+        Intent intent = new Intent(this, scanResults.class);
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
 
         return true;
     }
