@@ -19,4 +19,5 @@
     <string name="ocr_failure">No text captured</string>
     <string name="ocr_error">"Error reading text: %1$s"</string>
     <string name="output">Output</string>
+    <string name="foodstock">Empty</string>
 </resources>
