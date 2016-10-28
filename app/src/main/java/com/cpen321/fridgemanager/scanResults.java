@@ -30,7 +30,8 @@ public class scanResults extends AppCompatActivity {
         texts = getIntent().getStringArrayListExtra("texts");
         String display = "";
         for(int i = 0; i < texts.size(); i++) {
-            display = display + texts.get(i) + "\n";
+            if (ti.isFood(texts.get(i)))
+                display = display + texts.get(i) + "\n";
         }
         textViewToChange.setText(display);
     }

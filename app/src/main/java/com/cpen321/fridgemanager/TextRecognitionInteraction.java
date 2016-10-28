@@ -43,6 +43,7 @@ public class TextRecognitionInteraction {
         //}
     }
 
+
     /*
       Checks if Food with given name is valid.
       @param name of the food
