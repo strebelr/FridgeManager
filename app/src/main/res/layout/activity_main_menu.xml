@@ -38,6 +38,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
         app:fabSize = "normal"
         android:onClick="OcrCaptureActivity"
         android:src="@android:drawable/ic_menu_camera"
