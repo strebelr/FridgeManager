@@ -27,28 +27,10 @@ public class TextRecognitionInteraction {
     }
 
     /*
-      Add foods to storage. The method will split the string if it is a sentence containing multiple food items.
+      Add individual food to storage if it is a valid food.
       @param string to try to add
      */
     public void addFoodToStorage(String name) {
-        String[] words = name.replaceAll("[^a-zA-Z ]",
-                "").split("\\s+");
-        for (int i = 0; i < words.length; i++) {
-            // You may want to check for a non-word character before blindly
-            // performing a replacement
-            // It may also be necessary to adjust the character class
-            words[i] = words[i].replaceAll("[^\\w]", "");
-            addIndividualFoods(words[i]);
-        }
-    }
-
-    /*
-      Add individual food to storage if it is a valid
-food.
-      @param string must not be a sentence containing
-multiple food items
-     */
-    public void addIndividualFoods(String name) {
         String real_name;
         if (isFood(name)) {
             di.writeToStorage(name);

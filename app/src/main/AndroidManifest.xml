@@ -24,12 +24,7 @@
         </activity>
         <activity android:name=".OcrCaptureActivity"
             android:label="@string/button_scanReceipt" />
-        <activity android:name=".foodStock"
-            android:label="@string/button_foodStock" />
-        <activity android:name=".expenditures"
-            android:label="@string/button_spendings" />
-        <activity android:name=".foodToExpire"
-            android:label="@string/button_foodToExpire" />
+
         <activity android:name=".scanResults"
             android:label="Scan Results" ></activity>
     </application>

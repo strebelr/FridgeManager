@@ -40,6 +40,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 
@@ -114,8 +116,6 @@ public class OcrCaptureActivity extends AppCompatActivity {
     // A TextToSpeech engine for speaking a String value.
     private TextToSpeech tts;
 
-    // A Database Interaction Object
-    private TextRecognitionInteraction ti;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -126,7 +126,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
         setContentView(R.layout.ocr_capture);
 
         // Create an instance of Database Interaction
-        ti = new TextRecognitionInteraction(getApplicationContext());
+
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<OcrGraphic>) findViewById(R.id.graphicOverlay);
@@ -367,14 +367,27 @@ public class OcrCaptureActivity extends AppCompatActivity {
         TextBlock textBlock = null;
 
         Set<OcrGraphic> graphics = mGraphicOverlay.getAllGraphics();
+        Set<String> texts = new HashSet<>();
 
         for (OcrGraphic graphic : graphics) {
             textBlock = graphic.getTextBlock();
-            ti.addFoodToStorage(textBlock.getValue());
+            String[] words = textBlock.getValue().replaceAll("[^a-zA-Z ]", "").split("\\s+");
+            for (int i = 0; i < words.length; i++) {
+                // You may want to check for a non-word character before blindly
+                // performing a replacement
+                // It may also be necessary to adjust the character class
+                words[i] = words[i].replaceAll("[^\\w]", "");
+                texts.add(words[i]);
+            }
+            //
         }
 
-        //starts scanResult activity
+        // starts scanResult activity
         Intent intent = new Intent(this, scanResults.class);
+        String[] objects = new String[texts.size()];
+        texts.toArray(objects);
+        final ArrayList<String> list = new ArrayList<String>(Arrays.asList(objects));
+        intent.putStringArrayListExtra("texts", list);
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
 
