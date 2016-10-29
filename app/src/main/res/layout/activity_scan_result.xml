@@ -17,7 +17,10 @@
         android:layout_height="fill_parent"
         android:scrollbars="none"
         android:layout_weight="1"
-        android:layout_above="@+id/button3">
+        android:layout_above="@+id/button3"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <TableLayout
             android:layout_width="match_parent"
@@ -28,7 +31,7 @@
     </ScrollView>
 
     <Button
-        android:text="Try Again"
+        android:text="string/try_again"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button3"
@@ -40,7 +43,7 @@
         android:layout_toStartOf="@+id/button2" />
 
     <Button
-        android:text="Add"
+        android:text="@string/add_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button2"

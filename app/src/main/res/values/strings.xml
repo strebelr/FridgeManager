@@ -20,4 +20,7 @@
     <string name="ocr_error">"Error reading text: %1$s"</string>
     <string name="output">Output</string>
     <string name="foodstock">Empty</string>
+    <string name="add_one_item">Add</string>
+    <string name="add_all">Add all</string>
+    <string name="try_again">Try again</string>
 </resources>

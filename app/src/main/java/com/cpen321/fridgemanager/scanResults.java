@@ -4,8 +4,10 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -45,13 +47,28 @@ public class scanResults extends AppCompatActivity {
                 mTlayout.addView(tr);
 
                 Button btn_add = new Button(this);
-                Button btn_del = new Button(this);
+                ImageButton btn_del = new ImageButton(this);
                 TextView food_name = new TextView(this);
 
+                //Create add button
+                btn_add.setText(getResources().getString(R.string.add_one_item));
+                tr.addView(btn_add);
+
+                //Create delete button
+                btn_del.setImageResource(R.drawable.ic_trash);
+                tr.addView(btn_del);
+
+                //Create food text
                 food_name.setText(name);
                 food_name.setId(i);
+                food_name.setGravity(Gravity.CENTER_VERTICAL);
+                TableRow.LayoutParams trLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+                trLayoutParams.weight = 1;
+                food_name.setLayoutParams(trLayoutParams);
+                tr.addView(food_name,0);
 
-                tr.addView(food_name);
+
+
             }
         }
     }
