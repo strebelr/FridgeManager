@@ -41,11 +41,12 @@ public class scanResults extends AppCompatActivity {
 
         texts = getIntent().getStringArrayListExtra("texts");
         String name = "";
-
+        String unit = "";
 
         for(int i = 0; i < texts.size(); i++) {
             name = texts.get(i);
-            if (ti.isFood(name)) {
+            unit = ti.getUnit(name);
+            if (unit != null) {
                 tr = new TableRow(this);
                 mTlayout.addView(tr);
 
@@ -65,7 +66,6 @@ public class scanResults extends AppCompatActivity {
                 //Create delete button
                 btn_del.setImageResource(R.drawable.ic_trash);
                 btn_del.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         // TODO DELETE
@@ -82,8 +82,6 @@ public class scanResults extends AppCompatActivity {
                 trLayoutParams.weight = 1;
                 food_name.setLayoutParams(trLayoutParams);
                 tr.addView(food_name,0);
-
-
 
             }
         }
