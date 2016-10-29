@@ -36,6 +36,7 @@ public class MainMenu extends AppCompatActivity {
             R.drawable.ic_expenditures
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +44,7 @@ public class MainMenu extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -68,8 +69,8 @@ public class MainMenu extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new foodStock(), "Stock");
-        adapter.addFrag(new foodToExpire(), "Spent");
-        adapter.addFrag(new expenditures(), "Alert");
+        adapter.addFrag(new foodToExpire(), "Alert");
+        adapter.addFrag(new expenditures(), "Spent");
         viewPager.setAdapter(adapter);
     }
 
@@ -97,11 +98,10 @@ public class MainMenu extends AppCompatActivity {
         }
 
         @Override
-        public CharSequence getPageTitle(int posintion) {
+        public CharSequence getPageTitle(int position) {
             return null;
         }
     }
-
 
     public void OcrCaptureActivity(View view){
         Intent intent = new Intent(this, OcrCaptureActivity.class);
