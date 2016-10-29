@@ -31,7 +31,7 @@
     </ScrollView>
 
     <Button
-        android:text="string/try_again"
+        android:text="@string/try_again"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button3"

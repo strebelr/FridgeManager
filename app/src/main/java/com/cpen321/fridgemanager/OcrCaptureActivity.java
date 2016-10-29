@@ -367,27 +367,25 @@ public class OcrCaptureActivity extends AppCompatActivity {
         TextBlock textBlock = null;
 
         Set<OcrGraphic> graphics = mGraphicOverlay.getAllGraphics();
-        Set<String> texts = new HashSet<>();
+        ArrayList<String> texts = new ArrayList<String>();
 
         for (OcrGraphic graphic : graphics) {
             textBlock = graphic.getTextBlock();
-            String[] words = textBlock.getValue().replaceAll("[^a-zA-Z ]", "").split("\\s+");
+            String t = textBlock.getValue().replaceAll("[^a-zA-Z\r\n]", "").replaceAll("[\n\r]", "    ");
+            String[] words = t.split("[\r\n\\s+]");
             for (int i = 0; i < words.length; i++) {
                 // You may want to check for a non-word character before blindly
                 // performing a replacement
                 // It may also be necessary to adjust the character class
-                words[i] = words[i].replaceAll("[^\\w]", "");
+                //words[i] = words[i].replaceAll("[^\\w]", "");
                 texts.add(words[i]);
             }
-            //
+
         }
 
         // starts scanResult activity
         Intent intent = new Intent(this, scanResults.class);
-        String[] objects = new String[texts.size()];
-        texts.toArray(objects);
-        final ArrayList<String> list = new ArrayList<String>(Arrays.asList(objects));
-        intent.putStringArrayListExtra("texts", list);
+        intent.putStringArrayListExtra("texts", texts);
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
 
