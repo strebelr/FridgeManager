@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ public class scanResults extends AppCompatActivity {
 
     private ArrayList<String> texts;
 
+    TableLayout mTlayout;
+    TableRow tr;
 
     // A Database Interaction Object
     private TextRecognitionInteraction ti;
@@ -28,30 +32,28 @@ public class scanResults extends AppCompatActivity {
         setContentView(R.layout.activity_scan_result);
 
         ti = new TextRecognitionInteraction(getApplicationContext());
+        mTlayout = (TableLayout) findViewById(R.id.mTlayout);
 
-        final TextView textViewToChange = (TextView) findViewById(R.id.output);
         texts = getIntent().getStringArrayListExtra("texts");
-        String display = "";
         String name = "";
-        Button myButton = null;
-        Button oldButton = null;
-        RelativeLayout rl = (RelativeLayout) findViewById(R.id.scan_result);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+
         for(int i = 0; i < texts.size(); i++) {
-            myButton = null;
             name = texts.get(i);
             if (ti.isFood(name)) {
-                //display = display + texts.get(i) + "\n";
-                myButton = new Button(this);
-                myButton.setText(name);
-                myButton.setId(i);
-                if(oldButton != null)
-                    lp.addRule(RelativeLayout.BELOW, oldButton.getId());
-                rl.addView(myButton, lp);
-                oldButton = myButton;
+                tr = new TableRow(this);
+                mTlayout.addView(tr);
+
+                Button btn_add = new Button(this);
+                Button btn_del = new Button(this);
+                TextView food_name = new TextView(this);
+
+                food_name.setText(name);
+                food_name.setId(i);
+
+                tr.addView(food_name);
             }
         }
-        textViewToChange.setText(display);
     }
 
     @Override

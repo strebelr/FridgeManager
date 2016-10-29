@@ -27,7 +27,7 @@
 
         <activity android:name=".scanResults"
             android:label="Scan Results"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
     </application>
 
 </manifest>
