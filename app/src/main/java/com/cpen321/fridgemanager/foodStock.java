@@ -31,6 +31,9 @@ public class foodStock extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // set title of the page
+        ((MainMenu) getActivity()).getSupportActionBar().setTitle("Food Stock");
+
         View view = inflater.inflate(R.layout.fragment_food_stock, container, false);
         TextView textViewToChange = (TextView)view.findViewById(R.id.foodstock);
         DatabaseInteraction di = new DatabaseInteraction(getContext());

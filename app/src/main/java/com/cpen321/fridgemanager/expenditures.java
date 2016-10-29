@@ -52,9 +52,7 @@ public class expenditures extends Fragment{
 
     public class SavedTabsListAdapter extends BaseExpandableListAdapter {
 
-
-
-        private String[] groups = {"Jan", "Feb", "Mar"};
+        private String[] groups = {"Jan", "Feb", "Mar", "Apr"};
 
         private String[][] children = {
                 { "Arnold", "Barry", "Chuck", "David" },
@@ -118,4 +116,5 @@ public class expenditures extends Fragment{
         }
 
     }
+
 }
