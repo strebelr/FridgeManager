@@ -57,8 +57,9 @@ public class scanResults extends AppCompatActivity {
                 TableRow.LayoutParams amountLayoutParams = new TableRow.LayoutParams();
                 amount.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) });
                 amount.setMaxLines(1);
-                amount.setInputType(InputType.TYPE_CLASS_NUMBER);
-                amount.setWidth(R.dimen.max_char);
+                amount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                float measure = amount.getPaint().measureText("9999");
+                amount.setWidth(amount.getPaddingLeft() + amount.getPaddingRight() + (int) measure);
                 tr.addView(amount);
 
                 //Create delete button

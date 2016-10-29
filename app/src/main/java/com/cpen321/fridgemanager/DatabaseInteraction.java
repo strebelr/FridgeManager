@@ -32,15 +32,22 @@ public class DatabaseInteraction {
     /*
       Appends a new JSONObject with String data to the JSON file.
       @param data The data to initialize the JSONObject with
+      @param quantity
+      @param unit 0 for unit
+                  1 for gram
+                  2 for kg
+                  3 for L
+                  4 for cup
      */
-    public void writeToStorage(String data) {
+    public void writeToStorage(String data, double quantity, int unit) {
         // Create a new JSON Object
         JSONObject element = new JSONObject();
         String date = getCurrentDate();
         try {
             element.put("name", data);
             element.put("bought", date);
-            //element.put("quantity", quantity)
+            element.put("quantity", quantity);
+            element.put("unit", unit);
         } catch (JSONException e) {}
 
         // Get the root JSON String from File

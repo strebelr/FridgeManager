@@ -33,7 +33,8 @@ public class TextRecognitionInteraction {
     public void addFoodToStorage(String name) {
         String real_name;
         if (isFood(name)) {
-            di.writeToStorage(name);
+            // TODO FIX THIS
+            di.writeToStorage(name, 1, 1);
         }
         //else {
         //    real_name = isAbb(name);
@@ -43,6 +44,25 @@ public class TextRecognitionInteraction {
         //}
     }
 
+
+    /*
+      Checks if Food with given name is valid and returns unit of the food.
+      @param name of the food
+      @returns unit in String if valid
+               null otherwise
+     */
+    public String getUnit(String name) {
+        assert(library != null);
+        try {
+            for (int i = 0; i < library.length(); i++) {
+                JSONObject jsonObject = library.getJSONObject(i);
+                String library_name = jsonObject.optString("name").toString();
+                if (library_name.toLowerCase().equals(name.toLowerCase()))
+                    return jsonObject.optString("unit").toString();
+            }
+        } catch (JSONException e) {}
+        return null;
+    }
 
     /*
       Checks if Food with given name is valid.
