@@ -4,9 +4,12 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -46,20 +49,17 @@ public class scanResults extends AppCompatActivity {
                 tr = new TableRow(this);
                 mTlayout.addView(tr);
 
-                Button btn_add = new Button(this);
+                EditText amount = new EditText(this);
                 ImageButton btn_del = new ImageButton(this);
                 TextView food_name = new TextView(this);
 
-                //Create add button
-                btn_add.setText(getResources().getString(R.string.add_one_item));
-                btn_add.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        // TODO ADD
-                    }
-                });
-                tr.addView(btn_add);
+                //Create amount field
+                TableRow.LayoutParams amountLayoutParams = new TableRow.LayoutParams();
+                amount.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) });
+                amount.setMaxLines(1);
+                amount.setInputType(InputType.TYPE_CLASS_NUMBER);
+                amount.setWidth(R.dimen.max_char);
+                tr.addView(amount);
 
                 //Create delete button
                 btn_del.setImageResource(R.drawable.ic_trash);
