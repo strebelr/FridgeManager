@@ -58,7 +58,19 @@ public class TextRecognitionInteraction {
                 JSONObject jsonObject = library.getJSONObject(i);
                 String library_name = jsonObject.optString("name").toString();
                 if (library_name.toLowerCase().equals(name.toLowerCase()))
-                    return jsonObject.optString("unit").toString();
+                    switch(Integer.parseInt(jsonObject.optString("unit").toString())) {
+                        case 0:
+                            return "unit";
+                        case 1:
+                            return "grams";
+                        case 2:
+                            return "kgs";
+                        case 3:
+                            return "litres";
+                        case 4:
+                            return "cups";
+                    }
+
             }
         } catch (JSONException e) {}
         return null;

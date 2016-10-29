@@ -26,7 +26,7 @@ public class scanResults extends AppCompatActivity {
     private ArrayList<String> texts;
 
     TableLayout mTlayout;
-    TableRow tr;
+    private ArrayList<TableRow> trs;
 
     // A Database Interaction Object
     private TextRecognitionInteraction ti;
@@ -39,50 +39,71 @@ public class scanResults extends AppCompatActivity {
         ti = new TextRecognitionInteraction(getApplicationContext());
         mTlayout = (TableLayout) findViewById(R.id.mTlayout);
 
+        initializeScreen();
+    }
+
+    private void initializeScreen() {
         texts = getIntent().getStringArrayListExtra("texts");
+        trs = new ArrayList<TableRow>();
         String name = "";
         String unit = "";
+        int current_row = 0;
 
         for(int i = 0; i < texts.size(); i++) {
             name = texts.get(i);
             unit = ti.getUnit(name);
             if (unit != null) {
-                tr = new TableRow(this);
-                mTlayout.addView(tr);
+                trs.add(new TableRow(this));
+
+                mTlayout.addView(trs.get(current_row));
+
 
                 EditText amount = new EditText(this);
                 ImageButton btn_del = new ImageButton(this);
                 TextView food_name = new TextView(this);
+                TextView unit_name = new TextView(this);
 
-                //Create amount field
+                // Create amount field
                 TableRow.LayoutParams amountLayoutParams = new TableRow.LayoutParams();
                 amount.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) });
                 amount.setMaxLines(1);
                 amount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 float measure = amount.getPaint().measureText("9999");
                 amount.setWidth(amount.getPaddingLeft() + amount.getPaddingRight() + (int) measure);
-                tr.addView(amount);
+                trs.get(current_row).addView(amount);
+
+                // Create unit text
+                unit_name.setText(unit);
+                unit_name.setId(i);
+                unit_name.setGravity(Gravity.CENTER_VERTICAL);
+                TableRow.LayoutParams trLayoutParams_unit = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+                unit_name.setLayoutParams(trLayoutParams_unit);
+                trs.get(current_row).addView(unit_name);
 
                 //Create delete button
                 btn_del.setImageResource(R.drawable.ic_trash);
+                btn_del.setId(current_row);
                 btn_del.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // TODO DELETE
-                        System.out.println("v.getid is:- " + v.getId());
+                        int index = v.getId();
+                        texts.remove(index);
+                        mTlayout.removeView(trs.get(index));
                     }
                 });
-                tr.addView(btn_del);
+                trs.get(current_row).addView(btn_del);
 
-                //Create food text
+                // Create food text
                 food_name.setText(name);
                 food_name.setId(i);
                 food_name.setGravity(Gravity.CENTER_VERTICAL);
                 TableRow.LayoutParams trLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
                 trLayoutParams.weight = 1;
                 food_name.setLayoutParams(trLayoutParams);
-                tr.addView(food_name,0);
+                trs.get(current_row).addView(food_name,0);
 
+                current_row++;
             }
         }
     }
