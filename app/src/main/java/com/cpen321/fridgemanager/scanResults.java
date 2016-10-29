@@ -52,10 +52,25 @@ public class scanResults extends AppCompatActivity {
 
                 //Create add button
                 btn_add.setText(getResources().getString(R.string.add_one_item));
+                btn_add.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        // TODO ADD
+                    }
+                });
                 tr.addView(btn_add);
 
                 //Create delete button
                 btn_del.setImageResource(R.drawable.ic_trash);
+                btn_del.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        // TODO DELETE
+                        System.out.println("v.getid is:- " + v.getId());
+                    }
+                });
                 tr.addView(btn_del);
 
                 //Create food text
