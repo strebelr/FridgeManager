@@ -40,6 +40,7 @@ public class DatabaseInteraction {
         try {
             element.put("name", data);
             element.put("bought", date);
+            //element.put("quantity", quantity)
         } catch (JSONException e) {}
 
         // Get the root JSON String from File

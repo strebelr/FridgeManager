@@ -1,9 +1,12 @@
 package com.cpen321.fridgemanager;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -29,9 +32,24 @@ public class scanResults extends AppCompatActivity {
         final TextView textViewToChange = (TextView) findViewById(R.id.output);
         texts = getIntent().getStringArrayListExtra("texts");
         String display = "";
+        String name = "";
+        Button myButton = null;
+        Button oldButton = null;
+        RelativeLayout rl = (RelativeLayout) findViewById(R.id.scan_result);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         for(int i = 0; i < texts.size(); i++) {
-            if (ti.isFood(texts.get(i)))
-                display = display + texts.get(i) + "\n";
+            myButton = null;
+            name = texts.get(i);
+            if (ti.isFood(name)) {
+                //display = display + texts.get(i) + "\n";
+                myButton = new Button(this);
+                myButton.setText(name);
+                myButton.setId(i);
+                if(oldButton != null)
+                    lp.addRule(RelativeLayout.BELOW, oldButton.getId());
+                rl.addView(myButton, lp);
+                oldButton = myButton;
+            }
         }
         textViewToChange.setText(display);
     }
