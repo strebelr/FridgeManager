@@ -14,15 +14,11 @@
 
     <TextView
         android:text="@string/output"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_marginTop="30dp"
         android:id="@+id/output"
-        android:layout_alignRight="@+id/button2"
-        android:layout_alignEnd="@+id/button2"
-        android:layout_alignLeft="@+id/button3"
-        android:layout_alignStart="@+id/button3"
         android:layout_above="@+id/button2"
         />
 
@@ -31,22 +27,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button3"
-        android:layout_below="@+id/output"
+        android:layout_marginRight="41dp"
+        android:layout_marginEnd="41dp"
+        android:onClick="OcrCaptureActivity"
+        android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/button2"
-        android:layout_toStartOf="@+id/button2"
-        android:layout_marginRight="55dp"
-        android:layout_marginEnd="55dp"
-        android:onClick="OcrCaptureActivity"/>
+        android:layout_toStartOf="@+id/button2" />
 
     <Button
         android:text="Add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button2"
+        android:layout_marginEnd="68dp"
         android:onClick="AddFood"
-        android:layout_marginRight="59dp"
-        android:layout_marginEnd="59dp"
-        android:layout_marginBottom="17dp"
+        android:layout_marginRight="68dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

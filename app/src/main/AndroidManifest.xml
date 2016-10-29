@@ -26,7 +26,8 @@
             android:label="@string/button_scanReceipt" />
 
         <activity android:name=".scanResults"
-            android:label="Scan Results" ></activity>
+            android:label="Scan Results"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
