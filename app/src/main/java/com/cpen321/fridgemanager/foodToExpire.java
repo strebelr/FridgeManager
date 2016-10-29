@@ -23,6 +23,9 @@ public class foodToExpire extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // change the title according to which fragment it's on
+        // TODO: need to fix
+        ((MainMenu) getActivity()).getSupportActionBar().setTitle("Expiring");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_food_to_expire, container, false);
     }

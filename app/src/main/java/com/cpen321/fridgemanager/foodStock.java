@@ -50,6 +50,9 @@ public class foodStock extends Fragment{
             }
             textViewToChange.setText(text);
         }
+
+        ((MainMenu) getActivity()).getSupportActionBar().setTitle("Stock");
+
         // Inflate the layout for this fragment
         return view;
 
