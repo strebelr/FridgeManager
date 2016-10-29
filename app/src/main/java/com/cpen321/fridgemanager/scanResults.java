@@ -35,6 +35,12 @@ public class scanResults extends AppCompatActivity {
         }
         textViewToChange.setText(display);
     }
+
+    @Override
+    public void onBackPressed(){
+        mainMenu();
+    }
+
     public void OcrCaptureActivity(View view){
         Intent intent = new Intent(this, OcrCaptureActivity.class);
         intent.putExtra(EXTRA_MESSAGE, message);
