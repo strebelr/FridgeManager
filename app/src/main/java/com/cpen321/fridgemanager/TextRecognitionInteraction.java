@@ -33,10 +33,7 @@ public class TextRecognitionInteraction {
     public void addFoodToStorage(String name, double quantity, int unit) {
         String real_name;
         int unit_int;
-        if (isFood(name)) {
-            // TODO FIX THIS
-            di.writeToStorage(name, quantity, unit);
-        }
+        di.writeToStorage(name, quantity, unit);
         //else {
         //    real_name = isAbb(name);
         //    if (real_name != null) {
@@ -46,43 +43,43 @@ public class TextRecognitionInteraction {
     }
 
 
+//    /*
+//      Checks if Food with given name is valid and returns unit of the food.
+//      @param name of the food
+//      @returns unit in String if valid
+//               null otherwise
+//     */
+//    public int getUnit(String name) {
+//        assert(library != null);
+//        try {
+//            for (int i = 0; i < library.length(); i++) {
+//                JSONObject jsonObject = library.getJSONObject(i);
+//                String library_name = jsonObject.optString("name").toString();
+//                if (library_name.toLowerCase().equals(name.toLowerCase()))
+//                    return Integer.parseInt(jsonObject.optString("unit").toString());
+//            }
+//        } catch (JSONException e) {}
+//        return -1;
+//    }
+
     /*
-      Checks if Food with given name is valid and returns unit of the food.
+      Checks if Food with given name is valid.
       @param name of the food
-      @returns unit in String if valid
+      @returns jsonobject for food is valid
                null otherwise
      */
-    public int getUnit(String name) {
+    public JSONObject isFood(String name) {
+        // Iterate the jsonArray and print the info of JSONObjects
         assert(library != null);
         try {
             for (int i = 0; i < library.length(); i++) {
                 JSONObject jsonObject = library.getJSONObject(i);
                 String library_name = jsonObject.optString("name").toString();
                 if (library_name.toLowerCase().equals(name.toLowerCase()))
-                    return Integer.parseInt(jsonObject.optString("unit").toString());
+                    return jsonObject;
             }
         } catch (JSONException e) {}
-        return -1;
-    }
-
-    /*
-      Checks if Food with given name is valid.
-      @param name of the food
-      @returns true if valid food
-               false otherwise
-     */
-    public boolean isFood(String name) {
-        // Iterate the jsonArray and print the info of JSONObjects
-        if(library == null) return false;
-        try {
-            for (int i = 0; i < library.length(); i++) {
-                JSONObject jsonObject = library.getJSONObject(i);
-                String library_name = jsonObject.optString("name").toString();
-                if (library_name.toLowerCase().equals(name.toLowerCase()))
-                    return true;
-            }
-        } catch (JSONException e) {}
-        return false;
+        return null;
     }
 
     /*

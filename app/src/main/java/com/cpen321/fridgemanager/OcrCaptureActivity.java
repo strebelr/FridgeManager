@@ -371,7 +371,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
 
         for (OcrGraphic graphic : graphics) {
             textBlock = graphic.getTextBlock();
-            String t = textBlock.getValue().replaceAll("[^a-zA-Z\r\n]", "").replaceAll("[\n\r]", "    ");
+            String t = textBlock.getValue().replaceAll("[^a-zA-Z\r\n\\s]", "");
             String[] words = t.split("[\r\n\\s+]");
             for (int i = 0; i < words.length; i++) {
                 // You may want to check for a non-word character before blindly
@@ -380,7 +380,6 @@ public class OcrCaptureActivity extends AppCompatActivity {
                 //words[i] = words[i].replaceAll("[^\\w]", "");
                 texts.add(words[i]);
             }
-
         }
 
         // starts scanResult activity

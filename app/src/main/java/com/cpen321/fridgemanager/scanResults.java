@@ -16,6 +16,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import static android.R.id.message;
@@ -31,7 +33,7 @@ public class scanResults extends AppCompatActivity {
     TableLayout mTlayout;
     private ArrayList<TableRow> trs = new ArrayList<TableRow>();
 
-    // A Database Interaction Object
+    // A Text Recognition Interaction Object
     private TextRecognitionInteraction ti;
 
     @Override
@@ -43,93 +45,119 @@ public class scanResults extends AppCompatActivity {
         mTlayout = (TableLayout) findViewById(R.id.mTlayout);
         ArrayList<String> texts = getIntent().getStringArrayListExtra("texts");
 
-        String name = "";
-        int int_unit; // Int value for unit type.
-        int current_row = 0; // Keeps track of number of elements in array list
+        JSONObject food;
+
+        ArrayList<ArrayList<String>> consecutive_non_name = new ArrayList<ArrayList<String>>();
+        ArrayList<String> temp_consecutive = null;
 
         for(int i = 0; i < texts.size(); i++) {
-            name = texts.get(i);
-            int_unit = ti.getUnit(name);
-
-            if (int_unit != -1) {
-                // Add table row, unit, quantity, and food name to array list.
-                trs.add(new TableRow(this));
-                units.add(int_unit);
-                amounts.add(new EditText(this));
-                names.add(texts.get(i));
-
-                // Add table row to layout and initialize button and text views
-                mTlayout.addView(trs.get(current_row));
-                ImageButton btn_del = new ImageButton(this);
-                TextView food_name = new TextView(this);
-                TextView unit_name = new TextView(this);
-
-                // Create amount field
-                TableRow.LayoutParams amountLayoutParams = new TableRow.LayoutParams();
-                amounts.get(current_row).setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) });
-                amounts.get(current_row).setMaxLines(1);
-                amounts.get(current_row).setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                float measure = amounts.get(current_row).getPaint().measureText("9999"); // Set width
-                amounts.get(current_row).setWidth(amounts.get(current_row).getPaddingLeft() + amounts.get(current_row).getPaddingRight() + (int) measure);
-                trs.get(current_row).addView(amounts.get(current_row));
-
-                // Create unit text
-                switch(int_unit) {
-                    // TODO: CHANGE UNIT STRING IF NECESSARY
-                    case 0:
-                        unit_name.setText("unit");
-                        break;
-                    case 1:
-                        unit_name.setText("grams");
-                        break;
-                    case 2:
-                        unit_name.setText("kgs");
-                        break;
-                    case 3:
-                        unit_name.setText("litres");
-                        break;
-                    case 4:
-                        unit_name.setText("cups");
-                        break;
+            food = ti.isFood(texts.get(i));
+            if(food != null) {
+                if(temp_consecutive != null) {
+                    consecutive_non_name.add(new ArrayList<String>(temp_consecutive));
+                    temp_consecutive = null;
                 }
-
-                // Create unit text view
-                unit_name.setId(i);
-                unit_name.setGravity(Gravity.CENTER_VERTICAL);
-                TableRow.LayoutParams trLayoutParams_unit = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-                unit_name.setLayoutParams(trLayoutParams_unit);
-                trs.get(current_row).addView(unit_name);
-
-                // Create delete button
-                btn_del.setImageResource(R.drawable.ic_trash);
-                btn_del.setId(current_row);
-                // Set on click listener
-                btn_del.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int index = v.getId();
-                        // Assign null to elements removed
-                        names.set(index, null);
-                        amounts.set(index, null);
-                        units.set(index, null);
-                        // Remove table row from table layout
-                        mTlayout.removeView(trs.get(index));
-                    }
-                });
-                trs.get(current_row).addView(btn_del);
-
-                // Create food text
-                food_name.setText(name);
-                food_name.setId(i);
-                food_name.setGravity(Gravity.CENTER_VERTICAL);
-                TableRow.LayoutParams trLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-                trLayoutParams.weight = 1;
-                food_name.setLayoutParams(trLayoutParams);
-                trs.get(current_row).addView(food_name,0);
-
-                // Increment array list count
-                current_row++;
+                names.add(food.optString("name").toString());
+                units.add(Integer.parseInt(food.optString("unit").toString()));
             }
+            else {
+                if(temp_consecutive == null)
+                    temp_consecutive = new ArrayList<String>();
+                temp_consecutive.add(texts.get(i));
+            }
+        }
+
+
+        // TODO: DEALS WITH NON-CONSECUTIVE WORDS
+//        for(int i = 0; i < consecutive_non_name.size(); i++) { // For each arrays of non-consecutive words
+//            if (consecutive_non_name.get(i).size() > 1) {
+//                for (int j = 0; j < consecutive_non_name.get(i).size(); j++) { // For each non-consecutive words
+//                    for (int k = j + 1; k < consecutive_non_name.get(i).size(); k++) { // Move through the words to get all combinations
+//                        String concat = "";
+//                        int inc_j = j;
+//                        while(inc_j <= k) {
+//                            concat += consecutive_non_name.get(i).get(inc_j);
+//                            inc_j++;
+//                        }
+//                        // TODO: CHECK NAME HERE. NEEDS A WAY TO HANDLE TWO-WORDED FOODS, e.g. "Green Onion". How??
+//                    }
+//                }
+//            }
+//        }
+
+        for(int i = 0; i < names.size(); i++) {
+            // Add table row and quantity field to array list.
+            trs.add(new TableRow(this));
+            amounts.add(new EditText(this));
+
+            // Add table row to layout and initialize button and text views
+            mTlayout.addView(trs.get(i));
+            ImageButton btn_del = new ImageButton(this);
+            TextView food_name = new TextView(this);
+            TextView unit_name = new TextView(this);
+
+            // Create amount field
+            TableRow.LayoutParams amountLayoutParams = new TableRow.LayoutParams();
+            amounts.get(i).setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+            amounts.get(i).setMaxLines(1);
+            amounts.get(i).setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            float measure = amounts.get(i).getPaint().measureText("9999"); // Set width
+            amounts.get(i).setWidth(amounts.get(i).getPaddingLeft() + amounts.get(i).getPaddingRight() + (int) measure);
+            trs.get(i).addView(amounts.get(i));
+
+            // Create unit text
+            switch (units.get(i)) {
+                // TODO: CHANGE UNIT STRING IF NECESSARY
+                case 0:
+                    unit_name.setText("unit");
+                    break;
+                case 1:
+                    unit_name.setText("grams");
+                    break;
+                case 2:
+                    unit_name.setText("kgs");
+                    break;
+                case 3:
+                    unit_name.setText("litres");
+                    break;
+                case 4:
+                    unit_name.setText("cups");
+                    break;
+            }
+
+            // Create unit text view
+            unit_name.setId(i);
+            unit_name.setGravity(Gravity.CENTER_VERTICAL);
+            TableRow.LayoutParams trLayoutParams_unit = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+            unit_name.setLayoutParams(trLayoutParams_unit);
+            trs.get(i).addView(unit_name);
+
+            // Create delete button
+            btn_del.setImageResource(R.drawable.ic_trash);
+            btn_del.setId(i);
+            // Set on click listener
+            btn_del.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int index = v.getId();
+                    // Assign null to elements removed
+                    names.set(index, null);
+                    amounts.set(index, null);
+                    units.set(index, null);
+                    // Remove table row from table layout
+                    mTlayout.removeView(trs.get(index));
+                }
+            });
+            trs.get(i).addView(btn_del);
+
+            // Create food text
+            food_name.setText(names.get(i));
+            food_name.setId(i);
+            food_name.setGravity(Gravity.CENTER_VERTICAL);
+            TableRow.LayoutParams trLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+            trLayoutParams.weight = 1;
+            food_name.setLayoutParams(trLayoutParams);
+            trs.get(i).addView(food_name, 0);
         }
     }
 
