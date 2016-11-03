@@ -39,7 +39,7 @@ public class DatabaseInteraction {
                   3 for L
                   4 for cup
      */
-    public void writeToStorage(String data, double quantity, int unit) {
+    public void writeToStorage(String data, double quantity, int unit, String location) {
         // Create a new JSON Object
         JSONObject element = new JSONObject();
         String date = getCurrentDate();
@@ -60,9 +60,18 @@ public class DatabaseInteraction {
                 // Make a JSON Object from root String
                 jsonRootObject = new JSONObject(jsonRoot);
                 // Get the JSON Array containing "Foods"
-                jsonArray = jsonRootObject.optJSONArray("Foods");
-                // Append the new element
-                jsonArray.put(element);
+                jsonArray = jsonRootObject.optJSONArray(location);
+                if (jsonArray != null) {
+                    // Append the new element
+                    jsonArray.put(element);
+                }
+                else {
+                    jsonArray = new JSONArray();
+                    // Put the new element into the array
+                    jsonArray.put(element);
+                    // Add the JSON Array to JSON Root Object
+                    jsonRootObject.put(location, jsonArray);
+                }
             }
             // If root does not exist
             else {
@@ -73,7 +82,7 @@ public class DatabaseInteraction {
                 // Put the new element into the array
                 jsonArray.put(element);
                 // Add the JSON Array to JSON Root Object
-                jsonRootObject.put("Foods", jsonArray);
+                jsonRootObject.put(location, jsonArray);
             }
 
             // Output the new JSON Root Object to File
@@ -160,7 +169,7 @@ public class DatabaseInteraction {
       Reads the Library JSON file and returns an JSONArray
       @return raw JSON formatted string
      */
-    public JSONArray getStorageArray() {
+    public JSONArray getFreshArray() {
         String jsonRoot = readFile(0);
 
         String data = "";
@@ -169,7 +178,49 @@ public class DatabaseInteraction {
             JSONObject  jsonRootObject = new JSONObject(jsonRoot);
 
             // Get the food array from root object
-            JSONArray jsonArray = jsonRootObject.optJSONArray("Foods");
+            JSONArray jsonArray = jsonRootObject.optJSONArray("Fresh");
+
+            return jsonArray;
+        } catch (JSONException e) {}
+
+        return null;
+    }
+
+    /*
+      Reads the Library JSON file and returns an JSONArray
+      @return raw JSON formatted string
+     */
+    public JSONArray getPantryArray() {
+        String jsonRoot = readFile(0);
+
+        String data = "";
+
+        try {
+            JSONObject  jsonRootObject = new JSONObject(jsonRoot);
+
+            // Get the food array from root object
+            JSONArray jsonArray = jsonRootObject.optJSONArray("Pantry");
+
+            return jsonArray;
+        } catch (JSONException e) {}
+
+        return null;
+    }
+
+    /*
+      Reads the Library JSON file and returns an JSONArray
+      @return raw JSON formatted string
+     */
+    public JSONArray getFridgeArray() {
+        String jsonRoot = readFile(0);
+
+        String data = "";
+
+        try {
+            JSONObject  jsonRootObject = new JSONObject(jsonRoot);
+
+            // Get the food array from root object
+            JSONArray jsonArray = jsonRootObject.optJSONArray("Fridge");
 
             return jsonArray;
         } catch (JSONException e) {}

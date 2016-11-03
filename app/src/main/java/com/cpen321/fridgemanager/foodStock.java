@@ -26,30 +26,31 @@ public class foodStock extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_food_stock, container, false);
-        TextView textViewToChange = (TextView)view.findViewById(R.id.foodstock);
-        DatabaseInteraction di = new DatabaseInteraction(getContext());
-        JSONArray jsonArray = di.getStorageArray();
-        if (jsonArray != null) {
-            String text = "";
-            try {
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                    String name = jsonObject.optString("name").toString();
-                    //String date = jsonObject.optString("date").toString();
-
-                    text = text + name + "\n";
-                }
-            } catch (JSONException e) {
-            }
-            textViewToChange.setText(text);
-        }
+//        TextView textViewToChange = (TextView)view.findViewById(R.id.foodstock);
+//        DatabaseInteraction di = new DatabaseInteraction(getContext());
+//        JSONArray jsonArray = di.getStorageArray();
+//        if (jsonArray != null) {
+//            String text = "";
+//            try {
+//                for (int i = 0; i < jsonArray.length(); i++) {
+//                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+//
+//                    String name = jsonObject.optString("name").toString();
+//                    //String date = jsonObject.optString("date").toString();
+//
+//                    text = text + name + "\n";
+//                }
+//            } catch (JSONException e) {
+//            }
+//            textViewToChange.setText(text);
+//        }
         // Inflate the layout for this fragment
         return view;
 

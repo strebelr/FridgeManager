@@ -30,16 +30,10 @@ public class TextRecognitionInteraction {
       Add individual food to storage if it is a valid food.
       @param string to try to add
      */
-    public void addFoodToStorage(String name, double quantity, int unit) {
+    public void addFoodToStorage(String name, double quantity, int unit, String location) {
         String real_name;
         int unit_int;
-        di.writeToStorage(name, quantity, unit);
-        //else {
-        //    real_name = isAbb(name);
-        //    if (real_name != null) {
-        //        di.writeToStorage(real_name);
-        //    }
-        //}
+        di.writeToStorage(name, quantity, unit, location);
     }
 
 

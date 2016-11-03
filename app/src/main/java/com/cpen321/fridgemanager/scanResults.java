@@ -29,6 +29,7 @@ public class scanResults extends AppCompatActivity {
     private ArrayList<EditText> amounts = new ArrayList<EditText>();
     private ArrayList<Integer> units = new ArrayList<Integer>();
     private ArrayList<String> names = new ArrayList<String>();
+    private ArrayList<String> locations = new ArrayList<String>();
 
     TableLayout mTlayout;
     private ArrayList<TableRow> trs = new ArrayList<TableRow>();
@@ -59,6 +60,7 @@ public class scanResults extends AppCompatActivity {
                 }
                 names.add(food.optString("name").toString());
                 units.add(Integer.parseInt(food.optString("unit").toString()));
+                locations.add(food.optString("location").toString());
             }
             else {
                 if(temp_consecutive == null)
@@ -182,9 +184,9 @@ public class scanResults extends AppCompatActivity {
         for(int i = 0; i < names.size(); i++) {
             if(names.get(i) != null) { // If food not removed
                 if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
-                    ti.addFoodToStorage(names.get(i), 0.0, units.get(i));
+                    ti.addFoodToStorage(names.get(i), 0.0, units.get(i), locations.get(i));
                 } else {
-                    ti.addFoodToStorage(names.get(i), Double.parseDouble(amounts.get(i).getText().toString()), units.get(i));
+                    ti.addFoodToStorage(names.get(i), Double.parseDouble(amounts.get(i).getText().toString()), units.get(i), locations.get(i));
                 }
             }
         }
