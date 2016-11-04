@@ -30,6 +30,91 @@ public class DatabaseInteraction {
     }
 
     /*
+      Sets up the storage json. Runs only once after installation.
+     */
+    public void setUp() {
+        // Get the root JSON String from File
+        String jsonRoot = readFile(0);
+        try {
+            // If root object exists
+            if (jsonRoot == "") {
+                // Make a new JSON Root Object
+                JSONObject jsonRootObject = new JSONObject();
+                // Make a new JSON Array
+                JSONArray freshArray = new JSONArray();
+                JSONArray pantryArray = new JSONArray();
+                JSONArray fridgeArray = new JSONArray();
+                // Add the JSON Array to JSON Root Object
+                jsonRootObject.put("Fresh", freshArray);
+                jsonRootObject.put("Pantry", pantryArray);
+                jsonRootObject.put("Fridge", fridgeArray);
+
+                // Output the new JSON Root Object to File
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
+                outputStreamWriter.write(jsonRootObject.toString());
+                outputStreamWriter.close();
+            }
+        } catch (IOException e) {} catch (JSONException e) {}
+    }
+
+    /*
+      Deletes a JSONObject from JSONArray.
+      @param JSONObject to remove
+      @param location/JSONArray from which object is removed
+     */
+    public void removeFood(JSONObject food, String location) {
+        // Get the root JSON String from File
+        String jsonRoot = readFile(0);
+        try {
+            // If root object exists
+            if (jsonRoot != "") {
+                // Make a JSON Object from root String
+                JSONObject jsonRootObject = new JSONObject(jsonRoot);
+                // Get the JSON Array containing "Foods"
+                JSONArray jsonArray = jsonRootObject.optJSONArray(location);
+                // Make new JSONArray and Root to push back
+                JSONObject jsonNewRoot = new JSONObject();
+                JSONArray otherArray;
+                JSONArray otherArray2;
+                if(location.equals("Pantry")) {
+                    otherArray = jsonRootObject.optJSONArray("Fresh");
+                    otherArray2 = jsonRootObject.optJSONArray("Fridge");
+                    jsonNewRoot.put("Fresh", otherArray);
+                    jsonNewRoot.put("Fridge", otherArray2);
+                }
+                else if(location.equals("Fridge")) {
+                    otherArray = jsonRootObject.optJSONArray("Pantry");
+                    otherArray2 = jsonRootObject.optJSONArray("Fresh");
+                    jsonNewRoot.put("Pantry", otherArray);
+                    jsonNewRoot.put("Fresh", otherArray2);
+                }
+                else {
+                    otherArray = jsonRootObject.optJSONArray("Pantry");
+                    otherArray2 = jsonRootObject.optJSONArray("Fridge");
+                    jsonNewRoot.put("Pantry", otherArray);
+                    jsonNewRoot.put("Fridge", otherArray2);
+                }
+                JSONArray newArray = new JSONArray();
+
+                for(int i = 0; i < jsonArray.length(); i++) {
+                    // TODO: COMPARE ALL PARAMETERS
+                    if(!(food.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString()))) {
+                        newArray.put(jsonArray.get(i));
+                    }
+                }
+
+                jsonNewRoot.put(location, newArray);
+
+                // Output the new JSON Root Object to File
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
+                outputStreamWriter.write(jsonNewRoot.toString());
+                outputStreamWriter.close();
+            }
+
+        } catch (IOException e) {} catch (JSONException e) {}
+    }
+
+    /*
       Appends a new JSONObject with String data to the JSON file.
       @param data The data to initialize the JSONObject with
       @param quantity

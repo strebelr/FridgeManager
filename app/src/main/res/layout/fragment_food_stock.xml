@@ -6,14 +6,23 @@
     android:layout_height="match_parent"
     tools:context="com.cpen321.fridgemanager.foodStock">
 
-    <TextView
-        android:text="@string/foodstock"
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:id="@+id/foodstock"
+        android:scrollbars="none"
+        android:layout_weight="1"
         android:layout_below="@+id/title"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:id="@+id/scrollView2">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:id="@+id/mTlayoutF">
+        </TableLayout>
+    </ScrollView>
+
 
     <TextView
         android:layout_width="wrap_content"
