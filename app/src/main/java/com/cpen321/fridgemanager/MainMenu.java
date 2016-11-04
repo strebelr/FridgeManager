@@ -53,6 +53,7 @@ public class MainMenu extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
+        new DatabaseInteraction(getApplicationContext()).setUp();
     }
 
     @Override
