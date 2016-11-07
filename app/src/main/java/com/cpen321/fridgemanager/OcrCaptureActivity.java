@@ -42,7 +42,9 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 
 import android.Manifest;
@@ -369,7 +371,18 @@ public class OcrCaptureActivity extends AppCompatActivity {
         Set<OcrGraphic> graphics = mGraphicOverlay.getAllGraphics();
         ArrayList<String> texts = new ArrayList<String>();
 
-        for (OcrGraphic graphic : graphics) {
+        //Create a sorted list to sort the graphics by the X and Y value of the rect of textblock
+        List<OcrGraphic> sortedGraphics = new ArrayList<OcrGraphic>();
+
+        //add the set of graphics to the arraylist
+        for(OcrGraphic graphic : graphics){
+            sortedGraphics.add(graphic);
+        }
+
+        //sort the arraylist by rect coordinates of textblock of graphic
+        Collections.sort(sortedGraphics, new CoordinateComparator());
+
+        for (OcrGraphic graphic : sortedGraphics) {
             textBlock = graphic.getTextBlock();
             String t = textBlock.getValue().replaceAll("[^a-zA-Z\r\n\\s]", "");
             String[] words = t.split("[\r\n\\s+]");
