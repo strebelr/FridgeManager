@@ -35,8 +35,6 @@ public class foodStock extends Fragment{
     private JSONArray pantry;
 
     TableLayout mTlayout;
-    private ArrayList<TableRow> trsf = new ArrayList<TableRow>();
-    private ArrayList<TableRow> trsp = new ArrayList<TableRow>();
     private ArrayList<TableRow> trs = new ArrayList<TableRow>();
     private JSONObject food;
     DatabaseInteraction di;
@@ -69,36 +67,48 @@ public class foodStock extends Fragment{
         TableRow titlePantry = new TableRow(getActivity());
         TextView titlePantryText = new TextView(getActivity());
 
-
+        trs.clear();
         fridge = di.getFridgeArray();
         createTitle(titleFridge,titleFridgeText, R.string.foodStock_Fridge, fridge.length());
-        createTable(fridge);
-        trsf.clear();
-
+        createTable(0);
         fresh = di.getFreshArray();
         createTitle(titleFresh,titleFreshText, R.string.foodStock_Fresh, fresh.length());
-        trs.clear();
-        createTable(fresh);
-
+        createTable(1);
         pantry = di.getPantryArray();
         createTitle(titlePantry,titlePantryText, R.string.foodStock_Pantry, pantry.length());
-        trsp.clear();
-        createTable(pantry);
+        createTable(2);
         // Inflate the layout for this fragment
         return view;
     }
 
-    public void createTable(final JSONArray foodList){
+    public void createTable(int location){
+
+        // Selects food location
+        JSONArray foodList;
+        int index;
+        if (location == 0 ) {
+            foodList = fridge;
+            index = 0;
+        }
+        else if(location == 1) {
+            foodList = fresh;
+            index = fridge.length();
+        }
+        else {
+            foodList = pantry;
+            index = fridge.length() + fresh.length();
+        }
+
         for (int i = 0; i < foodList.length(); i++) {
             try {
                 food = foodList.getJSONObject(i);
 
-                trsf.add(new TableRow(getActivity()));
+                trs.add(new TableRow(getActivity()));
 
                 // Add table row to layout
-                if(trsf.get(i).getParent() != null)
-                    ((ViewGroup)trsf.get(i).getParent()).removeView(trsf.get(i));
-                mTlayout.addView(trsf.get(i));
+                if(trs.get(i + index).getParent() != null)
+                    ((ViewGroup)trs.get(i + index).getParent()).removeView(trs.get(i + index));
+                mTlayout.addView(trs.get(i + index));
                 ImageButton btn_del = new ImageButton(getActivity());
                 TextView food_name = new TextView(getActivity());
                 TextView unit_name = new TextView(getActivity());
@@ -125,49 +135,68 @@ public class foodStock extends Fragment{
                 }
 
                 // Create unit text view
-                amount.setId(i);
+                amount.setId(i + index);
                 amount.setText(food.optString("quantity").toString());
                 amount.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
                 TableRow.LayoutParams trLayoutParams_amount = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
                 amount.setLayoutParams(trLayoutParams_amount);
-                trsf.get(i).addView(amount);
+                trs.get(i + index).addView(amount);
 
                 // Create unit text view
-                unit_name.setId(i);
+                unit_name.setId(i + index);
                 unit_name.setGravity(Gravity.CENTER_VERTICAL);
                 TableRow.LayoutParams trLayoutParams_unit = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
                 float measure = unit_name.getPaint().measureText("9999"); // Set width
                 unit_name.setWidth(unit_name.getPaddingLeft() + unit_name.getPaddingRight() + (int) measure);
                 unit_name.setLayoutParams(trLayoutParams_unit);
-                trsf.get(i).addView(unit_name);
+                trs.get(i + index).addView(unit_name);
 
                 // Create delete button
                 btn_del.setImageResource(R.drawable.ic_trash);
-                btn_del.setId(i);
+                btn_del.setId(i + index);
                 // Set on click listener
                 btn_del.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int index = v.getId();
-                        // TODO: CALL REMOVE
+                        int new_index;
+                        String location;
+                        if (index < fridge.length()) {
+                            new_index = index;
+                            location = "Fridge";
+                        }
+                        else if (index >= fridge.length() && index < fridge.length() + fresh.length()) {
+                            new_index = index - fridge.length();
+                            location = "Fresh";
+                        }
+                        else {
+                            new_index = index - fridge.length() - fresh.length();
+                            location = "Pantry";
+                        }
+
                         // Remove table row from table layout
-                        mTlayout.removeView(trsf.get(index));
+                        mTlayout.removeView(trs.get(index));
                         try {
-                            di.removeFood(foodList.getJSONObject(index), "Fridge");
+                            if (location == "Fridge")
+                                di.removeFood(fridge.getJSONObject(new_index), location);
+                            else if (location == "Fresh")
+                                di.removeFood(fresh.getJSONObject(new_index), location);
+                            else
+                                di.removeFood(pantry.getJSONObject(new_index), location);
                         } catch(JSONException e) {}
                     }
                 });
-                trsf.get(i).addView(btn_del);
+                trs.get(i + index).addView(btn_del);
 
                 // Create food text
                 food_name.setText(food.optString("name").toString());
-                food_name.setId(i);
+                food_name.setId(i + index);
                 food_name.setGravity(Gravity.CENTER_VERTICAL);
                 food_name.setPadding((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.foodStock_paddingLeft), getResources().getDisplayMetrics()),0,0,0);
                 TableRow.LayoutParams trLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
                 trLayoutParams.weight = 1;
                 food_name.setLayoutParams(trLayoutParams);
-                trsf.get(i).addView(food_name, 0);
+                trs.get(i + index).addView(food_name, 0);
             } catch (JSONException e) {
             }
 

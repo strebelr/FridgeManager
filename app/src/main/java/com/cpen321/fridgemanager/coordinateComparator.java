@@ -10,6 +10,7 @@ import java.util.Comparator;
  */
 
 public class CoordinateComparator implements Comparator<OcrGraphic> {
+
     @Override
     public int compare(OcrGraphic g1, OcrGraphic g2) {
         RectF rect1 = new RectF(g1.getTextBlock().getBoundingBox());
