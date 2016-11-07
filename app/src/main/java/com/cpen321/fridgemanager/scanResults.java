@@ -193,9 +193,9 @@ public class scanResults extends AppCompatActivity {
 
 
                 if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
-                    ti.addFoodToStorage(names.get(i), 0.0, units.get(i), locations.get(i));
+                    ti.addFoodToStorage(names.get(i), 0.0, units.get(i), locations.get(i), expiry);
                 } else {
-                    ti.addFoodToStorage(names.get(i), Double.parseDouble(amounts.get(i).getText().toString()), units.get(i), locations.get(i));
+                    ti.addFoodToStorage(names.get(i), Double.parseDouble(amounts.get(i).getText().toString()), units.get(i), locations.get(i), expiry);
                 }
             }
         }

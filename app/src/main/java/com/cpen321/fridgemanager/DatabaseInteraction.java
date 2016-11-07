@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DatabaseInteraction {
     Context context;
@@ -124,13 +126,15 @@ public class DatabaseInteraction {
                   3 for L
                   4 for cup
      */
-    public void writeToStorage(String data, double quantity, int unit, String location) {
+    public void writeToStorage(String data, double quantity, int unit, String location, int expiry) {
         // Create a new JSON Object
         JSONObject element = new JSONObject();
         String date = getCurrentDate();
+        String expiry_date = getFutureDate(expiry);
         try {
             element.put("name", data);
             element.put("bought", date);
+            element.put("expiry", expiry_date);
             element.put("quantity", quantity);
             element.put("unit", unit);
         } catch (JSONException e) {}
@@ -391,6 +395,18 @@ public class DatabaseInteraction {
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c.getTime());
         return formattedDate;
+    }
+
+    /*
+      Gets the date that is x days away from today.
+      @param days away from today
+      @return date in String
+     */
+    private String getFutureDate(int days) {
+        Calendar c = new GregorianCalendar();
+        c.add(Calendar.DATE, days);
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        return df.format(c.getTime());
     }
 
 }
