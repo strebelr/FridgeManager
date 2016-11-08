@@ -3,6 +3,9 @@
     package="com.cpen321.fridgemanager">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="com.android.alarm.permission.VIBRATE" />
+    <uses-permission android:name="com.android.alarm.permission.WAKE_LOCK" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -29,6 +32,11 @@
             android:label="Scan Results"
             android:screenOrientation="portrait"
             ></activity>
+
+        /* Alarms */
+        <activity android:name=".Notification.Alert_Activity"/>
+        <receiver android:name=".Notification.AlertReceiver"/>
+
     </application>
 
 </manifest>
