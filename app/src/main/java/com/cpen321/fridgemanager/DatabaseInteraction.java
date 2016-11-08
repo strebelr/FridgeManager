@@ -392,7 +392,7 @@ public class DatabaseInteraction {
     */
     private String getCurrentDate() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = df.format(c.getTime());
         return formattedDate;
     }
@@ -405,7 +405,7 @@ public class DatabaseInteraction {
     private String getFutureDate(int days) {
         Calendar c = new GregorianCalendar();
         c.add(Calendar.DATE, days);
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         return df.format(c.getTime());
     }
 
