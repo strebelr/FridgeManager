@@ -2,6 +2,7 @@ package com.cpen321.fridgemanager;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -22,7 +23,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static java.util.logging.Logger.global;
 
@@ -67,21 +73,29 @@ public class foodStock extends Fragment{
         TableRow titlePantry = new TableRow(getActivity());
         TextView titlePantryText = new TextView(getActivity());
 
-        trs.clear();
-        fridge = di.getFridgeArray();
-        createTitle(titleFridge,titleFridgeText, R.string.foodStock_Fridge, fridge.length());
-        createTable(0);
-        fresh = di.getFreshArray();
-        createTitle(titleFresh,titleFreshText, R.string.foodStock_Fresh, fresh.length());
-        createTable(1);
-        pantry = di.getPantryArray();
-        createTitle(titlePantry,titlePantryText, R.string.foodStock_Pantry, pantry.length());
-        createTable(2);
+        try {
+            trs.clear();
+            fridge = di.getFridgeArray();
+            createTitle(titleFridge,titleFridgeText, R.string.foodStock_Fridge, fridge.length());
+            createTable(0);
+            fresh = di.getFreshArray();
+            createTitle(titleFresh,titleFreshText, R.string.foodStock_Fresh, fresh.length());
+            createTable(1);
+            pantry = di.getPantryArray();
+            createTitle(titlePantry,titlePantryText, R.string.foodStock_Pantry, pantry.length());
+            createTable(2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         // Inflate the layout for this fragment
         return view;
     }
 
-    public void createTable(int location){
+    public void createTable(int location) throws ParseException {
+        int DaysToExpiryDate = 3;
+        Calendar actDate = Calendar.getInstance();
+        actDate.set(Calendar.DAY_OF_YEAR, DaysToExpiryDate + actDate.get(Calendar.DAY_OF_YEAR));
 
         // Selects food location
         JSONArray foodList;
@@ -102,6 +116,13 @@ public class foodStock extends Fragment{
         for (int i = 0; i < foodList.length(); i++) {
             try {
                 food = foodList.getJSONObject(i);
+
+                Calendar expDate = Calendar.getInstance();
+                String expiryDate = food.optString("expiry");
+                DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                Date date = formatter.parse(expiryDate);
+                expDate.setTime(date);
+                int time_diff = actDate.compareTo(expDate);
 
                 trs.add(new TableRow(getActivity()));
 
@@ -184,6 +205,7 @@ public class foodStock extends Fragment{
                             else
                                 di.removeFood(pantry.getJSONObject(new_index), location);
                         } catch(JSONException e) {}
+
                     }
                 });
                 trs.get(i + index).addView(btn_del);
@@ -196,6 +218,9 @@ public class foodStock extends Fragment{
                 TableRow.LayoutParams trLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
                 trLayoutParams.weight = 1;
                 food_name.setLayoutParams(trLayoutParams);
+                if (time_diff >= 0){
+                    food_name.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
+                }
                 trs.get(i + index).addView(food_name, 0);
             } catch (JSONException e) {
             }
@@ -203,9 +228,9 @@ public class foodStock extends Fragment{
         }
     }
     private void createTitle(TableRow title, TextView textTitle, int nameTitle, int length ){
+        if (title.getParent() != null)
+            ((ViewGroup) title.getParent()).removeView(title);
         if (length > 0) {
-            if (title.getParent() != null)
-                ((ViewGroup) title.getParent()).removeView(title);
             mTlayout.addView(title);
             textTitle.setText(nameTitle);
             textTitle.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);

@@ -1,6 +1,8 @@
 package com.cpen321.fridgemanager;
 
 import android.app.ActionBar;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,9 +18,14 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.cpen321.fridgemanager.Notification.Alert;
+import com.cpen321.fridgemanager.Notification.AlertReceiver;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -188,9 +195,9 @@ public class scanResults extends AppCompatActivity {
                 int expiry = expiries.get(i); // Numbers of days until the expiry date.
                 // TODO: CALL ALARM FROM HERE
 
-
-
-
+                //Alert a = new Alert();
+                //a.setAlarm(findViewById(R.id.scan_result), expiry);
+                setAlarm(view, expiry);
 
                 if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
                     ti.addFoodToStorage(names.get(i), 0.0, units.get(i), locations.get(i), expiry);
@@ -201,4 +208,38 @@ public class scanResults extends AppCompatActivity {
         }
         mainMenu();
     }
+
+
+    public void setAlarm(View view, int dayToExpire) {
+
+        Calendar calendar = Calendar.getInstance();     // possible redundancy here
+        Calendar c = new GregorianCalendar();
+
+        calendar.getTime();
+        c.add(c.DATE, dayToExpire);
+
+        calendar.set(Calendar.DAY_OF_MONTH,c.DATE);
+       // calendar.set(Calendar.HOUR_OF_DAY,18);
+        calendar.set(Calendar.MINUTE,00);
+        calendar.set(Calendar.SECOND,00);
+
+        Long alertTime = System.currentTimeMillis() + 5000;
+
+        android.util.Log.i("Time Class ", " Time value in milliseconds "+alertTime);
+
+        Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alertTime, pendingIntent);
+
+        /* Comment above line and uncomment this line once expiry date is ready) */
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+
+    }
+
 }
