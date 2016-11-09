@@ -4,24 +4,29 @@ import android.content.Context;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 public class DatabaseInteraction {
     Context context;
 
+    private final static int STORAGE_DEST = 0;
+    private final static int LIBRARY_DEST = 1;
+    private final static int ASSETS_DEST = 2;
+    private final static List<String> LOCATIONS_LIST = Arrays.asList("Fridge", "Fresh", "Pantry", "Freezer");
+
+
     private final String storage = "storage.json";
     private final String library = "library.json";
-    private final String defaultlib = "default_library.json";
+    private final String default_lib = "default_library.json";
     private final String log = "log.txt"; // Output from test
 
     /*
@@ -36,20 +41,17 @@ public class DatabaseInteraction {
      */
     public void setUp() {
         // Get the root JSON String from File
-        String jsonRoot = readFile(0);
+        String jsonRoot = readFile(STORAGE_DEST);
         try {
             // If root object exists
             if (jsonRoot == "") {
                 // Make a new JSON Root Object
                 JSONObject jsonRootObject = new JSONObject();
-                // Make a new JSON Array
-                JSONArray freshArray = new JSONArray();
-                JSONArray pantryArray = new JSONArray();
-                JSONArray fridgeArray = new JSONArray();
-                // Add the JSON Array to JSON Root Object
-                jsonRootObject.put("Fresh", freshArray);
-                jsonRootObject.put("Pantry", pantryArray);
-                jsonRootObject.put("Fridge", fridgeArray);
+
+                // Put all arrays into object
+                for(int i = 0; i < LOCATIONS_LIST.size(); i++) {
+                    jsonRootObject.put(LOCATIONS_LIST.get(i), new JSONArray());
+                }
 
                 // Output the new JSON Root Object to File
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
@@ -66,7 +68,7 @@ public class DatabaseInteraction {
      */
     public void removeFood(JSONObject food, String location) {
         // Get the root JSON String from File
-        String jsonRoot = readFile(0);
+        String jsonRoot = readFile(STORAGE_DEST);
         try {
             // If root object exists
             if (jsonRoot != "") {
@@ -76,32 +78,22 @@ public class DatabaseInteraction {
                 JSONArray jsonArray = jsonRootObject.optJSONArray(location);
                 // Make new JSONArray and Root to push back
                 JSONObject jsonNewRoot = new JSONObject();
-                JSONArray otherArray;
-                JSONArray otherArray2;
-                if(location.equals("Pantry")) {
-                    otherArray = jsonRootObject.optJSONArray("Fresh");
-                    otherArray2 = jsonRootObject.optJSONArray("Fridge");
-                    jsonNewRoot.put("Fresh", otherArray);
-                    jsonNewRoot.put("Fridge", otherArray2);
-                }
-                else if(location.equals("Fridge")) {
-                    otherArray = jsonRootObject.optJSONArray("Pantry");
-                    otherArray2 = jsonRootObject.optJSONArray("Fresh");
-                    jsonNewRoot.put("Pantry", otherArray);
-                    jsonNewRoot.put("Fresh", otherArray2);
-                }
-                else {
-                    otherArray = jsonRootObject.optJSONArray("Pantry");
-                    otherArray2 = jsonRootObject.optJSONArray("Fridge");
-                    jsonNewRoot.put("Pantry", otherArray);
-                    jsonNewRoot.put("Fridge", otherArray2);
+                for(int i = 0; i < LOCATIONS_LIST.size(); i++) {
+                    if (location != LOCATIONS_LIST.get(i)) {
+                        jsonNewRoot.put(LOCATIONS_LIST.get(i), jsonRootObject.optJSONArray(LOCATIONS_LIST.get(i)));
+                    }
                 }
                 JSONArray newArray = new JSONArray();
-
+                boolean remove = true;
                 for(int i = 0; i < jsonArray.length(); i++) {
-                    // TODO: COMPARE ALL PARAMETERS
-                    if(!(food.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString()))) {
+                    if(!(food.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
+                            !(food.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
+                            !(food.optString("quantity").toString().equals(jsonArray.getJSONObject(i).optString("quantity").toString())) ||
+                            !remove) {
                         newArray.put(jsonArray.get(i));
+                    }
+                    else {
+                        remove = false;
                     }
                 }
 
@@ -140,7 +132,7 @@ public class DatabaseInteraction {
         } catch (JSONException e) {}
 
         // Get the root JSON String from File
-        String jsonRoot = readFile(0);
+        String jsonRoot = readFile(STORAGE_DEST);
         try {
             JSONObject jsonRootObject;
             JSONArray jsonArray;
@@ -182,7 +174,7 @@ public class DatabaseInteraction {
     }
 
     /*
-      Writes a String to File. Use this method for testing File IO.
+      Writes a String to Log. Use this method for testing File IO.
     */
     public void plainWrite(String data) {
         try {
@@ -193,52 +185,11 @@ public class DatabaseInteraction {
     }
 
     /*
-      Clears the content of Storage.
-     */
-    public void clear() {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
-            outputStreamWriter.write("");
-            outputStreamWriter.close();
-        } catch (IOException e) {}
-    }
-
-    /*
-      TODO: THIS METHOD SHOULD CHANGE WITH RESPECT TO UI
-      Reads the Storage JSON file and returns it as formatted string
-      @return raw JSON formatted string
-     */
-    public String readStorage() {
-        String jsonRoot = readFile(0);
-
-        String data = "";
-
-        try {
-            JSONObject  jsonRootObject = new JSONObject(jsonRoot);
-
-            // Get the food array from root object
-            JSONArray jsonArray = jsonRootObject.optJSONArray("Foods");
-
-            // Iterate the jsonArray and print the info of JSONObjects
-            for(int i=0; i < jsonArray.length(); i++){
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                String name = jsonObject.optString("name").toString();
-                String date = jsonObject.optString("date").toString();
-
-                data += name + "\n" + date + "\n";
-            }
-        } catch (JSONException e) {}
-
-        return data;
-    }
-
-    /*
       Reads the Library JSON file and returns an JSONArray
       @return raw JSON formatted string
      */
     public JSONArray readLibrary() {
-        String jsonRoot = readFile(1);
+        String jsonRoot = readFile(LIBRARY_DEST);
 
         String data = "";
 
@@ -255,11 +206,11 @@ public class DatabaseInteraction {
     }
 
     /*
-      Reads the Library JSON file and returns an JSONArray
+      Reads the Storage JSON file and returns the Fresh JSONArray
       @return raw JSON formatted string
      */
     public JSONArray getFreshArray() {
-        String jsonRoot = readFile(0);
+        String jsonRoot = readFile(STORAGE_DEST);
 
         String data = "";
 
@@ -276,11 +227,11 @@ public class DatabaseInteraction {
     }
 
     /*
-      Reads the Library JSON file and returns an JSONArray
+      Reads the Storage JSON file and returns the Pantry JSONArray
       @return raw JSON formatted string
      */
     public JSONArray getPantryArray() {
-        String jsonRoot = readFile(0);
+        String jsonRoot = readFile(STORAGE_DEST);
 
         String data = "";
 
@@ -297,11 +248,11 @@ public class DatabaseInteraction {
     }
 
     /*
-      Reads the Library JSON file and returns an JSONArray
+      Reads the Storage JSON file and returns the Fridge JSONArray
       @return raw JSON formatted string
      */
     public JSONArray getFridgeArray() {
-        String jsonRoot = readFile(0);
+        String jsonRoot = readFile(STORAGE_DEST);
 
         String data = "";
 
@@ -310,6 +261,27 @@ public class DatabaseInteraction {
 
             // Get the food array from root object
             JSONArray jsonArray = jsonRootObject.optJSONArray("Fridge");
+
+            return jsonArray;
+        } catch (JSONException e) {}
+
+        return null;
+    }
+
+    /*
+      Reads the Storage JSON file and returns the Freezer JSONArray
+      @return raw JSON formatted string
+     */
+    public JSONArray getFreezereArray() {
+        String jsonRoot = readFile(STORAGE_DEST);
+
+        String data = "";
+
+        try {
+            JSONObject  jsonRootObject = new JSONObject(jsonRoot);
+
+            // Get the food array from root object
+            JSONArray jsonArray = jsonRootObject.optJSONArray("Freezer");
 
             return jsonArray;
         } catch (JSONException e) {}
@@ -327,11 +299,11 @@ public class DatabaseInteraction {
     private String readFile(int destination) {
         String dest;
         boolean local = true; // Checks if we are reading local app storage or assets folder
-        if (destination == 0)
+        if (destination == STORAGE_DEST)
             dest = storage;
-        else if (destination == 1)
+        else if (destination == LIBRARY_DEST)
             dest = library;
-        else if (destination == 2) {
+        else if (destination == ASSETS_DEST) {
             local = false;
             dest = null;
         }
@@ -344,7 +316,7 @@ public class DatabaseInteraction {
             if (local)
                 inputStream = context.openFileInput(dest);
             else
-                inputStream = context.getResources().getAssets().open(defaultlib);
+                inputStream = context.getResources().getAssets().open(default_lib);
 
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -367,15 +339,14 @@ public class DatabaseInteraction {
       Imports a default library to working library. Must only be called once.
      */
     public void importLibrary() {
-        String library = readFile(2);
-        String jsonRoot = readFile(1);
+        String library = readFile(ASSETS_DEST);
         try {
             // Make a new JSON Root Object
             JSONObject jsonRootObject = new JSONObject();
             // JSON Root Object of Library
-            JSONObject libraryroot = new JSONObject(library);
+            JSONObject library_root = new JSONObject(library);
             // Get the JSON Array containing "Foods"
-            JSONArray jsonArray = libraryroot.optJSONArray("Foods");
+            JSONArray jsonArray = library_root.optJSONArray("Foods");
             // Add the JSON Array to JSON Root Object
             jsonRootObject.put("Foods", jsonArray);
 
@@ -408,5 +379,6 @@ public class DatabaseInteraction {
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         return df.format(c.getTime());
     }
+
 
 }
