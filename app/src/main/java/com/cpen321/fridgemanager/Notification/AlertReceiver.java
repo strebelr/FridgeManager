@@ -15,7 +15,7 @@ public class AlertReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        createNotification(context, "5 Seconds","5 Seconds have passed","Alert");
+        createNotification(context, "Expired Food","Your food has expired","Alert");
 
     }
 
