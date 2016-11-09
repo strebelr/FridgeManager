@@ -21,7 +21,6 @@ Structure of the source code directory?
 - src/main/java       Application/Library sources
 - src/main/res        Application/Library resources
 - src/test/java       Test sources
-- README.md           Project's readme
 
 Design patterns used?
 - ???
