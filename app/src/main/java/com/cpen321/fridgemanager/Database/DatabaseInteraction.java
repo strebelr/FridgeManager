@@ -5,6 +5,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,7 +23,7 @@ public class DatabaseInteraction {
     Context context;
 
     // Static list that contains the list of food locations. Modify this only to add more locations.
-    private final static List<String> LOCATIONS_LIST = Arrays.asList("Fridge", "Fresh", "Pantry", "Freezer");
+    public final static List<String> LOCATIONS_LIST = Arrays.asList("Fridge", "Fresh", "Pantry", "Freezer");
 
     // Defined variables to select file read locations
     private final static int STORAGE_DEST = 0;
@@ -37,7 +41,6 @@ public class DatabaseInteraction {
     private final static String storage = "storage.json";
     private final static String library = "library.json";
     private final static String default_lib = "default_library.json"; // Default library in assets
-    private final static String log = "log.txt"; // Output from test
 
     /*
       Default constructor
@@ -50,26 +53,30 @@ public class DatabaseInteraction {
       Sets up the storage json. Runs only once after installation.
      */
     public void setUp() {
-        // Get the root JSON String from File
-        String jsonRoot = readFile(STORAGE_DEST);
-        try {
-            // If root object exists
-            if (jsonRoot == "") {
-                // Make a new JSON Root Object
-                JSONObject jsonRootObject = new JSONObject();
-
-                // Put all arrays into object
-                for(int i = 0; i < LOCATIONS_LIST.size(); i++) {
-                    jsonRootObject.put(LOCATIONS_LIST.get(i), new JSONArray());
-                }
-
-                // Output the new JSON Root Object to File
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
-                outputStreamWriter.write(jsonRootObject.toString());
-                outputStreamWriter.close();
-            }
-        } catch (IOException e) {} catch (JSONException e) {}
+        if (readFile(LIBRARY_DEST) != "") return;
+        try { // Output the new JSON Root Object to File
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
+            write(outputStreamWriter, makeRoot().toString());
+        } catch (FileNotFoundException e) {}
     }
+
+    /*
+      Makes a new json root object with default location parameters.
+      @returns default root object
+     */
+    private JSONObject makeRoot() {
+        JSONObject root = new JSONObject();
+
+        try {
+            // Put all arrays into object
+            for (int i = 0; i < LOCATIONS_LIST.size(); i++) {
+                root.put(LOCATIONS_LIST.get(i), new JSONArray());
+            }
+        } catch (JSONException e) {}
+
+        return root;
+    }
+
 
     /*
       Deletes a JSONObject from JSONArray.
@@ -77,21 +84,35 @@ public class DatabaseInteraction {
       @param location/JSONArray from which object is removed
      */
     public void removeFood(JSONObject food, String location) {
-        // Get the root JSON String from File
-        String jsonRoot = readFile(STORAGE_DEST);
+        String root = readFile(STORAGE_DEST);
+        if (root == "") return;
+        try {  // Output the new JSON Root Object to File
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
+                write(outputStreamWriter, remove(root, location, food).toString());
+        } catch (FileNotFoundException e) {}
+    }
+
+    /*
+      Removes an object from specified array in given root.
+      @param root object in string
+      @param array to specific
+      @param object to remove
+      @return json object with element removed
+     */
+    private JSONObject remove(String root, String array, JSONObject element) {
         try {
             // If root object exists
-            if (jsonRoot != "") {
+            if (root != "") {
                 // Make a JSON Object from root String
-                JSONObject jsonRootObject = new JSONObject(jsonRoot);
+                JSONObject jsonRootObject = new JSONObject(root);
                 // Get the JSON Array containing "Foods"
-                JSONArray jsonArray = jsonRootObject.optJSONArray(location);
+                JSONArray jsonArray = jsonRootObject.optJSONArray(array);
                 // Make new JSONArray and Root to push back
                 JSONObject jsonNewRoot = new JSONObject();
 
                 // Put unmodified arrays into new root
                 for(int i = 0; i < LOCATIONS_LIST.size(); i++) {
-                    if (location != LOCATIONS_LIST.get(i)) {
+                    if (array != LOCATIONS_LIST.get(i)) {
                         jsonNewRoot.put(LOCATIONS_LIST.get(i), jsonRootObject.optJSONArray(LOCATIONS_LIST.get(i)));
                     }
                 }
@@ -100,9 +121,9 @@ public class DatabaseInteraction {
 
                 boolean remove = true; // Keeps track of if item has been removed already
                 for(int i = 0; i < jsonArray.length(); i++) {
-                    if(!(food.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
-                            !(food.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
-                            !(food.optString("quantity").toString().equals(jsonArray.getJSONObject(i).optString("quantity").toString())) ||
+                    if(!(element.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
+                            !(element.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
+                            !(element.optString("quantity").toString().equals(jsonArray.getJSONObject(i).optString("quantity").toString())) ||
                             !remove) { // If item doesn't match
                         newArray.put(jsonArray.get(i)); // Add item to new array
                     }
@@ -112,49 +133,83 @@ public class DatabaseInteraction {
                 }
 
                 // Put the new array
-                jsonNewRoot.put(location, newArray);
+                jsonNewRoot.put(array, newArray);
 
-                // Output the new JSON Root Object to File
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
-                outputStreamWriter.write(jsonNewRoot.toString());
-                outputStreamWriter.close();
+                return jsonNewRoot;
             }
 
-        } catch (IOException e) {} catch (JSONException e) {}
+        }  catch (JSONException e) {}
+
+        return null;
     }
 
     /*
       Appends a new JSONObject with String data to the JSON file.
-      @param data The data to initialize the JSONObject with
+      @param name of the food
       @param quantity
-            @param unit 0 for unit
+      @param unit 0 for unit
                   1 for gram
                   2 for kg
                   3 for L
                   4 for cup
+      @param location of the food to store
+      @param expiry days until it expires
      */
-    public void writeToStorage(String data, double quantity, int unit, String location, int expiry) {
+    public void writeToStorage(String name, double quantity, int unit, String location, int expiry) {
+        // Create the element
+        JSONObject element = create(name, quantity, unit, expiry);
+
+        // Get the root JSON String from File
+        String jsonRoot = readFile(STORAGE_DEST);
+
+        try{ // Output the new JSON Root Object to File
+            write(new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE)), add_to_root(element, jsonRoot, location));
+        } catch (FileNotFoundException e) {}
+    }
+
+    /*
+      Make a new JSON Object with provided attributes.
+      @param name of the food
+      @param quantity
+      @param unit 0 for unit
+                  1 for gram
+                  2 for kg
+                  3 for L
+                  4 for cup
+      @param expiry days until it expires
+      @returns JSONObject with given attributes
+     */
+    private JSONObject create(String name, double quantity, int unit, int expiry) {
         // Create a new JSON Object
         JSONObject element = new JSONObject();
         String date = getCurrentDate();
         String expiry_date = getFutureDate(expiry);
         try {
-            element.put("name", data);
+            element.put("name", name);
             element.put("bought", date);
             element.put("expiry", expiry_date);
             element.put("quantity", quantity);
             element.put("unit", unit);
         } catch (JSONException e) {}
+        return element;
+    }
 
-        // Get the root JSON String from File
-        String jsonRoot = readFile(STORAGE_DEST);
+    /*
+      Adds an element to a array in JSON Root Object.
+      @param object to add
+      @param root object in string with arrays
+      @param location to choose between arrays
+      @returns modified json root object in string
+     */
+    private String add_to_root(JSONObject element, String root, String location) {
+        assert(element != null);
         try {
             JSONObject jsonRootObject;
             JSONArray jsonArray;
             // If root object exists
-            if (jsonRoot != "") {
+            if (root != "") {
                 // Make a JSON Object from root String
-                jsonRootObject = new JSONObject(jsonRoot);
+                jsonRootObject = new JSONObject(root);
                 // Get the JSON Array containing "Foods"
                 jsonArray = jsonRootObject.optJSONArray(location);
                 if (jsonArray != null) {
@@ -181,122 +236,49 @@ public class DatabaseInteraction {
                 jsonRootObject.put(location, jsonArray);
             }
 
-            // Output the new JSON Root Object to File
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
-            outputStreamWriter.write(jsonRootObject.toString());
-            outputStreamWriter.close();
-        } catch (IOException e) {} catch (JSONException e) {}
-    }
+            return jsonRootObject.toString();
 
-    /*
-      Writes a String to Log. Use this method for testing File IO.
-    */
-    public void plainWrite(String data) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(log, Context.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        } catch (IOException e) {}
-    }
-
-    /*
-      Reads the Library JSON file and returns an JSONArray
-      @return raw JSON formatted string
-     */
-    public JSONArray readLibrary() {
-        String jsonRoot = readFile(LIBRARY_DEST);
-
-        String data = "";
-
-        try {
-            JSONObject  jsonRootObject = new JSONObject(jsonRoot);
-
-            // Get the food array from root object
-            JSONArray jsonArray = jsonRootObject.optJSONArray("Foods");
-
-            return jsonArray;
         } catch (JSONException e) {}
 
         return null;
     }
 
     /*
-      Reads the Storage JSON file and returns the Fresh JSONArray
-      @return raw JSON formatted string
+      Write to File, given an output stream writer.
+      @param OutputStreamWriter to File
      */
-    public JSONArray getFreshArray() {
-        String jsonRoot = readFile(STORAGE_DEST);
-
-        String data = "";
-
+    private void write(OutputStreamWriter osw, String word) {
         try {
-            JSONObject  jsonRootObject = new JSONObject(jsonRoot);
-
-            // Get the food array from root object
-            JSONArray jsonArray = jsonRootObject.optJSONArray("Fresh");
-
-            return jsonArray;
-        } catch (JSONException e) {}
-
-        return null;
+            osw.write(word);
+            osw.close();
+        } catch (IOException e){}
     }
 
     /*
-      Reads the Storage JSON file and returns the Pantry JSONArray
-      @return raw JSON formatted string
+      Gets JSON Array from specified location.
+      @param locations
      */
-    public JSONArray getPantryArray() {
-        String jsonRoot = readFile(STORAGE_DEST);
-
-        String data = "";
-
-        try {
-            JSONObject  jsonRootObject = new JSONObject(jsonRoot);
-
-            // Get the food array from root object
-            JSONArray jsonArray = jsonRootObject.optJSONArray("Pantry");
-
-            return jsonArray;
-        } catch (JSONException e) {}
-
-        return null;
+    public JSONArray getArray(String location) {
+        String root = readFile(STORAGE_DEST);
+        if (location.equals("Library")) {
+            root = readFile(LIBRARY_DEST);
+            return extractArray(root, "Foods");
+        }
+        return extractArray(root, location);
     }
 
     /*
-      Reads the Storage JSON file and returns the Fridge JSONArray
-      @return raw JSON formatted string
+      Returns a JSONArray with attribute, provided a root object.
+      @param root object in string
+      @param attribute
+      @returns JSONObject with given attribute
      */
-    public JSONArray getFridgeArray() {
-        String jsonRoot = readFile(STORAGE_DEST);
-
-        String data = "";
-
+    private JSONArray extractArray(String root, String attribute) {
         try {
-            JSONObject  jsonRootObject = new JSONObject(jsonRoot);
+            JSONObject  jsonRootObject = new JSONObject(root);
 
             // Get the food array from root object
-            JSONArray jsonArray = jsonRootObject.optJSONArray("Fridge");
-
-            return jsonArray;
-        } catch (JSONException e) {}
-
-        return null;
-    }
-
-    /*
-      Reads the Storage JSON file and returns the Freezer JSONArray
-      @return raw JSON formatted string
-     */
-    public JSONArray getFreezereArray() {
-        String jsonRoot = readFile(STORAGE_DEST);
-
-        String data = "";
-
-        try {
-            JSONObject  jsonRootObject = new JSONObject(jsonRoot);
-
-            // Get the food array from root object
-            JSONArray jsonArray = jsonRootObject.optJSONArray("Freezer");
+            JSONArray jsonArray = jsonRootObject.optJSONArray(attribute);
 
             return jsonArray;
         } catch (JSONException e) {}
@@ -306,47 +288,58 @@ public class DatabaseInteraction {
 
     /*
       Reads the JSON file and returns it as string
-      @param destination to read
-             0 for storage
-             1 for library
+      @param destination to read from
       @return raw JSON formatted string
+              empty string if file does not exist
     */
     private String readFile(int destination) {
-        String dest;
-        boolean local = true; // Checks if we are reading local app storage or assets folder
-        if (destination == STORAGE_DEST)
-            dest = storage;
-        else if (destination == LIBRARY_DEST)
-            dest = library;
-        else if (destination == ASSETS_DEST) {
-            local = false;
-            dest = null;
+        InputStreamReader isr;
+        if (destination == STORAGE_DEST) {
+            try {
+                isr = new InputStreamReader(context.openFileInput(storage));
+                return read(isr);
+            } catch (FileNotFoundException e) {
+            }
         }
-        else
-            dest = null;
+        else if (destination == LIBRARY_DEST) {
+            try {
+                isr = new InputStreamReader(context.openFileInput(library));
+                return read(isr);
+            } catch (FileNotFoundException e) {
+            }
+        }
+        else if (destination == ASSETS_DEST) {
+            try {
+                isr = new InputStreamReader(context.getResources().getAssets().open(default_lib));
+                return read(isr);
+            } catch (IOException e) {
+            }
+        }
+
+        return "";
+    }
+
+    /*
+      A method that handles only reading.
+     */
+    private String read(InputStreamReader isr) {
+        assert(isr != null);
 
         String root = "";
         try {
-            InputStream inputStream;
-            if (local)
-                inputStream = context.openFileInput(dest);
-            else
-                inputStream = context.getResources().getAssets().open(default_lib);
+            // Set up string builder
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            String receiveString = "";
+            StringBuilder stringBuilder = new StringBuilder();
 
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
-                }
-
-                inputStream.close();
-                root = stringBuilder.toString();
+            while ( (receiveString = bufferedReader.readLine()) != null ) {
+                stringBuilder.append(receiveString);
             }
+            isr.close();
+            root = stringBuilder.toString();
+
         } catch (IOException e) {}
+
         return root;
     }
 
@@ -354,21 +347,10 @@ public class DatabaseInteraction {
       Imports a default library to working library. Must only be called once.
      */
     public void importLibrary() {
-        String library = readFile(ASSETS_DEST);
         try {
-            // Make a new JSON Root Object
-            JSONObject jsonRootObject = new JSONObject();
-            // JSON Root Object of Library
-            JSONObject library_root = new JSONObject(library);
-            // Get the JSON Array containing "Foods"
-            JSONArray jsonArray = library_root.optJSONArray("Foods");
-            // Add the JSON Array to JSON Root Object
-            jsonRootObject.put("Foods", jsonArray);
-
             // Output the new JSON Root Object to File
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(this.library, Context.MODE_PRIVATE));
-            outputStreamWriter.write(jsonRootObject.toString());
-            outputStreamWriter.close();
+            write(outputStreamWriter, new JSONObject(readFile(ASSETS_DEST)).toString());
         } catch (IOException e) {} catch (JSONException e) {}
     }
 
@@ -379,8 +361,7 @@ public class DatabaseInteraction {
     private String getCurrentDate() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-        String formattedDate = df.format(c.getTime());
-        return formattedDate;
+        return df.format(c.getTime());
     }
 
     /*
@@ -394,6 +375,5 @@ public class DatabaseInteraction {
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         return df.format(c.getTime());
     }
-
 
 }

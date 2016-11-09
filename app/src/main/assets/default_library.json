@@ -12,5 +12,5 @@
   {"name":"Strawberry","expiry":"5","unit":"0", "location":"Fridge"},
   {"name":"Strawberries","expiry":"5","unit":"0", "location":"Fridge"},
   {"name":"Bread","expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"pork","expiry":"5","unit":"0", "location":"Fridge"}
+  {"name":"Pork","expiry":"5","unit":"0", "location":"Fridge"}
 ]}

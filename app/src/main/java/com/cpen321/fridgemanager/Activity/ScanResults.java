@@ -15,6 +15,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.cpen321.fridgemanager.Database.DatabaseInteraction;
 import com.cpen321.fridgemanager.Notification.AlertReceiver;
 import com.cpen321.fridgemanager.OcrReader.OcrCaptureActivity;
 import com.cpen321.fridgemanager.R;
@@ -118,20 +119,20 @@ public class ScanResults extends AppCompatActivity {
             // Create unit text
             switch (units.get(i)) {
                 // TODO: CHANGE UNIT STRING IF NECESSARY
-                case 0:
-                    unit_name.setText("unit");
+                case DatabaseInteraction.UNIT:
+                    unit_name.setText("");
                     break;
-                case 1:
-                    unit_name.setText("grams");
+                case DatabaseInteraction.GRAM:
+                    unit_name.setText(" g");
                     break;
-                case 2:
-                    unit_name.setText("kgs");
+                case DatabaseInteraction.KG:
+                    unit_name.setText(" kg");
                     break;
-                case 3:
-                    unit_name.setText("litres");
+                case DatabaseInteraction.L:
+                    unit_name.setText(" l");
                     break;
-                case 4:
-                    unit_name.setText("cups");
+                case DatabaseInteraction.CUP:
+                    unit_name.setText(" cups");
                     break;
             }
 

@@ -35,11 +35,18 @@ public class FoodStock extends Fragment{
     private JSONArray fridge;
     private JSONArray fresh;
     private JSONArray pantry;
+    private JSONArray freezer;
 
     TableLayout mTlayout;
     private ArrayList<TableRow> trs = new ArrayList<TableRow>();
     private JSONObject food;
     DatabaseInteraction di;
+
+    // Titles
+    TableRow titleFridge;
+    TableRow titleFresh;
+    TableRow titlePantry;
+    TableRow titleFreezer;
 
     public FoodStock() {
         // Required empty public constructor
@@ -62,24 +69,29 @@ public class FoodStock extends Fragment{
 
         di = new DatabaseInteraction(getContext());
 
-        TableRow titleFridge = new TableRow(getActivity());
+        titleFridge = new TableRow(getActivity());
+        titleFresh = new TableRow(getActivity());
+        titlePantry = new TableRow(getActivity());
+        titleFreezer = new TableRow(getActivity());
         TextView titleFridgeText = new TextView(getActivity());
-        TableRow titleFresh = new TableRow(getActivity());
         TextView titleFreshText = new TextView(getActivity());
-        TableRow titlePantry = new TableRow(getActivity());
         TextView titlePantryText = new TextView(getActivity());
+        TextView titleFreezerText = new TextView(getActivity());
 
         try {
             trs.clear();
-            fridge = di.getFridgeArray();
+            fridge = di.getArray("Fridge");
             createTitle(titleFridge,titleFridgeText, R.string.foodStock_Fridge, fridge.length());
             createTable(0);
-            fresh = di.getFreshArray();
+            fresh = di.getArray("Fresh");
             createTitle(titleFresh,titleFreshText, R.string.foodStock_Fresh, fresh.length());
             createTable(1);
-            pantry = di.getPantryArray();
+            pantry = di.getArray("Pantry");
             createTitle(titlePantry,titlePantryText, R.string.foodStock_Pantry, pantry.length());
             createTable(2);
+            freezer = di.getArray("Freezer");
+            createTitle(titlePantry,titleFreezerText, R.string.foodStock_Freezer, freezer.length());
+            createTable(3);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -96,17 +108,24 @@ public class FoodStock extends Fragment{
         // Selects food location
         JSONArray foodList;
         int index;
-        if (location == 0 ) {
-            foodList = fridge;
-            index = 0;
-        }
-        else if(location == 1) {
-            foodList = fresh;
-            index = fridge.length();
-        }
-        else {
-            foodList = pantry;
-            index = fridge.length() + fresh.length();
+
+        switch(location) {
+            case 0:
+                foodList = fridge;
+                index = 0;
+                break;
+            case 1:
+                foodList = fresh;
+                index = fridge.length();
+                break;
+            case 2:
+                foodList = pantry;
+                index = fridge.length() + fresh.length();
+                break;
+            default: // and case 3
+                foodList = freezer;
+                index = fridge.length() + fresh.length() + pantry.length();
+                break;
         }
 
         for (int i = 0; i < foodList.length(); i++) {
@@ -134,19 +153,19 @@ public class FoodStock extends Fragment{
                 // Create unit text
                 switch (Integer.parseInt(food.optString("unit").toString())) {
                     // TODO: CHANGE UNIT STRING IF NECESSARY
-                    case 0:
+                    case DatabaseInteraction.UNIT:
                         unit_name.setText("");
                         break;
-                    case 1:
+                    case DatabaseInteraction.GRAM:
                         unit_name.setText(" g");
                         break;
-                    case 2:
+                    case DatabaseInteraction.KG:
                         unit_name.setText(" kg");
                         break;
-                    case 3:
+                    case DatabaseInteraction.L:
                         unit_name.setText(" l");
                         break;
-                    case 4:
+                    case DatabaseInteraction.CUP:
                         unit_name.setText(" cups");
                         break;
                 }
@@ -186,20 +205,42 @@ public class FoodStock extends Fragment{
                             new_index = index - fridge.length();
                             location = "Fresh";
                         }
-                        else {
+                        else if (index >= fridge.length() + fresh.length() && index < fridge.length() + fresh.length() + pantry.length()) {
                             new_index = index - fridge.length() - fresh.length();
                             location = "Pantry";
+                        }
+                        else {
+                            new_index = index - fridge.length() - fresh.length() - pantry.length();
+                            location = "Freezer";
                         }
 
                         // Remove table row from table layout
                         mTlayout.removeView(trs.get(index));
                         try {
-                            if (location == "Fridge")
+                            if (location == "Fridge") {
                                 di.removeFood(fridge.getJSONObject(new_index), location);
-                            else if (location == "Fresh")
+                                if (di.getArray("Fridge").length() == 0) {
+                                    mTlayout.removeView(titleFridge);
+                                }
+                            }
+                            else if (location == "Fresh") {
                                 di.removeFood(fresh.getJSONObject(new_index), location);
-                            else
+                                if (di.getArray("Fresh").length() == 0) {
+                                    mTlayout.removeView(titleFresh);
+                                }
+                            }
+                            else if (location == "Pantry"){
                                 di.removeFood(pantry.getJSONObject(new_index), location);
+                                if (di.getArray("Pantry").length() == 0) {
+                                    mTlayout.removeView(titlePantry);
+                                }
+                            }
+                            else if (location == "Freezer") {
+                                di.removeFood(pantry.getJSONObject(new_index), location);
+                                if (di.getArray("Freezer").length() == 0) {
+                                    mTlayout.removeView(titleFreezer);
+                                }
+                            }
                         } catch(JSONException e) {}
 
                     }
