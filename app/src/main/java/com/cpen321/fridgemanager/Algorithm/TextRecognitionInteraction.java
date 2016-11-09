@@ -33,6 +33,14 @@ public class TextRecognitionInteraction {
     }
 
     /*
+      Constructor that assigns library to provided JSONArray. Useful for testing.
+     */
+    public TextRecognitionInteraction(Context context, JSONArray array) {
+        di = new DatabaseInteraction(context);
+        library = array;
+    }
+
+    /*
       Add individual food to storage if it is a valid food.
       @param string to try to add
      */
@@ -49,8 +57,7 @@ public class TextRecognitionInteraction {
     public JSONObject isFood(String name) {
         // Iterate the jsonArray and print the info of JSONObjects
         assert(library != null);
-
-        Log.d(TAG, "name is" + name);
+        // Log.d(TAG, "name is" + name);
 
         try {
             //maximum allowable difference
