@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.cpen321.fridgemanager.R;
 
+//This class is currently unused
 public class Alert_Activity extends AppCompatActivity {
 
     @Override

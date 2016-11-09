@@ -90,7 +90,7 @@ public class FoodStock extends Fragment{
             createTitle(titlePantry,titlePantryText, R.string.foodStock_Pantry, pantry.length());
             createTable(2);
             freezer = di.getArray("Freezer");
-            createTitle(titlePantry,titleFreezerText, R.string.foodStock_Freezer, freezer.length());
+            createTitle(titleFreezer,titleFreezerText, R.string.foodStock_Freezer, freezer.length());
             createTable(3);
         } catch (ParseException e) {
             e.printStackTrace();
