@@ -7,6 +7,8 @@ import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.cpen321.fridgemanager.R;
+
 import java.util.Calendar;
 
 /**

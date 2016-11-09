@@ -37,8 +37,5 @@
         <item>Freezer</item>
         <item>Pantry</item>
     </string-array>
-    <string name="add_one_item">Add</string>
-    <string name="add_all">Add all</string>
-    <string name="try_again">Try again</string>
     <string name="add_food">Add Food</string>
 </resources>

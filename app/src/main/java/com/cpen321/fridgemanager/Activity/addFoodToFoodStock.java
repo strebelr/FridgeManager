@@ -16,6 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.cpen321.fridgemanager.Database.DatabaseInteraction;
+import com.cpen321.fridgemanager.Fragment.Expenditures;
+import com.cpen321.fridgemanager.Fragment.FoodStock;
+import com.cpen321.fridgemanager.Fragment.FoodToExpire;
+import com.cpen321.fridgemanager.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -61,7 +67,7 @@ public class addFoodToFoodStock extends AppCompatActivity {
         text = (AutoCompleteTextView) findViewById(R.id.addFoodName);
         DatabaseInteraction di = new DatabaseInteraction(getApplicationContext());
         List<String>  list = new ArrayList<>();
-        JSONArray jsonArray = di.getStorageArray();
+        JSONArray jsonArray = di.getArray("Library");
         if (jsonArray != null) {
             String text = "";
             try {
@@ -99,9 +105,9 @@ public class addFoodToFoodStock extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new foodStock(), "Stock");
-        adapter.addFrag(new foodToExpire(), "Alert");
-        adapter.addFrag(new expenditures(), "Spent");
+        adapter.addFrag(new FoodStock(), "Stock");
+        adapter.addFrag(new FoodToExpire(), "Alert");
+        adapter.addFrag(new Expenditures(), "Spent");
         viewPager.setAdapter(adapter);
     }
 
