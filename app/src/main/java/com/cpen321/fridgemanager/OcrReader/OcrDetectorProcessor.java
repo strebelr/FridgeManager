@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.OcrReader;
 
-import android.util.Log;
 import android.util.SparseArray;
 
-import com.cpen321.fridgemanager.camera.GraphicOverlay;
+import com.cpen321.fridgemanager.Camera.GraphicOverlay;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 

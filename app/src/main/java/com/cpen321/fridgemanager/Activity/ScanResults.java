@@ -1,6 +1,5 @@
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.Activity;
 
-import android.app.ActionBar;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -10,16 +9,16 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.cpen321.fridgemanager.Notification.Alert;
 import com.cpen321.fridgemanager.Notification.AlertReceiver;
+import com.cpen321.fridgemanager.OcrReader.OcrCaptureActivity;
+import com.cpen321.fridgemanager.R;
+import com.cpen321.fridgemanager.Algorithm.TextRecognitionInteraction;
 
 import org.json.JSONObject;
 
@@ -30,7 +29,7 @@ import java.util.GregorianCalendar;
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-public class scanResults extends AppCompatActivity {
+public class ScanResults extends AppCompatActivity {
 
     // Initialize ArrayLists  that store food data. Index corresponds between these three lists.
     private ArrayList<EditText> amounts = new ArrayList<EditText>();

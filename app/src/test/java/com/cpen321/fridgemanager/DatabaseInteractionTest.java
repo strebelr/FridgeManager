@@ -1,6 +1,9 @@
 package com.cpen321.fridgemanager;
 
 import android.content.Context;
+
+import com.cpen321.fridgemanager.Database.DatabaseInteraction;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

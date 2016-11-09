@@ -1,4 +1,4 @@
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import com.cpen321.fridgemanager.R;
 
 
-public class expenditures extends Fragment{
+public class Expenditures extends Fragment{
 
-    public expenditures() {
+    public Expenditures() {
         // Required empty public constructor
     }
 

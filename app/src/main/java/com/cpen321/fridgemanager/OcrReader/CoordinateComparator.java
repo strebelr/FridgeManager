@@ -1,6 +1,8 @@
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.OcrReader;
 
 import android.graphics.RectF;
+
+import com.cpen321.fridgemanager.OcrReader.OcrGraphic;
 
 import java.util.Comparator;
 

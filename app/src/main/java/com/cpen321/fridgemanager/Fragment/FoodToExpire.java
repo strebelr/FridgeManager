@@ -1,4 +1,4 @@
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import com.cpen321.fridgemanager.R;
 
 
-public class foodToExpire extends Fragment{
+public class FoodToExpire extends Fragment{
 
-    public foodToExpire() {
+    public FoodToExpire() {
         // Required empty public constructor
     }
 

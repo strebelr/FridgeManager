@@ -1,7 +1,9 @@
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.Algorithm;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.cpen321.fridgemanager.Database.DatabaseInteraction;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,23 +1,21 @@
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.cpen321.fridgemanager.Database.DatabaseInteraction;
 import com.cpen321.fridgemanager.R;
+import com.cpen321.fridgemanager.Algorithm.TextRecognitionInteraction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,10 +28,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static java.util.logging.Logger.global;
 
-
-public class foodStock extends Fragment{
+public class FoodStock extends Fragment{
 
     // Initialize ArrayLists  that store food data. Index corresponds between these three lists.
     private JSONArray fridge;
@@ -45,7 +41,7 @@ public class foodStock extends Fragment{
     private JSONObject food;
     DatabaseInteraction di;
 
-    public foodStock() {
+    public FoodStock() {
         // Required empty public constructor
 
     }

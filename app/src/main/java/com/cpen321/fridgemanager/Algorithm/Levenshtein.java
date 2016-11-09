@@ -1,4 +1,4 @@
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.Algorithm;
 
 /**
  * Created by wyc_j on 2016-11-08.

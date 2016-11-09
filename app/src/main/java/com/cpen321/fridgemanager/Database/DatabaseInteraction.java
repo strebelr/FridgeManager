@@ -1,4 +1,4 @@
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.Database;
 import android.content.Context;
 
 import org.json.JSONArray;
