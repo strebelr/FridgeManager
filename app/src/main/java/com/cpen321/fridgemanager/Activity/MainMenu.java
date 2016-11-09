@@ -109,5 +109,11 @@ public class MainMenu extends AppCompatActivity {
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
+    
+    public void addFoodToFoodStock(View view){
+        Intent intent = new Intent(this, addFoodToFoodStock.class);
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
 
 }

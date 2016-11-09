@@ -5,6 +5,7 @@
     android:layout_height="fill_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
+    android:background="@drawable/container_border"
     android:weightSum="1">
 
     <TextView
@@ -17,13 +18,17 @@
         android:textColorHighlight="@android:color/primary_text_dark"
         android:layout_centerVertical="true"
         android:textSize="20dp"
-        android:text="ENTER FOOD NAME" />
+        android:text="Food/Grocery Item" />
 
 
-    <Spinner
-        android:id="@+id/spinner1_for_foodname"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+    <AutoCompleteTextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40px"
+        android:layout_marginRight="40px"
+        android:id="@+id/addFoodName"
+        android:background="@drawable/field_input_border"
+        android:inputType="text"
 
         />
 
@@ -44,17 +49,21 @@
             android:textColorHighlight="@android:color/primary_text_dark"
             android:layout_centerVertical="true"
             android:textSize="20dp"
-            android:text="AMOUNT" />
+            android:text="Amount" />
 
         <EditText
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40px"
             android:paddingTop="20px"
+            android:inputType="number"
+            android:background="@drawable/field_input_border"
+            android:id="@+id/amounttext"
              />
 
         <Spinner
-            android:id="@+id/spinner1_for_amount"
+            android:id="@+id/amountspinner"
+            android:entries="@array/amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:popupBackground="@android:color/transparent"
@@ -72,7 +81,7 @@
         android:textColorHighlight="@android:color/primary_text_dark"
         android:layout_centerVertical="true"
         android:textSize="20dp"
-        android:text="EXPIRY DATE" />
+        android:text="Expiry Date" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -81,38 +90,51 @@
         android:paddingTop="20px"
         >
 
-        <EditText
-            android:layout_width="wrap_content"
+        <LinearLayout
+
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="4"
             android:layout_marginLeft="40px"
-            android:layout_weight="0.50"
-            android:paddingTop="20px" />
+            android:layout_marginRight="40px"
+            android:gravity="bottom"
+            android:background="@drawable/field_input_border"
+            android:paddingTop="20px"
+            >
 
-        <EditText
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/expiry_date"
+                android:layout_marginLeft="40px"
+                android:layout_marginRight="40px"
+                android:layout_width="wrap_content"
+                android:background="@drawable/field_input_border"
+                android:layout_height="wrap_content" />
+
+
+
+         </LinearLayout>
+
+        <LinearLayout
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="40px"
-            android:layout_weight="0.50"
-            android:paddingTop="20px" />
+            android:orientation="vertical"
+            android:gravity="top"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            >
 
+            <ImageButton
+                    android:id="@+id/btn1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pick Date"
+                    android:src="@drawable/ic_plus"
+                    android:onClick="showDatePickerDialog"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+        </LinearLayout>
 
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="40px"
-            android:layout_weight="0.50"
-            android:paddingTop="20px" />
-
-        <Spinner
-            android:id="@+id/spinner1_for_expiry_date"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:popupBackground="@android:color/transparent"
-            />
 
     </LinearLayout>
 
@@ -126,13 +148,14 @@
         android:textColorHighlight="@android:color/primary_text_dark"
         android:layout_centerVertical="true"
         android:textSize="20dp"
-        android:text="LOCATION" />
+        android:text="Location" />
 
 
     <Spinner
         android:id="@+id/spinner1_for_location"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:entries="@array/locations"
 
         />
 
@@ -146,8 +169,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ADD FOOD TO FOOD STOCK"
-        android:id="@+id/button"
+        android:id="@+id/button_add_to_food_stock"
         android:textSize="20dp" />
     ... />
-        </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>
