@@ -64,6 +64,7 @@
         android:layout_gravity="top|end"
         android:tint="@color/navigationBarColor"
         app:backgroundTint="@color/colorPrimary"
+        android:onClick="addFoodToFoodStock"
         app:elevation="0dp" />
 
 </android.support.design.widget.CoordinatorLayout>
