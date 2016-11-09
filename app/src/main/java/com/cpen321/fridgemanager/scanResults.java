@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -193,7 +194,10 @@ public class scanResults extends AppCompatActivity {
             if(names.get(i) != null) { // If food not removed
                 int expiry = expiries.get(i); // Numbers of days until the expiry date.
                 // TODO: CALL ALARM FROM HERE
-                setAlarm(view, 2);
+
+                //Alert a = new Alert();
+                //a.setAlarm(findViewById(R.id.scan_result), expiry);
+                setAlarm(view, expiry);
 
                 if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
                     ti.addFoodToStorage(names.get(i), 0.0, units.get(i), locations.get(i), expiry);
@@ -206,12 +210,16 @@ public class scanResults extends AppCompatActivity {
     }
 
 
-    public void setAlarm(View view, int day) {
+    public void setAlarm(View view, int dayToExpire) {
 
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();     // possible redundancy here
+        Calendar c = new GregorianCalendar();
 
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-        calendar.set(Calendar.HOUR_OF_DAY,18);
+        calendar.getTime();
+        c.add(c.DATE, dayToExpire);
+
+        calendar.set(Calendar.DAY_OF_MONTH,c.DATE);
+       // calendar.set(Calendar.HOUR_OF_DAY,18);
         calendar.set(Calendar.MINUTE,00);
         calendar.set(Calendar.SECOND,00);
 

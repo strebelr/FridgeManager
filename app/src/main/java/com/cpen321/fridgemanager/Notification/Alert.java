@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import java.util.Calendar;
-
+//This class is currently unused
 public class Alert extends AppCompatActivity {
 
     public void setAlarm(View view, int day) {
