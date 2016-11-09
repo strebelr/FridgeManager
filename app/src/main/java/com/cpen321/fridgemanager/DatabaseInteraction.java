@@ -18,16 +18,26 @@ import java.util.List;
 public class DatabaseInteraction {
     Context context;
 
+    // Static list that contains the list of food locations. Modify this only to add more locations.
+    private final static List<String> LOCATIONS_LIST = Arrays.asList("Fridge", "Fresh", "Pantry", "Freezer");
+
+    // Defined variables to select file read locations
     private final static int STORAGE_DEST = 0;
     private final static int LIBRARY_DEST = 1;
     private final static int ASSETS_DEST = 2;
-    private final static List<String> LOCATIONS_LIST = Arrays.asList("Fridge", "Fresh", "Pantry", "Freezer");
 
+    // Defined variables to select unit encoded in integers
+    public final static int UNIT = 0;
+    public final static int GRAM = 1;
+    public final static int KG = 2;
+    public final static int L = 3;
+    public final static int CUP = 4;
 
-    private final String storage = "storage.json";
-    private final String library = "library.json";
-    private final String default_lib = "default_library.json";
-    private final String log = "log.txt"; // Output from test
+    // Defined file names for File IO
+    private final static String storage = "storage.json";
+    private final static String library = "library.json";
+    private final static String default_lib = "default_library.json"; // Default library in assets
+    private final static String log = "log.txt"; // Output from test
 
     /*
       Default constructor
@@ -78,25 +88,30 @@ public class DatabaseInteraction {
                 JSONArray jsonArray = jsonRootObject.optJSONArray(location);
                 // Make new JSONArray and Root to push back
                 JSONObject jsonNewRoot = new JSONObject();
+
+                // Put unmodified arrays into new root
                 for(int i = 0; i < LOCATIONS_LIST.size(); i++) {
                     if (location != LOCATIONS_LIST.get(i)) {
                         jsonNewRoot.put(LOCATIONS_LIST.get(i), jsonRootObject.optJSONArray(LOCATIONS_LIST.get(i)));
                     }
                 }
+                // Make new array to store the array without the deleted element
                 JSONArray newArray = new JSONArray();
-                boolean remove = true;
+
+                boolean remove = true; // Keeps track of if item has been removed already
                 for(int i = 0; i < jsonArray.length(); i++) {
                     if(!(food.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
                             !(food.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
                             !(food.optString("quantity").toString().equals(jsonArray.getJSONObject(i).optString("quantity").toString())) ||
-                            !remove) {
-                        newArray.put(jsonArray.get(i));
+                            !remove) { // If item doesn't match
+                        newArray.put(jsonArray.get(i)); // Add item to new array
                     }
-                    else {
+                    else { // Don't add. I.e: remove
                         remove = false;
                     }
                 }
 
+                // Put the new array
                 jsonNewRoot.put(location, newArray);
 
                 // Output the new JSON Root Object to File
@@ -112,7 +127,7 @@ public class DatabaseInteraction {
       Appends a new JSONObject with String data to the JSON file.
       @param data The data to initialize the JSONObject with
       @param quantity
-      @param unit 0 for unit
+            @param unit 0 for unit
                   1 for gram
                   2 for kg
                   3 for L
