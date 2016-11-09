@@ -4,7 +4,7 @@
   {"name":"Mushroom","expiry":"5","unit":"1", "location":"Fridge"},
   {"name":"Mshroom","expiry":"5","unit":"1", "location":"Fridge"},
   {"name":"Zucchini","expiry":"0","unit":"0", "location":"Fridge"},
-  {"name":"Spinach","expiry":"5","unit":"0", "location":"Fridge"},
+  {"name":"Spinach","expiry":"0","unit":"0", "location":"Fridge"},
   {"name":"Tomato","expiry":"5","unit":"0", "location":"Fridge"},
   {"name":"Banana","expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"Salmon","expiry":"5","unit":"1", "location":"Fridge"},
