@@ -1,7 +1,8 @@
 {"Foods":[{"name":"Apple","expiry":"5","unit":"0", "location":"Fridge"},
   {"name":"Orange","expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"Grape","expiry":"5","unit":"0", "location":"Fridge"},
-  {"name":"Mushroom","expiry":"0","unit":"1", "location":"Fridge"},
+  {"name":"Mushroom","expiry":"5","unit":"1", "location":"Fridge"},
+  {"name":"Mshroom","expiry":"5","unit":"1", "location":"Fridge"},
   {"name":"Zucchini","expiry":"0","unit":"0", "location":"Fridge"},
   {"name":"Spinach","expiry":"5","unit":"0", "location":"Fridge"},
   {"name":"Tomato","expiry":"5","unit":"0", "location":"Fridge"},
@@ -9,5 +10,7 @@
   {"name":"Salmon","expiry":"5","unit":"1", "location":"Fridge"},
   {"name":"Swordfish","expiry":"5","unit":"1", "location":"Fridge"},
   {"name":"Strawberry","expiry":"5","unit":"0", "location":"Fridge"},
-  {"name":"Bread","expiry":"5","unit":"0", "location":"Fresh"}
+  {"name":"Strawberries","expiry":"5","unit":"0", "location":"Fridge"},
+  {"name":"Bread","expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"pork","expiry":"5","unit":"0", "location":"Fridge"}
 ]}
