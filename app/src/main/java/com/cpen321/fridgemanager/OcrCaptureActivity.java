@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.RectF;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -78,6 +79,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.cpen321.fridgemanager.camera.CameraSource;
 import com.cpen321.fridgemanager.camera.CameraSourcePreview;
 import com.cpen321.fridgemanager.camera.GraphicOverlay;
+import com.google.android.gms.vision.text.Line;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
@@ -384,14 +386,11 @@ public class OcrCaptureActivity extends AppCompatActivity {
 
         for (OcrGraphic graphic : sortedGraphics) {
             textBlock = graphic.getTextBlock();
-            String t = textBlock.getValue().replaceAll("[^a-zA-Z\r\n\\s]", "");
-            String[] words = t.split("[\r\n\\s+]");
-            for (int i = 0; i < words.length; i++) {
-                // You may want to check for a non-word character before blindly
-                // performing a replacement
-                // It may also be necessary to adjust the character class
-                //words[i] = words[i].replaceAll("[^\\w]", "");
-                texts.add(words[i]);
+
+            List<Line> lines = (List<Line>) textBlock.getComponents();
+            for(int i =0; i < lines.size(); i++) {
+                texts.add(lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
+                Log.d(TAG, "line "+i+" is :" + lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
             }
         }
 

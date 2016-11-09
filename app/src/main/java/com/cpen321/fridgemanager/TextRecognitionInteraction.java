@@ -1,6 +1,7 @@
 package com.cpen321.fridgemanager;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,6 +12,9 @@ import org.json.JSONObject;
  */
 
 public class TextRecognitionInteraction {
+
+    private static final String TAG = "TRI";
+
     DatabaseInteraction di;
     JSONArray library;
 
@@ -63,13 +67,29 @@ public class TextRecognitionInteraction {
     public JSONObject isFood(String name) {
         // Iterate the jsonArray and print the info of JSONObjects
         assert(library != null);
+
+        Log.d(TAG, "name is" + name);
+
         try {
+            //maximum allowable difference
+            int margin = 1;
+
             for (int i = 0; i < library.length(); i++) {
                 JSONObject jsonObject = library.getJSONObject(i);
                 String library_name = jsonObject.optString("name").toString();
-                if (library_name.toLowerCase().equals(name.toLowerCase()))
-                    return jsonObject;
+
+                if(name.length() >= library_name.length()) {
+                    //get the distance between the two strings
+                    int dist = Levenshtein.distance(name, library_name);
+                    //get the absolute distance (accounts for difference in string length
+                    int abs_dist = dist - Math.abs(library_name.length()-name.length());
+                    //if absolute distance is less than error, assume found and add to database
+                    if(abs_dist < margin){
+                        return jsonObject;
+                    }
+                }
             }
+
         } catch (JSONException e) {}
         return null;
     }
