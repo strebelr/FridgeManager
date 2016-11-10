@@ -206,7 +206,7 @@ public class ScanResults extends AppCompatActivity {
         mainMenu();
     }
 
-    // TODO: NEED TO TAKE IN UNIQUE ID, AND MSG. NEED MONTH AND DAY
+    // TODO: NEED TO TAKE IN UNIQUE ID, AND MSG. WHAT HAPPENS IF JANUARY 31 AND DAY IS ADDED
     public void setAlarm(View view, int dayToExpire) {
 
         Calendar calendar = Calendar.getInstance();     // possible redundancy here
@@ -214,10 +214,10 @@ public class ScanResults extends AppCompatActivity {
 
         calendar.add(Calendar.SECOND, 10);
         //calendar.set(Calendar.HOUR_OF_DAY, 18);
-        calendar.add(Calendar.DAY_OF_MONTH, dayToExpire);
+        calendar.add(Calendar.DAY_OF_YEAR, dayToExpire);
 
         android.util.Log.i("AFTER ",": " +calendar);
-        
+
         Long alertTime = System.currentTimeMillis() + 5000;
 
         android.util.Log.i("Time Class ", " Time value in milliseconds "+alertTime);

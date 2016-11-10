@@ -7,12 +7,20 @@
   {"name":"Spinach","expiry":"0","unit":"0", "location":"Fridge"},
   {"name":"Tomato","expiry":"5","unit":"0", "location":"Fridge"},
   {"name":"Banana","expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"Salmon","expiry":"5","unit":"1", "location":"Fridge"},
+  {"name":"Salmon Fillet","expiry":"5","unit":"1", "location":"Fridge"},
   {"name":"Swordfish","expiry":"5","unit":"1", "location":"Fridge"},
   {"name":"Strawberry","expiry":"5","unit":"0", "location":"Fridge"},
   {"name":"Strawberries","expiry":"5","unit":"0", "location":"Fridge"},
   {"name":"Bread","expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"Pork","expiry":"5","unit":"0", "location":"Fridge"},
   {"name":"Green Onion","expiry":"5","unit":"0", "location":"Fridge"},
-  {"name":"Onion","expiry":"14","unit":"0","location":"Fresh"}
+  {"name":"Onion","expiry":"14","unit":"0","location":"Fresh"},
+  {"name":"Eggplant","expiry":"7","unit":"0","location":"Fresh"},
+  {"name":"Lime","expiry":"14","unit":"0","location":"Fridge"},
+  {"name":"Soy Sauce","expiry":"100","unit":"3","location":"Pantry"},
+  {"name":"Hazelnut Bar","expiry":"20","unit":"0","location":"Pantry"},
+  {"name":"Nutella","expiry":"60","unit":"1","location":"Fridge"},
+  {"name":"Soy Drink","expiry":"3","unit":"0","location":"Fridge"},
+  {"name":"Ritz","expiry":"14","unit":"0","location":"Pantry"},
+  {"name":"Kit Kat","expiry":"14","unit":"0","location":"Pantry"}
 ]}
