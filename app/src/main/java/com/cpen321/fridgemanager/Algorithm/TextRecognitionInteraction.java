@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 /**
  * Created by Kazuki Fukushima on 2016/10/22.
+ * Handles the recognition of food items from the text read by OCRCaptureActivity
  */
 
 public class TextRecognitionInteraction {

@@ -81,7 +81,7 @@ public class OcrGraphic extends GraphicOverlay.Graphic {
      * @return True if the provided point is contained within this graphic's bounding box.
      */
     public boolean contains(float x, float y) {
-        // TODO: Check if this graphic's text contains this point.
+        // Check if this graphic's text contains this point.
         if (mText == null) {
             return false;
         }
@@ -98,7 +98,7 @@ public class OcrGraphic extends GraphicOverlay.Graphic {
      */
     @Override
     public void draw(Canvas canvas) {
-        // TODO: Draw the text onto the canvas.
+        // Draw the text onto the canvas.
         if(mText == null)
             return;
 
