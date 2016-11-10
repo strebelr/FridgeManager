@@ -57,28 +57,29 @@ public class ScanResults extends AppCompatActivity {
 
         JSONObject food;
 
-        //TODO: Handle the case where 2 items have identical name. Do not display two items, instead increase the default quantity
-        ArrayList<String> text_no_duplicates = new ArrayList<String>();
-        ArrayList<String> duplicates = new ArrayList<String>();
+        // TODO: Handle the case where 2 items have identical name. Do not display two items, instead increase the default quantity
+        ArrayList<JSONObject> text_no_duplicates = new ArrayList<>();
+        ArrayList<String> text_no_duplicates_compare = new ArrayList<>();
+        ArrayList<JSONObject> duplicates = new ArrayList<>();
 
-        //get rid of duplicates
+        // Get rid of duplicates
         for(int i = 0; i < texts.size(); i++){
-            if(!text_no_duplicates.contains(texts.get(i))){
-                text_no_duplicates.add(text_no_duplicates.size(),texts.get(i));
+            food = ti.isFood(texts.get(i));
+            if(food != null) {
+                if (!text_no_duplicates_compare.contains(food.optString("name").toString())) {
+                    text_no_duplicates.add(food);
+                    text_no_duplicates_compare.add(food.optString("name").toString());
+                }
+                else
+                    duplicates.add(food);
             }
-            else
-                duplicates.add(duplicates.size(),texts.get(i));
         }
 
         for(int i = 0; i < text_no_duplicates.size(); i++) {
-            //creates a new JSON Object and stores it in food
-            food = ti.isFood(text_no_duplicates.get(i));
-            if(food != null) {
-                names.add(food.optString("name").toString());
-                units.add(Integer.parseInt(food.optString("unit").toString()));
-                locations.add(food.optString("location").toString());
-                expiries.add(Integer.parseInt(food.optString("expiry").toString()));
-            }
+            names.add(text_no_duplicates.get(i).optString("name").toString());
+            units.add(Integer.parseInt(text_no_duplicates.get(i).optString("unit").toString()));
+            locations.add(text_no_duplicates.get(i).optString("location").toString());
+            expiries.add(Integer.parseInt(text_no_duplicates.get(i).optString("expiry").toString()));
         }
 
 

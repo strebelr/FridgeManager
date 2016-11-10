@@ -2,7 +2,6 @@
   {"name":"Orange","expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"Grape","expiry":"5","unit":"0", "location":"Fridge"},
   {"name":"Mushroom","expiry":"5","unit":"1", "location":"Fridge"},
-  {"name":"Mshroom","expiry":"5","unit":"1", "location":"Fridge"},
   {"name":"Zucchini","expiry":"0","unit":"0", "location":"Fridge"},
   {"name":"Spinach","expiry":"0","unit":"0", "location":"Fridge"},
   {"name":"Tomato","expiry":"5","unit":"0", "location":"Fridge"},
@@ -22,5 +21,6 @@
   {"name":"Nutella","expiry":"60","unit":"1","location":"Fridge"},
   {"name":"Soy Drink","expiry":"3","unit":"0","location":"Fridge"},
   {"name":"Ritz","expiry":"14","unit":"0","location":"Pantry"},
-  {"name":"Kit Kat","expiry":"14","unit":"0","location":"Pantry"}
+  {"name":"Kit Kat","expiry":"14","unit":"0","location":"Pantry"},
+  {"name":"Tom Yum Soup","expiry":"60","unit":"0","location":"Pantry"}
 ]}
