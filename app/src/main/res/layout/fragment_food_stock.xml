@@ -4,31 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cpen321.fridgemanager.foodStock">
+    tools:context="com.cpen321.fridgemanager.Fragment.FoodStock">
 
-    <TextView
-        android:text="@string/foodstock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:id="@+id/foodstock"
-        android:layout_below="@+id/title"
-        android:layout_centerHorizontal="true" />
-
-<!--    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Food Stock"
-        android:textSize="40dp"
-        android:textStyle="bold"
-        android:layout_marginTop="28dp"
-        android:id="@+id/title"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" /> -->
-
-    <ExpandableListView android:id="@+id/list"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_width="match_parent" />
+        android:layout_marginTop="20px"
+        android:layout_marginRight="50px"
+        android:layout_marginLeft="50px"
+        android:scrollbars="none"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/scrollView2">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:id="@+id/mTlayoutF">
+        </TableLayout>
+
+    </ScrollView>
+
 
 
 </RelativeLayout>

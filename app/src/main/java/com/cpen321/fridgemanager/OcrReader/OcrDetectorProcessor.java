@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.OcrReader;
 
-import android.util.Log;
 import android.util.SparseArray;
 
-import com.cpen321.fridgemanager.camera.GraphicOverlay;
+import com.cpen321.fridgemanager.Camera.GraphicOverlay;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 
 /**
  * A very simple Processor which gets detected TextBlocks and adds them to the overlay
  * as OcrGraphics.
- * TODO: Make this implement Detector.Processor<TextBlock> and add text to the GraphicOverlay
+ * Make this implement Detector.Processor<TextBlock> and add text to the GraphicOverlay
  */
 public class OcrDetectorProcessor implements  Detector.Processor<TextBlock>{
 
@@ -35,7 +34,7 @@ public class OcrDetectorProcessor implements  Detector.Processor<TextBlock>{
         mGraphicOverlay = ocrGraphicOverlay;
     }
 
-    // TODO:  Once this implements Detector.Processor<TextBlock>, implement the abstract methods.
+    // Once this implements Detector.Processor<TextBlock>, implement the abstract methods.
     @Override
     public void receiveDetections(Detector.Detections<TextBlock> detections){
         mGraphicOverlay.clear();
@@ -43,7 +42,7 @@ public class OcrDetectorProcessor implements  Detector.Processor<TextBlock>{
         for(int i = 0; i < items.size(); ++i) {
             TextBlock item = items.valueAt(i);
             if (item != null && item.getValue() != null) {
-                Log.d("Processor", "Text detected! " + item.getValue());
+     //           Log.d("Processor", "Text detected! " + item.getValue());
             }
             OcrGraphic graphic = new OcrGraphic(mGraphicOverlay, item);
             mGraphicOverlay.add(graphic);

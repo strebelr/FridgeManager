@@ -1,4 +1,4 @@
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.Activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,18 +9,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextView;
+
+import com.cpen321.fridgemanager.Database.DatabaseInteraction;
+import com.cpen321.fridgemanager.Fragment.Expenditures;
+import com.cpen321.fridgemanager.Fragment.FoodStock;
+import com.cpen321.fridgemanager.Fragment.FoodToExpire;
+import com.cpen321.fridgemanager.OcrReader.OcrCaptureActivity;
+import com.cpen321.fridgemanager.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.cpen321.fridgemanager.R;
-import com.cpen321.fridgemanager.foodStock;
-import com.cpen321.fridgemanager.foodToExpire;
-import com.cpen321.fridgemanager.expenditures;
 
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -53,6 +53,7 @@ public class MainMenu extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
+        new DatabaseInteraction(getApplicationContext()).setUp();
     }
 
     @Override
@@ -68,9 +69,9 @@ public class MainMenu extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new foodStock(), "Stock");
-        adapter.addFrag(new foodToExpire(), "Alert");
-        adapter.addFrag(new expenditures(), "Spent");
+        adapter.addFrag(new FoodStock(), "Stock");
+        adapter.addFrag(new FoodToExpire(), "Alert");
+        adapter.addFrag(new Expenditures(), "Spent");
         viewPager.setAdapter(adapter);
     }
 
@@ -105,6 +106,12 @@ public class MainMenu extends AppCompatActivity {
 
     public void OcrCaptureActivity(View view){
         Intent intent = new Intent(this, OcrCaptureActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
+    
+    public void addFoodToFoodStock(View view){
+        Intent intent = new Intent(this, addFoodToFoodStock.class);
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }

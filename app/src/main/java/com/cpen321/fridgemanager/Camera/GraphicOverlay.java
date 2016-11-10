@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cpen321.fridgemanager.camera;
+package com.cpen321.fridgemanager.Camera;
 
 import android.content.Context;
 import android.graphics.Canvas;

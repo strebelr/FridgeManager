@@ -1,4 +1,4 @@
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.OcrReader;
 
 /*
  * Copyright (C) The Android Open Source Project
@@ -41,46 +41,23 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.hardware.Camera;
-import android.os.Build;
-import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
-import android.view.View;
-import android.widget.Toast;
 
+import com.cpen321.fridgemanager.Activity.ScanResults;
+import com.cpen321.fridgemanager.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.cpen321.fridgemanager.camera.CameraSource;
-import com.cpen321.fridgemanager.camera.CameraSourcePreview;
-import com.cpen321.fridgemanager.camera.GraphicOverlay;
+import com.cpen321.fridgemanager.Camera.CameraSource;
+import com.cpen321.fridgemanager.Camera.CameraSourcePreview;
+import com.cpen321.fridgemanager.Camera.GraphicOverlay;
+import com.google.android.gms.vision.text.Line;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
-import java.io.IOException;
-import java.util.Locale;
 import java.util.Set;
 
 import static android.R.id.message;
@@ -151,7 +128,6 @@ public class OcrCaptureActivity extends AppCompatActivity {
                 Snackbar.LENGTH_LONG)
                 .show();
 
-        // TODO: Set up the Text To Speech engine.
         TextToSpeech.OnInitListener listener =
                 new TextToSpeech.OnInitListener() {
                     @Override
@@ -220,11 +196,11 @@ public class OcrCaptureActivity extends AppCompatActivity {
     private void createCameraSource(boolean autoFocus, boolean useFlash) {
         Context context = getApplicationContext();
 
-        // TODO: Create the TextRecognizer
+        //  Create the TextRecognizer
         TextRecognizer textRecognizer = new TextRecognizer.Builder(context).build();
-        // TODO: Set the TextRecognizer's Processor.
+        // Set the TextRecognizer's Processor.
         textRecognizer.setProcessor(new OcrDetectorProcessor(mGraphicOverlay));
-        // TODO: Check if the TextRecognizer is operational.
+        // Check if the TextRecognizer is operational.
         if(!textRecognizer.isOperational()){
             Log.w(TAG, "Detector dependencies are not yet available.");
 
@@ -237,7 +213,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
                 Log.w(TAG, getString(R.string.low_storage_error));
             }
         }
-        // TODO: Create the mCameraSource using the TextRecognizer.
+        // Create the mCameraSource using the TextRecognizer.
         mCameraSource = new CameraSource.Builder(getApplicationContext(),textRecognizer)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(1280,1024)
@@ -367,27 +343,32 @@ public class OcrCaptureActivity extends AppCompatActivity {
         TextBlock textBlock = null;
 
         Set<OcrGraphic> graphics = mGraphicOverlay.getAllGraphics();
-        Set<String> texts = new HashSet<>();
+        ArrayList<String> texts = new ArrayList<String>();
 
-        for (OcrGraphic graphic : graphics) {
+        //Create a sorted list to sort the graphics by the X and Y value of the rect of textblock
+        List<OcrGraphic> sortedGraphics = new ArrayList<OcrGraphic>();
+
+        //add the set of graphics to the arraylist
+        for(OcrGraphic graphic : graphics){
+            sortedGraphics.add(graphic);
+        }
+
+        //sort the arraylist by rect coordinates of textblock of graphic
+        Collections.sort(sortedGraphics, new CoordinateComparator());
+
+        for (OcrGraphic graphic : sortedGraphics) {
             textBlock = graphic.getTextBlock();
-            String[] words = textBlock.getValue().replaceAll("[^a-zA-Z ]", "").split("\\s+");
-            for (int i = 0; i < words.length; i++) {
-                // You may want to check for a non-word character before blindly
-                // performing a replacement
-                // It may also be necessary to adjust the character class
-                words[i] = words[i].replaceAll("[^\\w]", "");
-                texts.add(words[i]);
+
+            List<Line> lines = (List<Line>) textBlock.getComponents();
+            for(int i =0; i < lines.size(); i++) {
+                texts.add(lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
+                Log.d(TAG, "line "+i+" is :" + lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
             }
-            //
         }
 
         // starts scanResult activity
-        Intent intent = new Intent(this, scanResults.class);
-        String[] objects = new String[texts.size()];
-        texts.toArray(objects);
-        final ArrayList<String> list = new ArrayList<String>(Arrays.asList(objects));
-        intent.putStringArrayListExtra("texts", list);
+        Intent intent = new Intent(this, ScanResults.class);
+        intent.putStringArrayListExtra("texts", texts);
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
 

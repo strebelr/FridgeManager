@@ -6,6 +6,9 @@
     <string name="button_foodToExpire">Food To Expire</string>
     <string name="button_freshFood">Fresh Food</string>
     <string name="foodStock_Fridge">Fridge</string>
+    <string name="foodStock_Fresh">Fresh</string>
+    <string name="foodStock_Pantry">Pantry</string>
+    <string name="foodStock_Freezer">Freezer</string>
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
@@ -20,4 +23,21 @@
     <string name="ocr_error">"Error reading text: %1$s"</string>
     <string name="output">Output</string>
     <string name="foodstock">Empty</string>
+    <string name="add_one_item">Add</string>
+    <string name="add_all">Add all</string>
+    <string name="try_again">Try again</string>
+    <string-array name="amount">
+        <item>units</item>
+        <item>grams</item>
+        <item>kilograms</item>
+        <item>liters</item>
+        <item>cups</item>
+    </string-array>
+    <string-array name="locations">
+        <item>Fridge</item>
+        <item>Fresh</item>
+        <item>Pantry</item>
+        <item>Freezer</item>
+    </string-array>
+    <string name="add_food">Add Food</string>
 </resources>

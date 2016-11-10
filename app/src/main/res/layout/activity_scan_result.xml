@@ -10,14 +10,17 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.cpen321.fridgemanager.scanResults">
+    tools:context="com.cpen321.fridgemanager.Activity.ScanResults">
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scrollbars="none"
         android:layout_weight="1"
-        android:layout_above="@+id/button3">
+        android:layout_above="@+id/button3"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <TableLayout
             android:layout_width="match_parent"
@@ -28,27 +31,29 @@
     </ScrollView>
 
     <Button
-        android:text="Try Again"
+        android:text="@string/try_again"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button3"
-        android:layout_marginRight="41dp"
-        android:layout_marginEnd="41dp"
+        android:layout_marginLeft="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="50dp"
+        android:layout_alignParentStart="true"
         android:onClick="OcrCaptureActivity"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/button2"
-        android:layout_toStartOf="@+id/button2" />
+   />
 
     <Button
-        android:text="Add"
+        android:text="@string/add_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button2"
-        android:layout_marginEnd="68dp"
         android:onClick="AddFood"
-        android:layout_marginRight="68dp"
-        android:layout_alignParentBottom="true"
+        android:layout_marginRight="50dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginEnd="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+ />
 
 </RelativeLayout>
