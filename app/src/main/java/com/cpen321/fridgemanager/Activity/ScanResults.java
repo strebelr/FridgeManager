@@ -39,6 +39,7 @@ public class ScanResults extends AppCompatActivity {
     private ArrayList<String> names = new ArrayList<String>();
     private ArrayList<String> locations = new ArrayList<String>();
     private ArrayList<Integer> expiries = new ArrayList<Integer>();
+    private ArrayList<Integer> quantities = new ArrayList<Integer>();
 
     TableLayout mTlayout;
     private ArrayList<TableRow> trs = new ArrayList<TableRow>();
@@ -76,12 +77,22 @@ public class ScanResults extends AppCompatActivity {
         }
 
         for(int i = 0; i < text_no_duplicates.size(); i++) {
+            int count = 1;
             names.add(text_no_duplicates.get(i).optString("name").toString());
             units.add(Integer.parseInt(text_no_duplicates.get(i).optString("unit").toString()));
             locations.add(text_no_duplicates.get(i).optString("location").toString());
             expiries.add(Integer.parseInt(text_no_duplicates.get(i).optString("expiry").toString()));
+            if(Integer.parseInt(text_no_duplicates.get(i).optString("unit").toString()) == DatabaseInteraction.UNIT) {
+                for(int j = 0; j < duplicates.size(); j++) {
+                    if(text_no_duplicates.get(i).optString("name").toString().equals(duplicates.get(j).optString("name").toString())) {
+                        count++;
+                    }
+                }
+                quantities.add(count);
+            }
+            else
+                quantities.add(0);
         }
-
 
         for(int i = 0; i < names.size(); i++) {
             // Add table row and quantity field to array list.
@@ -99,6 +110,8 @@ public class ScanResults extends AppCompatActivity {
             amounts.get(i).setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
             amounts.get(i).setGravity(Gravity.RIGHT);
             amounts.get(i).setMaxLines(1);
+            if (quantities.get(i) != 0)
+                amounts.get(i).setHint(quantities.get(i) + "");
             amounts.get(i).setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             float measure = amounts.get(i).getPaint().measureText("9999"); // Set width
             amounts.get(i).setWidth(amounts.get(i).getPaddingLeft() + amounts.get(i).getPaddingRight() + (int) measure);
@@ -143,6 +156,7 @@ public class ScanResults extends AppCompatActivity {
                     names.set(index, null);
                     amounts.set(index, null);
                     units.set(index, null);
+                    quantities.set(index, null);
                     // Remove table row from table layout
                     mTlayout.removeView(trs.get(index));
                 }
@@ -198,7 +212,7 @@ public class ScanResults extends AppCompatActivity {
                 } */
 
                 if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
-                    ti.addFoodToStorage(names.get(i), 0.0, units.get(i), locations.get(i), expiry);
+                    ti.addFoodToStorage(names.get(i), quantities.get(i), units.get(i), locations.get(i), expiry);
                 } else {
                     ti.addFoodToStorage(names.get(i), Double.parseDouble(amounts.get(i).getText().toString()), units.get(i), locations.get(i), expiry);
                 }
