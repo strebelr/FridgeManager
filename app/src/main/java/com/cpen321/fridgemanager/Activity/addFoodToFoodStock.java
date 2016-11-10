@@ -142,10 +142,12 @@ public class addFoodToFoodStock extends AppCompatActivity {
 
         final EditText foodItem =  (EditText) findViewById(R.id.addFoodName);
         String name = foodItem.getText().toString();
+        //footItem.setText("");
 
         final EditText amountEditText = (EditText) findViewById(R.id.amounttext);
         String amountValue = amountEditText.getText().toString();
         double amount = Double.parseDouble(amountValue);
+        amountEditText.setText("");
 
         //final Spinner amountSpinner = (Spinner) findViewById(R.id.amountspinner);
         //String amountUnitsValue = amountSpinner.getSelectedItem().toString();
@@ -154,11 +156,17 @@ public class addFoodToFoodStock extends AppCompatActivity {
 
         final Spinner locationSpinner = (Spinner) findViewById(R.id.spinner1_for_location);
         String location = locationSpinner.getSelectedItem().toString();
+        
+        //final EditText expiryDate =  (EditText) findViewById(R.id.expiry_date);
+        //String expiryDate = expiryDate.getText().toString(); //This contains the expiry date value that has to be formatted correctly.
+        //expiryDate.setText("");
 
 
         DatabaseInteraction di = new DatabaseInteraction(getApplicationContext());
         //di.writeToStorage(name, amount, amountUnit, location, expiry);
+
         di.writeToStorage(name, amount, 1, location, 2-22-2016);
+
 
     }
 
