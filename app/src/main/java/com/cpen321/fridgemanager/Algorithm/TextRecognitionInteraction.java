@@ -56,10 +56,8 @@ public class TextRecognitionInteraction {
                null otherwise
      */
     public JSONObject isFood(String name) {
-        // Iterate the jsonArray and print the info of JSONObjects
         assert(library != null);
-        // Log.d(TAG, "name is" + name);
-
+        // Iterate the jsonArray and print the info of JSONObjects
         try {
             //maximum allowable difference
             int margin = 1;
@@ -84,27 +82,38 @@ public class TextRecognitionInteraction {
         return null;
     }
 
-//    /*
-//      Checks if Food with given name is valid.
-//      @param name of the food
-//      @returns true if valid food
-//               false otherwise
-//     */
-//    public String isAbb(String name) {
-//        // Iterate the jsonArray and print the info of JSONObjects
-//        if(library == null) return null;
-//        try {
-//            for (int i = 0; i < library.length(); i++) {
-//                JSONObject jsonObject = library.getJSONObject(i);
-//                String library_abb = jsonObject.optString("abb").toString();
-//                if (library_abb != null) {
-//                    if (library_abb.toLowerCase().equals(name.toLowerCase()))
-//                        return jsonObject.optString("name").toString();;
-//                }
-//            }
-//        } catch (JSONException e) {}
-//        return null;
-//    }
+    /*
+      Checks if Food with given name is valid.
+      @param name of the food
+      @returns true if valid food
+               false otherwise
+     */
+    public JSONObject isAbb(String abb) {
+        assert(library != null);
+        // Iterate the jsonArray and print the info of JSONObjects
+        if(library == null) return null;
+        try {
+            //maximum allowable difference
+            int margin = 1;
+
+            for (int i = 0; i < library.length(); i++) {
+                JSONObject jsonObject = library.getJSONObject(i);
+                String library_abb = jsonObject.optString("abb").toString();
+
+                if(abb.length() >= library_abb.length()) {
+                    //get the distance between the two strings
+                    int dist = Levenshtein.distance(abb, library_abb);
+                    //get the absolute distance (accounts for difference in string length
+                    int abs_dist = dist - Math.abs(library_abb.length()-abb.length());
+                    //if absolute distance is less than error, assume found and add to database
+                    if(abs_dist < margin){
+                        return jsonObject;
+                    }
+                }
+            }
+        } catch (JSONException e) {}
+        return null;
+    }
 
 }
 

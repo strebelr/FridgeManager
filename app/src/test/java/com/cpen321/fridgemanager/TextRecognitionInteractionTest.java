@@ -2,6 +2,7 @@ package com.cpen321.fridgemanager;
 
 import android.app.ApplicationErrorReport;
 import android.content.Context;
+import android.util.Log;
 
 import com.cpen321.fridgemanager.Algorithm.TextRecognitionInteraction;
 
@@ -11,7 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -47,6 +50,8 @@ public class TextRecognitionInteractionTest {
         String test6 = "O r a           n g e";
         String test7 = "Oraaangae";
 
+
+
         // Test
         assertEquals("Fail: Test 1", "Apple", ti.isFood(test1).optString("name").toString());
         assertEquals("Fail: Test 2", "Apple", ti.isFood(test2).optString("name").toString());
@@ -55,5 +60,34 @@ public class TextRecognitionInteractionTest {
         assertEquals("Fail: Test 5", "Orange", ti.isFood(test5).optString("name").toString());
         assertEquals("Fail: Test 6", "Orange", ti.isFood(test6).optString("name").toString());
         assertEquals("Fail: Test 7", "Orange", ti.isFood(test7).optString("name").toString());
+
+
+    }
+
+    @Test
+    public void test_abb1() throws Exception {
+        // Test Case
+        String test8 = "tov";
+
+        // Abbreviation Test
+        String test8_act = "";
+        if (ti.isFood(test8) != null)
+            test8_act = ti.isFood(test8).optString("name").toString();
+        else
+            test8_act = test8;
+        assertThat("Fail: Test 8 - Abbreviation", "Tomato", is(test8_act));
+    }
+
+    @Test
+    public void test_abb2() throws Exception {
+        // Test Case
+        String test9 = "Mshroom";
+
+        String test9_act = "";
+        if (ti.isFood(test9) != null)
+            test9_act = ti.isFood(test9).optString("name").toString();
+        else
+            test9_act = test9;
+        assertEquals("Fail: Test 9 - Abbreviation", "Mushroom", test9_act);
     }
 }
