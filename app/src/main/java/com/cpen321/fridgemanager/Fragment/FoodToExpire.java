@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cpen321.fridgemanager.Activity.MainMenu;
 import com.cpen321.fridgemanager.R;
 
 
@@ -24,7 +25,7 @@ public class FoodToExpire extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // set title of the page
-        ((MainMenu) getActivity()).getSupportActionBar().setTitle("Expiring");
+        // ((MainMenu) getActivity()).getSupportActionBar().setTitle("Expiring");
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_food_to_expire, container, false);

@@ -1,4 +1,4 @@
-package com.cpen321.fridgemanager;
+package com.cpen321.fridgemanager.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -27,7 +27,7 @@ public class Expenditures extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_expenditures, container, false);
-        ExpandableListView expListView = (ExpandableListView) root.findViewById(R.id.list);
+        ExpandableListView expListView = (ExpandableListView) root.findViewById(R.id.expandableListView1);
         // Inflate the layout for this fragment
         return root;
     }
