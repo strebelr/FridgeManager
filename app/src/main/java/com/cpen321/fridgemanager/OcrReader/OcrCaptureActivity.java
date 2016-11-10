@@ -128,7 +128,6 @@ public class OcrCaptureActivity extends AppCompatActivity {
                 Snackbar.LENGTH_LONG)
                 .show();
 
-        // TODO: Set up the Text To Speech engine.
         TextToSpeech.OnInitListener listener =
                 new TextToSpeech.OnInitListener() {
                     @Override
@@ -197,11 +196,11 @@ public class OcrCaptureActivity extends AppCompatActivity {
     private void createCameraSource(boolean autoFocus, boolean useFlash) {
         Context context = getApplicationContext();
 
-        // TODO: Create the TextRecognizer
+        //  Create the TextRecognizer
         TextRecognizer textRecognizer = new TextRecognizer.Builder(context).build();
-        // TODO: Set the TextRecognizer's Processor.
+        // Set the TextRecognizer's Processor.
         textRecognizer.setProcessor(new OcrDetectorProcessor(mGraphicOverlay));
-        // TODO: Check if the TextRecognizer is operational.
+        // Check if the TextRecognizer is operational.
         if(!textRecognizer.isOperational()){
             Log.w(TAG, "Detector dependencies are not yet available.");
 
@@ -214,7 +213,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
                 Log.w(TAG, getString(R.string.low_storage_error));
             }
         }
-        // TODO: Create the mCameraSource using the TextRecognizer.
+        // Create the mCameraSource using the TextRecognizer.
         mCameraSource = new CameraSource.Builder(getApplicationContext(),textRecognizer)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(1280,1024)

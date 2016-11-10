@@ -59,6 +59,9 @@ public class ScanResults extends AppCompatActivity {
         ArrayList<ArrayList<String>> consecutive_non_name = new ArrayList<ArrayList<String>>();
         ArrayList<String> temp_consecutive = null;
 
+        //TODO: Handle the case where 2 items have identical name. Goal: Do not display two items, instead
+        // increase the default quantity
+
         for(int i = 0; i < texts.size(); i++) {
             food = ti.isFood(texts.get(i));
             if(food != null) {
@@ -78,23 +81,6 @@ public class ScanResults extends AppCompatActivity {
             }
         }
 
-
-        // TODO: DEALS WITH NON-CONSECUTIVE WORDS
-//        for(int i = 0; i < consecutive_non_name.size(); i++) { // For each arrays of non-consecutive words
-//            if (consecutive_non_name.get(i).size() > 1) {
-//                for (int j = 0; j < consecutive_non_name.get(i).size(); j++) { // For each non-consecutive words
-//                    for (int k = j + 1; k < consecutive_non_name.get(i).size(); k++) { // Move through the words to get all combinations
-//                        String concat = "";
-//                        int inc_j = j;
-//                        while(inc_j <= k) {
-//                            concat += consecutive_non_name.get(i).get(inc_j);
-//                            inc_j++;
-//                        }
-//                        // TODO: CHECK NAME HERE. NEEDS A WAY TO HANDLE TWO-WORDED FOODS, e.g. "Green Onion". How??
-//                    }
-//                }
-//            }
-//        }
 
         for(int i = 0; i < names.size(); i++) {
             // Add table row and quantity field to array list.
