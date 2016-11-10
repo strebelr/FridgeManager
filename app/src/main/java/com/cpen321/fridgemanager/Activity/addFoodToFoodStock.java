@@ -28,10 +28,6 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by macuser on 2016-10-29.
- */
-
 public class addFoodToFoodStock extends AppCompatActivity {
 
     AutoCompleteTextView text;
@@ -82,22 +78,23 @@ public class addFoodToFoodStock extends AppCompatActivity {
         text.setAdapter(adapter);
         text.setThreshold(2);
 
+        /*
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
+        setupTabIcons();*/
 
 
 
     }
 
-    private void setupTabIcons() {
+    /*private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
@@ -138,7 +135,7 @@ public class addFoodToFoodStock extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return null;
         }
-    }
+    }*/
 
 
     public void sendFeedback(View view) {
@@ -150,9 +147,9 @@ public class addFoodToFoodStock extends AppCompatActivity {
         String amountValue = amountEditText.getText().toString();
         double amount = Double.parseDouble(amountValue);
 
-        final Spinner amountSpinner = (Spinner) findViewById(R.id.amountspinner);
-        String amountUnitsValue = amountSpinner.getSelectedItem().toString();
-        int amountUnit = Integer.parseInt(amountUnitsValue);
+        //final Spinner amountSpinner = (Spinner) findViewById(R.id.amountspinner);
+        //String amountUnitsValue = amountSpinner.getSelectedItem().toString();
+        //int amountUnit = Integer.parseInt(amountUnitsValue);
 
 
         final Spinner locationSpinner = (Spinner) findViewById(R.id.spinner1_for_location);
@@ -161,6 +158,7 @@ public class addFoodToFoodStock extends AppCompatActivity {
 
         DatabaseInteraction di = new DatabaseInteraction(getApplicationContext());
         //di.writeToStorage(name, amount, amountUnit, location, expiry);
+        di.writeToStorage(name, amount, 1, location, 2-22-2016);
 
     }
 
