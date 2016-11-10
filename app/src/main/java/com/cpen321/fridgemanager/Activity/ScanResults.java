@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -56,28 +57,27 @@ public class ScanResults extends AppCompatActivity {
 
         JSONObject food;
 
-        ArrayList<ArrayList<String>> consecutive_non_name = new ArrayList<ArrayList<String>>();
-        ArrayList<String> temp_consecutive = null;
+        //TODO: Handle the case where 2 items have identical name. Do not display two items, instead increase the default quantity
+        ArrayList<String> text_no_duplicates = new ArrayList<String>();
+        ArrayList<String> duplicates = new ArrayList<String>();
 
-        //TODO: Handle the case where 2 items have identical name. Goal: Do not display two items, instead
-        // increase the default quantity
+        //get rid of duplicates
+        for(int i = 0; i < texts.size(); i++){
+            if(!text_no_duplicates.contains(texts.get(i))){
+                text_no_duplicates.add(text_no_duplicates.size(),texts.get(i));
+            }
+            else
+                duplicates.add(duplicates.size(),texts.get(i));
+        }
 
-        for(int i = 0; i < texts.size(); i++) {
-            food = ti.isFood(texts.get(i));
+        for(int i = 0; i < text_no_duplicates.size(); i++) {
+            //creates a new JSON Object and stores it in food
+            food = ti.isFood(text_no_duplicates.get(i));
             if(food != null) {
-                if(temp_consecutive != null) {
-                    consecutive_non_name.add(new ArrayList<String>(temp_consecutive));
-                    temp_consecutive = null;
-                }
                 names.add(food.optString("name").toString());
                 units.add(Integer.parseInt(food.optString("unit").toString()));
                 locations.add(food.optString("location").toString());
                 expiries.add(Integer.parseInt(food.optString("expiry").toString()));
-            }
-            else {
-                if(temp_consecutive == null)
-                    temp_consecutive = new ArrayList<String>();
-                temp_consecutive.add(texts.get(i));
             }
         }
 
@@ -96,6 +96,7 @@ public class ScanResults extends AppCompatActivity {
             // Create amount field
             TableRow.LayoutParams amountLayoutParams = new TableRow.LayoutParams();
             amounts.get(i).setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+            amounts.get(i).setGravity(Gravity.RIGHT);
             amounts.get(i).setMaxLines(1);
             amounts.get(i).setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             float measure = amounts.get(i).getPaint().measureText("9999"); // Set width
