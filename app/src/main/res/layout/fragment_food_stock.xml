@@ -9,7 +9,6 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         android:layout_marginRight="50px"
         android:layout_marginLeft="50px"
         android:scrollbars="none"
