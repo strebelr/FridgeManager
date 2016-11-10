@@ -142,7 +142,7 @@ public class addFoodToFoodStock extends AppCompatActivity {
 
         final EditText foodItem =  (EditText) findViewById(R.id.addFoodName);
         String name = foodItem.getText().toString();
-        //footItem.setText("");
+        foodItem.setText("");
 
         final EditText amountEditText = (EditText) findViewById(R.id.amounttext);
         String amountValue = amountEditText.getText().toString();

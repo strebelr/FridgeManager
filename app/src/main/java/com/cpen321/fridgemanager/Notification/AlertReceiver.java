@@ -44,7 +44,7 @@ public class AlertReceiver extends BroadcastReceiver {
         //LED
         builder.setLights( 0xFFC125, 100, 50);
 
-        notificationManager.notify(100,builder.build());
+        notificationManager.notify(100, builder.build());
 
     }
 

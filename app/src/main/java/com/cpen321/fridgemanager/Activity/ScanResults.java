@@ -199,6 +199,16 @@ public class ScanResults extends AppCompatActivity {
                 //a.setAlarm(findViewById(R.id.scan_result), expiry);
                 setAlarm(view, expiry);
 
+                /*if(expiry > 4) {
+                    setAlarm(view, expiry - 3);     // sends notification 3 days before expiry
+                    setAlarm(view, expiry);
+                } else if (expiry <= 3 && expiry > 1) {
+                    setAlarm(view, 1);     // sends notification the next day
+                    setAlarm(view, expiry);
+                } else {
+                    setAlarm(view, expiry);         // only send notification on the day of expiry
+                } */
+
                 if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
                     ti.addFoodToStorage(names.get(i), 0.0, units.get(i), locations.get(i), expiry);
                 } else {
@@ -209,20 +219,18 @@ public class ScanResults extends AppCompatActivity {
         mainMenu();
     }
 
-
+    // TODO: NEED TO TAKE IN UNIQUE ID, AND MSG. NEED MONTH AND DAY
     public void setAlarm(View view, int dayToExpire) {
 
         Calendar calendar = Calendar.getInstance();     // possible redundancy here
-        Calendar c = new GregorianCalendar();
+        //Calendar c = new GregorianCalendar();
 
-        calendar.getTime();
-        c.add(c.DATE, dayToExpire);
+        calendar.add(Calendar.SECOND, 10);
+        //calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.add(Calendar.DAY_OF_MONTH, dayToExpire);
 
-        calendar.set(Calendar.DAY_OF_MONTH,c.DATE);
-       // calendar.set(Calendar.HOUR_OF_DAY,18);
-        calendar.set(Calendar.MINUTE,00);
-        calendar.set(Calendar.SECOND,00);
-
+        android.util.Log.i("AFTER ",": " +calendar);
+        
         Long alertTime = System.currentTimeMillis() + 5000;
 
         android.util.Log.i("Time Class ", " Time value in milliseconds "+alertTime);
