@@ -7,21 +7,33 @@
     tools:context="com.cpen321.fridgemanager.Fragment.FoodStock">
 
     <ScrollView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20px"
+        android:fillViewport="true"
         android:layout_marginRight="50px"
         android:layout_marginLeft="50px"
         android:scrollbars="none"
         android:layout_centerHorizontal="true"
         android:id="@+id/scrollView2">
-
-        <TableLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:id="@+id/mTlayoutF">
-        </TableLayout>
+     >
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:id="@+id/mTlayoutF">
+            </TableLayout>
+
+                <TextView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:text=" "
+                android:layout_below="@id/mTlayoutF"/>
+
+        </RelativeLayout>
+
 
     </ScrollView>
 
