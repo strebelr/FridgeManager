@@ -1,5 +1,7 @@
 package com.cpen321.fridgemanager.Activity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,8 +12,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -148,9 +153,30 @@ public class addFoodToFoodStock extends AppCompatActivity {
         EditText foodItem =  (EditText) findViewById(R.id.addFoodName);
         String name = foodItem.getText().toString();
 
-        EditText amountEditText = (EditText) findViewById(R.id.amounttext);
+        final EditText amountEditText = (EditText) findViewById(R.id.amounttext);
         String amountValue = amountEditText.getText().toString();
         double amount = 0;
+        //Handle enter button on keyboard
+        foodItem.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_ENTER){
+                    //your necessary codes...
+                    return true;
+                }
+                return false;
+            }
+        });
+        amountEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_ENTER ){
+                    //your necessary codes...
+                    return true;
+                }
+                return false;
+            }
+        });
         try {
             amount = Double.parseDouble(amountValue);
         } catch (NumberFormatException e) {}
