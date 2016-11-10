@@ -6,10 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Toast;
+import android.widget.TextView;
+
 
 import com.cpen321.fridgemanager.R;
 
@@ -19,8 +21,84 @@ import java.util.List;
 import java.util.Map;
 
 
-public class expenditures extends Fragment{
+public class Expenditures extends Fragment{
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_expenditures, container, false);
+        ExpandableListView expListView = (ExpandableListView) root.findViewById(R.id.list);
+        // Inflate the layout for this fragment
+        return root;
+    }
+
+    public class SavedTabsListAdapter extends BaseExpandableListAdapter {
+
+        private String[] groups = { "Jan", "Feb", "Mar", "Apr" };
+
+        private String[][] children = {
+                { "Arnold", "Barry", "Chuck", "David" },
+                { "Ace", "Bandit", "Cha-Cha", "Deuce" },
+                { "Fluffy", "Snuggles" },
+                { "Goldy", "Bubbles" }
+        };
+
+        @Override
+        public int getGroupCount() {
+            return groups.length;
+        }
+
+        @Override
+        public int getChildrenCount(int i) {
+            return children[i].length;
+        }
+
+        @Override
+        public Object getGroup(int i) {
+            return groups[i];
+        }
+
+        @Override
+        public Object getChild(int i, int i1) {
+            return children[i][i1];
+        }
+
+        @Override
+        public long getGroupId(int i) {
+            return i;
+        }
+
+        @Override
+        public long getChildId(int i, int i1) {
+            return i1;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+        @Override
+        public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
+            TextView textView = new TextView(Expenditures.this.getActivity());
+            textView.setText(getGroup(i).toString());
+            return textView;
+        }
+
+        @Override
+        public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
+            TextView textView = new TextView(Expenditures.this.getActivity());
+            textView.setText(getChild(i, i1).toString());
+            return textView;
+        }
+
+        @Override
+        public boolean isChildSelectable(int i, int i1) {
+            return true;
+        }
+
+    }
+/*
     List<String> ChildList;
     Map<String, List<String>> ParentListItems;
     ExpandableListView expandableListView;
@@ -39,12 +117,13 @@ public class expenditures extends Fragment{
     String[] MarItems = {"111", "222", "333"};
     String[] DefaultMsg = {"loading"};
 
+*/
 
-
-    public expenditures() {
+    public Expenditures() {
         // Required empty public constructor
     }
 
+/*
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +149,7 @@ public class expenditures extends Fragment{
 
             ParentListItems.put(HoldItem, ChildList);
         }
-/*
+
         expandableListView = (ExpandableListView) ;
         expandableListAdapter= new ListAdapter(this, ParentList, ParentListItems);
 
@@ -91,24 +170,19 @@ public class expenditures extends Fragment{
             }
         });
 
-        */
+
+
 
     }
+*/
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_expenditures, container, false);
-        expandableListView = (ExpandableListView) root.findViewById(R.id.list);
-        // Inflate the layout for this fragment
-        return root;
-    }
 
+/*
     private void loadChildItem(String[] ParentElementsName) {
         ChildList = new ArrayList<String>();
         for (String model: ParentElementsName)
             ChildList.add(model);
     }
 
-
+*/
 }
