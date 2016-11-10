@@ -22,5 +22,12 @@
   {"name":"Soy Drink","expiry":"3","unit":"0","location":"Fridge"},
   {"name":"Ritz","expiry":"14","unit":"0","location":"Pantry"},
   {"name":"Kit Kat","expiry":"14","unit":"0","location":"Pantry"},
+  {"name":"Bacon","expiry":"7","unit":"1","location":"Fridge"},
+  {"name":"Shrimp","expiry":"7","unit":"1","location":"Fridge"},
+  {"name":"Cabbage","expiry":"7","unit":"0","location":"Fridge"},
+  {"name":"Toast","expiry":"14","unit":"1","location":"Pantry"},
+  {"name":"Caesar","expiry":"30","unit":"0","location":"Fridge"},
+  {"name":"Celery","expiry":"7","unit":"1","location":"Fresh"},
+  {"name":"Salad","expiry":"7","unit":"1","location":"Fresh"},
   {"name":"Tom Yum Soup","expiry":"60","unit":"0","location":"Pantry"}
 ]}
