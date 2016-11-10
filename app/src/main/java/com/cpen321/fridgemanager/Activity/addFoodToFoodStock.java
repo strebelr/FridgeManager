@@ -156,27 +156,7 @@ public class addFoodToFoodStock extends AppCompatActivity {
         final EditText amountEditText = (EditText) findViewById(R.id.amounttext);
         String amountValue = amountEditText.getText().toString();
         double amount = 0;
-        //Handle enter button on keyboard
-        foodItem.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode == KeyEvent.KEYCODE_ENTER){
-                    //your necessary codes...
-                    return true;
-                }
-                return false;
-            }
-        });
-        amountEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode == KeyEvent.KEYCODE_ENTER ){
-                    //your necessary codes...
-                    return true;
-                }
-                return false;
-            }
-        });
+
         try {
             amount = Double.parseDouble(amountValue);
         } catch (NumberFormatException e) {}
