@@ -236,7 +236,7 @@ public class FoodStock extends Fragment{
                                 }
                             }
                             else if (location == "Freezer") {
-                                di.removeFood(pantry.getJSONObject(new_index), location);
+                                di.removeFood(freezer.getJSONObject(new_index), location);
                                 if (di.getArray("Freezer").length() == 0) {
                                     mTlayout.removeView(titleFreezer);
                                 }
