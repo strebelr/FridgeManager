@@ -4,32 +4,38 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center"
-    android:orientation="vertical"
     android:background="@drawable/container_border"
+    android:orientation="vertical"
     android:weightSum="1">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_gravity="center"
+        android:layout_marginTop="60px"
         android:paddingLeft="10px"
         android:paddingTop="20px"
+        android:paddingBottom="20px"
+        android:text="Food/Grocery Item"
         android:textColor="@android:color/black"
         android:textColorHighlight="@android:color/primary_text_dark"
-        android:layout_centerVertical="true"
-        android:textSize="20dp"
-        android:text="Food/Grocery Item" />
+        android:textSize="25dp" />
 
 
     <AutoCompleteTextView
+        android:id="@+id/addFoodName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40px"
         android:layout_marginRight="40px"
-        android:id="@+id/addFoodName"
+        android:paddingBottom="10px"
+        android:paddingTop="10px"
         android:background="@drawable/field_input_border"
         android:inputType="text"
-
+        android:textSize="25dp"
+        android:paddingLeft="30px"
+        android:paddingRight="30px"
         />
 
 
@@ -43,96 +49,91 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10px"
-            android:paddingTop="20px"
+            android:layout_centerVertical="true"
+            android:paddingLeft="40px"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"
+            android:layout_marginTop="40px"
+            android:text="Amount"
             android:textColor="@android:color/black"
             android:textColorHighlight="@android:color/primary_text_dark"
-            android:layout_centerVertical="true"
-            android:textSize="20dp"
-            android:text="Amount" />
+            android:textSize="25dp" />
 
         <EditText
+            android:id="@+id/amounttext"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingLeft="30px"
+            android:paddingRight="30px"
             android:layout_marginLeft="40px"
-            android:paddingTop="20px"
-            android:inputType="number"
             android:background="@drawable/field_input_border"
-            android:id="@+id/amounttext"
-             />
+            android:inputType="number"
+            android:layout_marginTop="40px"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"
+            android:textSize="25dp"/>
 
         <Spinner
             android:id="@+id/amountspinner"
-            android:entries="@array/amount"
+            android:layout_marginRight="40px"
+            android:layout_marginTop="40px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:popupBackground="@android:color/transparent"
-            />
+            android:entries="@array/amount" />
 
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_gravity="center"
         android:paddingLeft="10px"
-        android:paddingTop="20px"
+        android:paddingTop="40px"
+        android:text="Expiry Date"
         android:textColor="@android:color/black"
         android:textColorHighlight="@android:color/primary_text_dark"
-        android:layout_centerVertical="true"
-        android:textSize="20dp"
-        android:text="Expiry Date" />
+        android:textSize="25dp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="20px"
-        >
-
-        <LinearLayout
-
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_weight="4"
-            android:layout_marginLeft="40px"
-            android:layout_marginRight="40px"
-            android:gravity="bottom"
-            android:background="@drawable/field_input_border"
-            android:paddingTop="20px"
-            >
+        android:paddingTop="20px">
 
             <TextView
-                android:id="@+id/expiry_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="40px"
                 android:layout_marginRight="40px"
-                android:layout_width="wrap_content"
+                android:layout_marginTop="20px"
+                android:layout_weight="4"
                 android:background="@drawable/field_input_border"
-                android:layout_height="wrap_content" />
-
-
-
-         </LinearLayout>
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="10px"
+                android:paddingBottom="10px"
+                android:textSize="25dp"
+                android:id="@+id/expiry_date" />
 
         <LinearLayout
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="top"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            >
+            android:gravity="top"
+            android:orientation="vertical">
 
             <ImageButton
-                    android:id="@+id/btn1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pick Date"
-                    android:src="@drawable/ic_plus"
-                    android:onClick="showDatePickerDialog"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                android:id="@+id/btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:onClick="showDatePickerDialog"
+                android:src="@drawable/ic_plus"
+                android:text="Pick Date" />
         </LinearLayout>
 
 
@@ -141,22 +142,23 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_gravity="center"
         android:paddingLeft="10px"
         android:paddingTop="20px"
+        android:text="Location"
         android:textColor="@android:color/black"
         android:textColorHighlight="@android:color/primary_text_dark"
-        android:layout_centerVertical="true"
-        android:textSize="20dp"
-        android:text="Location" />
+        android:textSize="25dp" />
 
 
     <Spinner
         android:id="@+id/spinner1_for_location"
+        android:layout_marginRight="40px"
+        android:layout_marginLeft="40px"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:entries="@array/locations"
-
         />
 
     <LinearLayout
@@ -164,14 +166,16 @@
         android:layout_height="0dip"
         android:layout_weight="1"
         android:gravity="center|bottom"
-        android:orientation="vertical" >
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ADD FOOD TO FOOD STOCK"
-        android:id="@+id/button_add_to_food_stock"
-        android:textSize="20dp" />
-    ... />
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_add_to_food_stock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="ADD FOOD"
+            android:textSize="25dp" />
+        ... />
 
     </LinearLayout>
 </LinearLayout>

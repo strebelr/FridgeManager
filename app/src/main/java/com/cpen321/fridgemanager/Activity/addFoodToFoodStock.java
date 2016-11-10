@@ -1,5 +1,6 @@
 package com.cpen321.fridgemanager.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
@@ -9,12 +10,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
 import com.cpen321.fridgemanager.Fragment.Expenditures;
@@ -26,7 +29,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static android.R.id.message;
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class addFoodToFoodStock extends AppCompatActivity {
 
@@ -40,10 +49,10 @@ public class addFoodToFoodStock extends AppCompatActivity {
             R.drawable.ic_expenditures
     };
 
+    addFoodToFoodStockDatePicker newFragment;
 
     public addFoodToFoodStock() {
         // Required empty public constructor
-
     }
 
     @Override
@@ -55,7 +64,6 @@ public class addFoodToFoodStock extends AppCompatActivity {
         btnAddFoodToFoodStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 sendFeedback(v);
             }
         });
@@ -74,7 +82,7 @@ public class addFoodToFoodStock extends AppCompatActivity {
             }
         }
 
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.activity_add_food, list );
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.list_item, list);
         text.setAdapter(adapter);
         text.setThreshold(2);
 
@@ -89,8 +97,6 @@ public class addFoodToFoodStock extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();*/
-
-
 
     }
 
@@ -137,44 +143,66 @@ public class addFoodToFoodStock extends AppCompatActivity {
         }
     }*/
 
-
     public void sendFeedback(View view) {
 
-        final EditText foodItem =  (EditText) findViewById(R.id.addFoodName);
+        EditText foodItem =  (EditText) findViewById(R.id.addFoodName);
         String name = foodItem.getText().toString();
-        foodItem.setText("");
 
-        final EditText amountEditText = (EditText) findViewById(R.id.amounttext);
+        EditText amountEditText = (EditText) findViewById(R.id.amounttext);
         String amountValue = amountEditText.getText().toString();
-        double amount = Double.parseDouble(amountValue);
-        amountEditText.setText("");
+        double amount = 0;
+        try {
+            amount = Double.parseDouble(amountValue);
+        } catch (NumberFormatException e) {}
 
-        //final Spinner amountSpinner = (Spinner) findViewById(R.id.amountspinner);
-        //String amountUnitsValue = amountSpinner.getSelectedItem().toString();
-        //int amountUnit = Integer.parseInt(amountUnitsValue);
+        Spinner amountSpinner = (Spinner) findViewById(R.id.amountspinner);
+        String amountUnitsValue = amountSpinner.getSelectedItem().toString();
+        int int_unit;
+        if (amountUnitsValue.equals("units"))
+            int_unit = 0;
+        else if (amountUnitsValue.equals("grams"))
+            int_unit = 1;
+        else if (amountUnitsValue.equals("kilograms"))
+            int_unit = 2;
+        else if (amountUnitsValue.equals("liters"))
+            int_unit = 3;
+        else
+            int_unit = 4;
 
-
-        final Spinner locationSpinner = (Spinner) findViewById(R.id.spinner1_for_location);
+        Spinner locationSpinner = (Spinner) findViewById(R.id.spinner1_for_location);
         String location = locationSpinner.getSelectedItem().toString();
-        
-        //final EditText expiryDate =  (EditText) findViewById(R.id.expiry_date);
-        //String expiryDate = expiryDate.getText().toString(); //This contains the expiry date value that has to be formatted correctly.
-        //expiryDate.setText("");
 
+        TextView expiryField =  (TextView) findViewById(R.id.expiry_date);
+        String expiryDate = expiryField.getText().toString(); // This contains the expiry date value that has to be formatted correctly.
+
+        String[] strings;
+        Calendar expiry = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        int difference = 0;
+        if (expiryDate.length() != 0) {
+            strings = expiryDate.split("-");
+            int year = Integer.parseInt(strings[0]);
+
+            int month = Integer.parseInt(strings[1]);
+            int day = Integer.parseInt(strings[2]);
+
+            expiry.clear();
+            expiry.set(year, month - 1, day);
+            difference = (int) TimeUnit.DAYS.convert(expiry.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS) + 1;
+        }
 
         DatabaseInteraction di = new DatabaseInteraction(getApplicationContext());
-        //di.writeToStorage(name, amount, amountUnit, location, expiry);
+        di.writeToStorage(name, amount, int_unit, location, difference);
 
-        di.writeToStorage(name, amount, 1, location, 2-22-2016);
-
-
+        Intent intent = new Intent(this, MainMenu.class);
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new addFoodToFoodStockDatePicker();
+        newFragment = new addFoodToFoodStockDatePicker();
         newFragment.show(getSupportFragmentManager(), "datePicker");
-
-
     }
 
 }

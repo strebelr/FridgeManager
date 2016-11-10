@@ -11,12 +11,7 @@ import com.cpen321.fridgemanager.R;
 
 import java.util.Calendar;
 
-/**
- * Created by macuser on 2016-10-29.
- */
-
 public class addFoodToFoodStockDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
 
     int year;
     int month;
@@ -24,33 +19,28 @@ public class addFoodToFoodStockDatePicker extends DialogFragment implements Date
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-
-
-        final Calendar c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
-
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
-
     @Override
     public void onDateSet(DatePicker view, int i, int i1, int i2) {
-
-        TextView tv1= (TextView) getActivity().findViewById(R.id.expiry_date);
-        tv1.setText("Year: "+view.getYear()+" Month: "+view.getMonth()+" Day: "+view.getDayOfMonth());
-
+        TextView tv1 = (TextView) getActivity().findViewById(R.id.expiry_date);
+        int month = view.getMonth() + 1;
+        year = view.getYear();
+        this.month = month;
+        day = view.getDayOfMonth();
+        tv1.setText(view.getYear() + "-" + month + "-" + view.getDayOfMonth());
     }
 
-    public int getYear()
-    {
+    public int getYear() {
         return year;
     }
 
-    public int getMonth()
-    {
+    public int getMonth() {
         return month;
     }
 

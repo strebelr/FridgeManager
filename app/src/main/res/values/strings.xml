@@ -27,15 +27,17 @@
     <string name="add_all">Add all</string>
     <string name="try_again">Try again</string>
     <string-array name="amount">
+        <item>units</item>
         <item>grams</item>
         <item>kilograms</item>
-        <item>pounds</item>
-        <item>servings</item>
+        <item>liters</item>
+        <item>cups</item>
     </string-array>
     <string-array name="locations">
         <item>Fridge</item>
-        <item>Freezer</item>
+        <item>Fresh</item>
         <item>Pantry</item>
+        <item>Freezer</item>
     </string-array>
     <string name="add_food">Add Food</string>
 </resources>
