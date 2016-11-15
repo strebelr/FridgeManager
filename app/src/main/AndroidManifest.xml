@@ -40,6 +40,9 @@
         <activity android:name=".Notification.Alert_Activity"/>
         <receiver android:name=".Notification.AlertReceiver"/>
 
+        /* Instruction */
+        <activity android:name=".Activity.Instruction"/>
+
     </application>
 
 </manifest>
