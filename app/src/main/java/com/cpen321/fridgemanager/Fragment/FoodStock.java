@@ -1,5 +1,6 @@
 package com.cpen321.fridgemanager.Fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -145,6 +146,7 @@ public class FoodStock extends Fragment{
                 if(trs.get(i + index).getParent() != null)
                     ((ViewGroup)trs.get(i + index).getParent()).removeView(trs.get(i + index));
                 mTlayout.addView(trs.get(i + index));
+                ImageButton btn_decr = new ImageButton(getActivity());
                 ImageButton btn_del = new ImageButton(getActivity());
                 final TextView food_name = new TextView(getActivity());
                 TextView unit_name = new TextView(getActivity());
@@ -170,7 +172,8 @@ public class FoodStock extends Fragment{
                         break;
                 }
 
-                // Create unit text view
+
+                // Create amount text view
                 amount.setId(i + index);
                 amount.setText(food.optString("quantity").toString());
                 amount.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
@@ -186,6 +189,18 @@ public class FoodStock extends Fragment{
                 unit_name.setWidth(unit_name.getPaddingLeft() + unit_name.getPaddingRight() + (int) measure);
                 unit_name.setLayoutParams(trLayoutParams_unit);
                 trs.get(i + index).addView(unit_name);
+
+                // Create decrease button
+                btn_decr.setImageResource(R.drawable.ic_minus);
+                btn_decr.setId(i + index);
+                // Set on click listener
+                btn_decr.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+                trs.get(i + index).addView(btn_decr);
 
                 // Create delete button
                 btn_del.setImageResource(R.drawable.ic_trash);
