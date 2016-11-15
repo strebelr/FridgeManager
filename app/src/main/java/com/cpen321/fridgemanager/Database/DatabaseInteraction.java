@@ -29,6 +29,7 @@ public class DatabaseInteraction {
     private final static int STORAGE_DEST = 0;
     private final static int LIBRARY_DEST = 1;
     private final static int ASSETS_DEST = 2;
+    private final static int UNDO_DEST = 3;
 
     // Defined variables to select unit encoded in integers
     public final static int UNIT = 0;
@@ -40,6 +41,7 @@ public class DatabaseInteraction {
     // Defined file names for File IO
     private final static String storage = "storage.json";
     private final static String library = "library.json";
+    private final static String undo_stack = "undo_stack.json";
     private final static String default_lib = "default_library.json"; // Default library in assets
 
     /*
@@ -66,7 +68,6 @@ public class DatabaseInteraction {
      */
     private JSONObject makeRoot() {
         JSONObject root = new JSONObject();
-
         try {
             // Put all arrays into object
             for (int i = 0; i < LOCATIONS_LIST.size(); i++) {
@@ -77,6 +78,114 @@ public class DatabaseInteraction {
         return root;
     }
 
+    /*
+      Add to Undo Stack.
+     */
+    public void addStack(JSONObject food) {
+        String root = readFile(UNDO_DEST);
+        try {  // Output the new JSON Root Object to File
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(undo_stack, Context.MODE_PRIVATE));
+            write(outputStreamWriter, stack(root, food).toString());
+        } catch (FileNotFoundException e) {}
+    }
+
+    /*
+      TODO: Update Undo Stack JSON.
+     */
+    private JSONObject stack(String root, JSONObject food) {
+        JSONObject rootObject;
+        JSONObject writeObject = null;
+        if (root != "") { // if stack does exist
+            try {
+                rootObject = new JSONObject(root);
+                writeObject = new JSONObject();
+                int size = Integer.parseInt(rootObject.optString("size").toString());
+                int new_size;
+                if (size < 8) new_size = size + 1;
+                else new_size = 9;
+                writeObject.put("size", new_size);
+                writeObject.put("0", food);
+                String attribute;
+                String attribute_stack;
+                int j;
+                for (int i = 1; i <= new_size; i++) {
+                    j = i - 1;
+                    attribute = "" + i;
+                    attribute_stack = "" + j;
+                    writeObject.put(attribute, new JSONObject(rootObject.optString(attribute_stack).toString()));
+                }
+            } catch (JSONException e) {}
+        }
+        else { // if stack does not exist
+            writeObject = new JSONObject();
+            try {
+                writeObject.put("size", 1);
+                writeObject.put("0", food);
+            } catch (JSONException e) {}
+        }
+        return writeObject;
+    }
+
+    /*
+      Undo Last Delete.
+     */
+    public void popUndo() {
+        String root = readFile(UNDO_DEST);
+        if (root == "") return;
+        try {  // Output the new JSON Root Object to File
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(undo_stack, Context.MODE_PRIVATE));
+            write(outputStreamWriter, undo(root).toString());
+        } catch (FileNotFoundException e) {}
+    }
+
+    /*
+      TODO: Undo previous delete. Pop from JSON Stack and return root.
+     */
+    private JSONObject undo(String root) {
+        return null;
+    }
+
+    /*
+      Add new food or abbreviation to the library.
+     */
+    public void addToLibrary() {
+        String root = readFile(LIBRARY_DEST);
+        if (root == "") return;
+        try {  // Output the new JSON Root Object to File
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(library, Context.MODE_PRIVATE));
+            write(outputStreamWriter, addDefinition(root).toString());
+        } catch (FileNotFoundException e) {}
+    }
+
+    /*
+      TODO: Add new word to library.
+     */
+    private JSONObject addDefinition(String root) {
+        return null;
+    }
+
+    /*
+      Decrement food. If given in plain units, decrement by 1. Else, decrement by 25% of original amount.
+     */
+    public void decrementFood(JSONObject food, String location) {
+        String root = readFile(STORAGE_DEST);
+        if (root == "") return;
+        try {  // Output the new JSON Root Object to File
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
+            write(outputStreamWriter, decrement(root, location, food).toString());
+        } catch (FileNotFoundException e) {}
+    }
+
+    /*
+      TODO: Decrement food from a given root.
+      @param root object in string
+      @param array to specific
+      @param object to decrement from
+      @return json object with element decremented
+     */
+    private JSONObject decrement(String root, String array, JSONObject element) {
+        return null;
+    }
 
     /*
       Deletes a JSONObject from JSONArray.
@@ -84,6 +193,7 @@ public class DatabaseInteraction {
       @param location/JSONArray from which object is removed
      */
     public void removeFood(JSONObject food, String location) {
+        addStack(food);
         String root = readFile(STORAGE_DEST);
         if (root == "") return;
         try {  // Output the new JSON Root Object to File
@@ -189,6 +299,7 @@ public class DatabaseInteraction {
             element.put("bought", date);
             element.put("expiry", expiry_date);
             element.put("quantity", quantity);
+            element.put("original_qty", quantity);
             element.put("unit", unit);
         } catch (JSONException e) {}
         return element;
@@ -311,6 +422,13 @@ public class DatabaseInteraction {
         else if (destination == ASSETS_DEST) {
             try {
                 isr = new InputStreamReader(context.getResources().getAssets().open(default_lib));
+                return read(isr);
+            } catch (IOException e) {
+            }
+        }
+        else if (destination == UNDO_DEST) {
+            try {
+                isr = new InputStreamReader(context.openFileInput(undo_stack));
                 return read(isr);
             } catch (IOException e) {
             }
