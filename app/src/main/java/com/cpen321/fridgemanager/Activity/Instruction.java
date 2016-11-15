@@ -4,12 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-
-import com.cpen321.fridgemanager.R;
 
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
