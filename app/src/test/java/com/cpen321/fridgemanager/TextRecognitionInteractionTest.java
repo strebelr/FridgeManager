@@ -49,10 +49,11 @@ public class TextRecognitionInteractionTest {
         String test5 = "ORANGE";
         String test6 = "O r a           n g e";
         String test7 = "Oraaangae";
+        String test8 = "Spinach";
+        String test9 = "spi nach";
+        String test10 = "spinnnnnach";
 
-
-
-        // Test
+        // Tests for food items that should be recognized
         assertEquals("Fail: Test 1", "Apple", ti.isFood(test1).optString("name").toString());
         assertEquals("Fail: Test 2", "Apple", ti.isFood(test2).optString("name").toString());
         assertEquals("Fail: Test 3", "Apple", ti.isFood(test3).optString("name").toString());
@@ -60,16 +61,17 @@ public class TextRecognitionInteractionTest {
         assertEquals("Fail: Test 5", "Orange", ti.isFood(test5).optString("name").toString());
         assertEquals("Fail: Test 6", "Orange", ti.isFood(test6).optString("name").toString());
         assertEquals("Fail: Test 7", "Orange", ti.isFood(test7).optString("name").toString());
-
-
+        assertEquals("Fail: Test 8", "Spanich", ti.isFood(test8).optString("name").toString());
+        assertEquals("Fail: Test 9", "Spanich", ti.isFood(test9).optString("name").toString());
+        assertEquals("Fail: Test 10", "Spanich", ti.isFood(test10).optString("name").toString());
     }
 
+    // Abbreviation tests
     @Test
     public void test_abb1() throws Exception {
-        // Test Case
+        // Test first test case
         String test8 = "tov";
 
-        // Abbreviation Test
         String test8_act = "";
         if (ti.isFood(test8) != null)
             test8_act = ti.isFood(test8).optString("name").toString();
@@ -80,7 +82,7 @@ public class TextRecognitionInteractionTest {
 
     @Test
     public void test_abb2() throws Exception {
-        // Test Case
+        // Test first test case
         String test9 = "Mshroom";
 
         String test9_act = "";
