@@ -4,7 +4,7 @@ How to find your source code?
 - All files under FridgeManager\app\src
 
 How to check it out?
-- ???
+- git clone https://github.com/strebelr/FridgeManager
 
 How to build the project?
 - Sync project with gradle file and the run app
@@ -23,4 +23,4 @@ Structure of the source code directory?
 - src/test/java       Unit Tests
 
 Design patterns used?
-- ???
+- Structural Design Pattern

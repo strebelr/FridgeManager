@@ -146,7 +146,7 @@ public class FoodStock extends Fragment{
                     ((ViewGroup)trs.get(i + index).getParent()).removeView(trs.get(i + index));
                 mTlayout.addView(trs.get(i + index));
                 ImageButton btn_del = new ImageButton(getActivity());
-                TextView food_name = new TextView(getActivity());
+                final TextView food_name = new TextView(getActivity());
                 TextView unit_name = new TextView(getActivity());
                 TextView amount = new TextView(getActivity());
 
@@ -259,6 +259,24 @@ public class FoodStock extends Fragment{
                     food_name.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
                 }
                 trs.get(i + index).addView(food_name, 0);
+
+                /*food_name.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int index = v.getId();
+                        int new_index;
+                        //food_name.setText(food.optString("name").toString());
+                        food_name.setText(food.optString("expiry").toString());
+
+                        //if ("Boiling Point K".equals(boilingpointK.getText().toString()))
+                        //    boilingpointK.setText("2792");
+                        //else if ("2792".equals(boilingpointK.getText().toString()))
+                        //    boilingpointK.setText("Boiling Point K");
+                    }
+                });*/
+
+
+
             } catch (JSONException e) {
             }
 
