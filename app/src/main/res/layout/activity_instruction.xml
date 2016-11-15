@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/layout_main">
+
+    <!-- other widgets go here-->
+
+    <TextView
+    android:text="Add Instructions Here"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/textView" />
+
+    <TextView
+        android:text="click anywhere to access main page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2" />
+</LinearLayout>
