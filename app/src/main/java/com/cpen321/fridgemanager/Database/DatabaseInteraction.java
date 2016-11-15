@@ -38,6 +38,9 @@ public class DatabaseInteraction {
     public final static int L = 3;
     public final static int CUP = 4;
 
+    // Decrement Percentage
+    private final static double DECREMENT_P = 0.25;
+
     // Defined file names for File IO
     private final static String storage = "storage.json";
     private final static String library = "library.json";
@@ -166,14 +169,39 @@ public class DatabaseInteraction {
 
     /*
       Decrement food. If given in plain units, decrement by 1. Else, decrement by 25% of original amount.
+      @returns 0 if decrements
+               1 if removes
+               -1 otherwise
      */
-    public void decrementFood(JSONObject food, String location) {
+    public int decrementFood(JSONObject food, String location) {
         String root = readFile(STORAGE_DEST);
-        if (root == "") return;
+
+        if (root == "") return -1;
         try {  // Output the new JSON Root Object to File
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
-            write(outputStreamWriter, decrement(root, location, food).toString());
-        } catch (FileNotFoundException e) {}
+            if(checkRemove(food)) {
+                write(outputStreamWriter, remove(root, location, food).toString());
+                return 1;
+            }
+            else {
+                write(outputStreamWriter, decrement(root, location, food).toString());
+                return 0;
+            }
+        } catch (FileNotFoundException e) { return -1;}
+    }
+
+    /*
+      Check if decrement == remove.
+      @returns true if a decrement removes the food
+               false if a decrement still keeps food
+     */
+    private boolean checkRemove(JSONObject food) {
+        if (Integer.parseInt(food.optString("unit").toString()) == UNIT ) {
+            return Double.parseDouble(food.optString("quantity").toString()) == 1;
+        }
+        else {
+            return Double.parseDouble(food.optString("quantity").toString()) == DECREMENT_P * Double.parseDouble(food.optString("original_qty").toString());
+        }
     }
 
     /*
@@ -184,6 +212,61 @@ public class DatabaseInteraction {
       @return json object with element decremented
      */
     private JSONObject decrement(String root, String array, JSONObject element) {
+        try {
+            // If root object exists
+            if (root != "") {
+                // Make a JSON Object from root String
+                JSONObject jsonRootObject = new JSONObject(root);
+                // Get the JSON Array containing "Foods"
+                JSONArray jsonArray = jsonRootObject.optJSONArray(array);
+                // Make new JSONArray and Root to push back
+                JSONObject jsonNewRoot = new JSONObject();
+
+                // Put unmodified arrays into new root
+                for(int i = 0; i < LOCATIONS_LIST.size(); i++) {
+                    if (array != LOCATIONS_LIST.get(i)) {
+                        jsonNewRoot.put(LOCATIONS_LIST.get(i), jsonRootObject.optJSONArray(LOCATIONS_LIST.get(i)));
+                    }
+                }
+                // Make new array to store the array without the deleted element
+                JSONArray newArray = new JSONArray();
+                JSONObject decrement;
+                double new_qty;
+
+                boolean remove = true; // Keeps track of if item has been removed already
+                for(int i = 0; i < jsonArray.length(); i++) {
+                    if(!(element.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
+                            !(element.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
+                            !(element.optString("quantity").toString().equals(jsonArray.getJSONObject(i).optString("quantity").toString())) ||
+                            !remove) { // If item doesn't match
+                        newArray.put(jsonArray.get(i)); // Add item to new array
+                    }
+                    else { // Don't add. I.e: remove
+                        decrement = new JSONObject();
+                        decrement.put("name", jsonArray.getJSONObject(i).optString("name").toString());
+                        decrement.put("bought", jsonArray.getJSONObject(i).optString("bought").toString());
+                        decrement.put("expiry", jsonArray.getJSONObject(i).optString("expiry").toString());
+                        if (Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()) == UNIT)
+                            new_qty = Integer.parseInt(jsonArray.getJSONObject(i).optString("quantity").toString()) - 1;
+                        else
+                            new_qty = Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()) - DECREMENT_P * Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString());
+                        decrement.put("quantity", new_qty);
+                        decrement.put("original_qty", Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()));
+                        decrement.put("unit", Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()));
+                        newArray.put(decrement);
+                        addStack(decrement);
+                        remove = false;
+                    }
+                }
+
+                // Put the new array
+                jsonNewRoot.put(array, newArray);
+
+                return jsonNewRoot;
+            }
+
+        }  catch (JSONException e) {}
+
         return null;
     }
 
