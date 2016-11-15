@@ -2,13 +2,20 @@ package com.cpen321.fridgemanager.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.Gravity;
+import android.widget.AbsListView;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import android.widget.Toast;
 import android.widget.TextView;
 
@@ -23,6 +30,46 @@ import java.util.Map;
 
 public class Expenditures extends Fragment{
 
+    ExpandableListAdapter mAdapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Set up our adapter
+        mAdapter = new MyExpandableListAdapter();
+        //setListAdapter(mAdapter);
+        //registerForContextMenu(getExpandableListView());
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        menu.setHeaderTitle("Sample menu");
+        //menu.add(0, 0, 0, R.string.expandable_list_sample_action);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        ExpandableListContextMenuInfo info = (ExpandableListContextMenuInfo) item.getMenuInfo();
+
+        String title = ((TextView) info.targetView).getText().toString();
+
+        int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+        if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+            int groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+            int childPos = ExpandableListView.getPackedPositionChild(info.packedPosition);
+            //Toast.makeText(this, title + ": Child " + childPos + " clicked in group " + groupPos, Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (type == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+            int groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+            //Toast.makeText(this, title + ": Group " + groupPos + " clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return false;
+    }
+
+    /*
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -31,69 +78,77 @@ public class Expenditures extends Fragment{
         // Inflate the layout for this fragment
         return root;
     }
+    */
 
-    public class SavedTabsListAdapter extends BaseExpandableListAdapter {
+    public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
         private String[] groups = { "Jan", "Feb", "Mar", "Apr" };
 
         private String[][] children = {
-                { "Arnold", "Barry", "Chuck", "David" },
-                { "Ace", "Bandit", "Cha-Cha", "Deuce" },
-                { "Fluffy", "Snuggles" },
-                { "Goldy", "Bubbles" }
+                { "Fresh", "Fridge", "Pantry" },
+                { "Fresh", "Fridge", "Pantry" },
+                { "Fresh", "Fridge", "Pantry" },
+                { "Fresh", "Fridge", "Pantry" },
         };
 
-        @Override
+        public Object getChild(int groupPosition, int childPosition) {
+            return children[groupPosition][childPosition];
+        }
+
+        public long getChildId(int groupPosition, int childPosition) {
+            return childPosition;
+        }
+
+        public int getChildrenCount(int groupPosition) {
+            return children[groupPosition].length;
+        }
+
+        public TextView getGenericView() {
+            // Layout parameters for the ExpandableListView
+            AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, 64);
+
+            TextView textView;
+            textView = new TextView(getContext()); // TODO: test
+            textView.setLayoutParams(lp);
+            // Center the text vertically
+            textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+            // Set the text starting position
+            textView.setPadding(36, 0, 0, 0);
+            return textView;
+        }
+
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
+                                 View convertView, ViewGroup parent) {
+            TextView textView = getGenericView();
+            textView.setText(getChild(groupPosition, childPosition).toString());
+            return textView;
+        }
+
+        public Object getGroup(int groupPosition) {
+            return groups[groupPosition];
+        }
+
         public int getGroupCount() {
             return groups.length;
         }
 
-        @Override
-        public int getChildrenCount(int i) {
-            return children[i].length;
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
         }
 
-        @Override
-        public Object getGroup(int i) {
-            return groups[i];
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
+                                 ViewGroup parent) {
+            TextView textView = getGenericView();
+            textView.setText(getGroup(groupPosition).toString());
+            return textView;
         }
 
-        @Override
-        public Object getChild(int i, int i1) {
-            return children[i][i1];
-        }
-
-        @Override
-        public long getGroupId(int i) {
-            return i;
-        }
-
-        @Override
-        public long getChildId(int i, int i1) {
-            return i1;
-        }
-
-        @Override
-        public boolean hasStableIds() {
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
             return true;
         }
 
-        @Override
-        public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
-            TextView textView = new TextView(Expenditures.this.getActivity());
-            textView.setText(getGroup(i).toString());
-            return textView;
-        }
-
-        @Override
-        public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-            TextView textView = new TextView(Expenditures.this.getActivity());
-            textView.setText(getChild(i, i1).toString());
-            return textView;
-        }
-
-        @Override
-        public boolean isChildSelectable(int i, int i1) {
+        public boolean hasStableIds() {
             return true;
         }
 
@@ -169,9 +224,6 @@ public class Expenditures extends Fragment{
                 return true;
             }
         });
-
-
-
 
     }
 */
