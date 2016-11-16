@@ -39,7 +39,11 @@ public class DatabaseInteraction {
     public final static int CUP = 4;
 
     // Decrement Percentage
-    private final static double DECREMENT_P = 0.25;
+    private final static double DECREMENT_P = 0.20;
+
+    // Remove or Decrement Select
+    private final static String DEC_SEL = "dec";
+    private final static String REM_SEL = "rem";
 
     // Defined file names for File IO
     private final static String storage = "storage.json";
@@ -83,19 +87,22 @@ public class DatabaseInteraction {
 
     /*
       Add to Undo Stack.
+      @param object to add to stack
+      @param select whether it was added by remove or decrement
+      @param location of where the object was
      */
-    public void addStack(JSONObject food) {
+    public void addStack(JSONObject food, String sel, String location) {
         String root = readFile(UNDO_DEST);
         try {  // Output the new JSON Root Object to File
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(undo_stack, Context.MODE_PRIVATE));
-            write(outputStreamWriter, stack(root, food).toString());
+            write(outputStreamWriter, stack(root, food, sel, location).toString());
         } catch (FileNotFoundException e) {}
     }
 
     /*
       TODO: Update Undo Stack JSON.
      */
-    private JSONObject stack(String root, JSONObject food) {
+    private JSONObject stack(String root, JSONObject food, String sel, String location) {
         JSONObject rootObject;
         JSONObject writeObject = null;
         if (root != "") { // if stack does exist
@@ -104,18 +111,26 @@ public class DatabaseInteraction {
                 writeObject = new JSONObject();
                 int size = Integer.parseInt(rootObject.optString("size").toString());
                 int new_size;
-                if (size < 8) new_size = size + 1;
-                else new_size = 9;
+                if (size < 9) new_size = size + 1;
+                else new_size = 10;
                 writeObject.put("size", new_size);
                 writeObject.put("0", food);
+                writeObject.put("0s", sel);
+                writeObject.put("0sl", location);
                 String attribute;
                 String attribute_stack;
                 int j;
-                for (int i = 1; i <= new_size; i++) {
+                for (int i = 1; i < new_size; i++) {
                     j = i - 1;
                     attribute = "" + i;
                     attribute_stack = "" + j;
                     writeObject.put(attribute, new JSONObject(rootObject.optString(attribute_stack).toString()));
+                    attribute = attribute + "s";
+                    attribute_stack = attribute_stack + "s";
+                    writeObject.put(attribute, rootObject.optString(attribute_stack).toString());
+                    attribute = attribute + "l";
+                    attribute_stack = attribute_stack + "l";
+                    writeObject.put(attribute, rootObject.optString(attribute_stack).toString());
                 }
             } catch (JSONException e) {}
         }
@@ -124,27 +139,109 @@ public class DatabaseInteraction {
             try {
                 writeObject.put("size", 1);
                 writeObject.put("0", food);
+                writeObject.put("0s", sel);
+                writeObject.put("0sl", location);
             } catch (JSONException e) {}
         }
         return writeObject;
     }
 
     /*
+      Decrement the index of stack to pop.
+     */
+    public void fixStack() {
+        String root = readFile(UNDO_DEST);
+        try{
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(undo_stack, Context.MODE_PRIVATE));
+            write(outputStreamWriter, decStack(root).toString());
+        } catch (FileNotFoundException e) {}
+    }
+
+    private JSONObject decStack(String root) {
+        try {
+            JSONObject rootObject = new JSONObject(root);
+            JSONObject writeObject = new JSONObject();
+            int size = Integer.parseInt(rootObject.optString("size").toString()) - 1;
+            writeObject.put("size", size);
+            int j;
+            String attribute;
+            String attribute_stack;
+            for (int i = 0; i < size; i++) {
+                j = i + 1;
+                attribute = "" + i;
+                attribute_stack = "" + j;
+                writeObject.put(attribute, new JSONObject(rootObject.optString(attribute_stack).toString()));
+                attribute = attribute + "s";
+                attribute_stack = attribute_stack + "s";
+                writeObject.put(attribute, rootObject.optString(attribute_stack).toString());
+                attribute = attribute + "l";
+                attribute_stack = attribute_stack + "l";
+                writeObject.put(attribute, rootObject.optString(attribute_stack).toString());
+            }
+            return writeObject;
+        } catch (JSONException e) {
+        }
+        return null;
+    }
+
+    /*
       Undo Last Delete.
      */
     public void popUndo() {
-        String root = readFile(UNDO_DEST);
-        if (root == "") return;
+        String rootU = readFile(UNDO_DEST);
+        String rootS = readFile(STORAGE_DEST);
+        if (rootU == "" || rootS == "") return;
         try {  // Output the new JSON Root Object to File
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(undo_stack, Context.MODE_PRIVATE));
-            write(outputStreamWriter, undo(root).toString());
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
+            write(outputStreamWriter, undo(rootU, rootS).toString());
         } catch (FileNotFoundException e) {}
     }
 
     /*
       TODO: Undo previous delete. Pop from JSON Stack and return root.
      */
-    private JSONObject undo(String root) {
+    private JSONObject undo(String rootUndo, String rootStorage) {
+        try {
+            JSONObject stack = new JSONObject(rootUndo);
+            String location = stack.optString("0sl").toString();
+            JSONObject toAdd = new JSONObject(stack.optString("0").toString());
+            if(stack.optString("0s").toString().equals(REM_SEL)) {
+                return new JSONObject(add_to_root(toAdd, rootStorage, location));
+            }
+            else {
+                JSONObject jsonRootObject = new JSONObject(rootStorage);
+                // Get the JSON Array containing "Foods"
+                JSONArray jsonArray = jsonRootObject.optJSONArray(location);
+                // Make new JSONArray and Root to push back
+                JSONObject jsonNewRoot = new JSONObject();
+
+                // Put unmodified arrays into new root
+                for(int i = 0; i < LOCATIONS_LIST.size(); i++) {
+                    if (location != LOCATIONS_LIST.get(i)) {
+                        jsonNewRoot.put(LOCATIONS_LIST.get(i), jsonRootObject.optJSONArray(LOCATIONS_LIST.get(i)));
+                    }
+                }
+                // Make new array to store the array without the deleted element
+                JSONArray newArray = new JSONArray();
+                boolean remove = true; // Keeps track of if item has been removed already
+                for(int i = 0; i < jsonArray.length(); i++) {
+                    if(!(toAdd.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
+                            !(toAdd.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
+                            !(toAdd.optString("expiry").toString().equals(jsonArray.getJSONObject(i).optString("expiry").toString())) ||
+                            !remove) { // If item doesn't match
+                            newArray.put(jsonArray.get(i)); // Add item to new array
+                    }
+                    else { // Don't add. I.e: remove
+                        remove = false;
+                    }
+                }
+                newArray.put(toAdd);
+                // Put the new array
+                jsonNewRoot.put(location, newArray);
+                return jsonNewRoot;
+            }
+        } catch (JSONException e) {}
+
         return null;
     }
 
@@ -231,6 +328,7 @@ public class DatabaseInteraction {
                 // Make new array to store the array without the deleted element
                 JSONArray newArray = new JSONArray();
                 JSONObject decrement;
+                JSONObject stack;
                 double new_qty;
 
                 boolean remove = true; // Keeps track of if item has been removed already
@@ -243,18 +341,25 @@ public class DatabaseInteraction {
                     }
                     else { // Don't add. I.e: remove
                         decrement = new JSONObject();
+                        stack = new JSONObject();
                         decrement.put("name", jsonArray.getJSONObject(i).optString("name").toString());
+                        stack.put("name", jsonArray.getJSONObject(i).optString("name").toString());
                         decrement.put("bought", jsonArray.getJSONObject(i).optString("bought").toString());
+                        stack.put("bought", jsonArray.getJSONObject(i).optString("bought").toString());
                         decrement.put("expiry", jsonArray.getJSONObject(i).optString("expiry").toString());
+                        stack.put("expiry", jsonArray.getJSONObject(i).optString("expiry").toString());
                         if (Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()) == UNIT)
                             new_qty = Integer.parseInt(jsonArray.getJSONObject(i).optString("quantity").toString()) - 1;
                         else
                             new_qty = Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()) - DECREMENT_P * Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString());
                         decrement.put("quantity", new_qty);
+                        stack.put("quantity", Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()));
                         decrement.put("original_qty", Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()));
+                        stack.put("original_qty", Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()));
                         decrement.put("unit", Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()));
+                        stack.put("unit", Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()));
                         newArray.put(decrement);
-                        addStack(decrement);
+                        addStack(stack, DEC_SEL, array);
                         remove = false;
                     }
                 }
@@ -276,7 +381,6 @@ public class DatabaseInteraction {
       @param location/JSONArray from which object is removed
      */
     public void removeFood(JSONObject food, String location) {
-        addStack(food);
         String root = readFile(STORAGE_DEST);
         if (root == "") return;
         try {  // Output the new JSON Root Object to File
@@ -294,6 +398,7 @@ public class DatabaseInteraction {
      */
     private JSONObject remove(String root, String array, JSONObject element) {
         try {
+            addStack(element, REM_SEL, array);
             // If root object exists
             if (root != "") {
                 // Make a JSON Object from root String
@@ -322,6 +427,7 @@ public class DatabaseInteraction {
                     }
                     else { // Don't add. I.e: remove
                         remove = false;
+
                     }
                 }
 
