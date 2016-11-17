@@ -17,10 +17,10 @@ How to run tests?
     - To run all tests in a directory, right-click on the directory and select Run tests .
 
 Structure of the source code directory?
-- src/main/assets     Application/Library assets (Default Library Database)
-- src/main/java       Application/Library sources
-- src/main/res        Application/Library resources
-- src/test/java       Unit Tests
+- src/main/assets-----Application/Library assets (Default Library Database)
+- src/main/java-------Application/Library sources
+- src/main/res--------Application/Library resources
+- src/test/java-------Unit Tests
 
 Design patterns used?
 - Structural Design Pattern
