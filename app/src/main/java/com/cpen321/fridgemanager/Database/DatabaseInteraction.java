@@ -13,9 +13,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -567,6 +572,64 @@ public class DatabaseInteraction {
         return extractArray(root, location);
     }
 
+        /*
+      @param -
+      @returns JSONArray containing all food items which are close to expiry sorted by expiry date
+     */
+    public JSONArray getSortedExpiryArray() throws JSONException, ParseException {
+        int DaysToExpiryDate = 3;
+
+        String root = readFile(STORAGE_DEST);
+        JSONArray fridge = extractArray(root, "Fridge");
+        JSONArray freezer = extractArray(root, "Freezer");
+        JSONArray pantry = extractArray(root, "Pantry");
+        JSONArray fresh = extractArray(root, "Fresh");
+        JSONArray sort = concatArray(fridge, freezer, pantry, fresh);
+
+        List<JSONObject> jsonValues = new ArrayList<JSONObject>();
+        for (int i = 0; i < sort.length(); i++) {
+            if (foodToExpire(sort.getJSONObject(i)))
+                jsonValues.add(sort.getJSONObject(i));
+        }
+        return sort;
+    }
+
+    /*
+      Compares expiry date of food to actual time
+      @param JSONObject which should be compared
+      @returns 0 for not close to expiry, 1 for close to expiry
+     */
+    public boolean foodToExpire(JSONObject food) throws ParseException {
+        int DaysToExpiryDate = 3;
+        Calendar actDate = Calendar.getInstance();
+        actDate.set(Calendar.DAY_OF_YEAR, DaysToExpiryDate + actDate.get(Calendar.DAY_OF_YEAR));
+
+        //Create calendar object out of expiry date
+        Calendar expDate = Calendar.getInstance();
+        String expiryDate = food.optString("expiry");
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = formatter.parse(expiryDate);
+        expDate.setTime(date);
+        int timeDiff = actDate.compareTo(expDate);
+        return (timeDiff >= 0);
+    }
+
+    /*
+      Returns a JSONArray with attribute, provided a root object.
+      @param JSONArray to concatenate
+      @returns Concatenated JSONArray
+     */
+    private JSONArray concatArray(JSONArray... arrs)
+            throws JSONException {
+        JSONArray result = new JSONArray();
+        for (JSONArray arr : arrs) {
+            for (int i = 0; i < arr.length(); i++) {
+                result.put(arr.get(i));
+            }
+        }
+        return result;
+    }
+
     /*
       Returns a JSONArray with attribute, provided a root object.
       @param root object in string
@@ -683,4 +746,26 @@ public class DatabaseInteraction {
         return df.format(c.getTime());
     }
 
+}
+
+class JSONComparator implements Comparator<JSONObject>
+{
+    public int compare(JSONObject a, JSONObject b)
+    {
+        int valA = 0;
+        int valB = 0;
+
+        try {
+            valB = b.getInt("expiry");
+            valA = a.getInt("expiry");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if(valA > valB)
+            return 1;
+        if(valA < valB)
+            return -1;
+        return 0;
+    }
 }
