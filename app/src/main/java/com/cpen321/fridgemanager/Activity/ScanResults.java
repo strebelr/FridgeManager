@@ -204,8 +204,8 @@ public class ScanResults extends AppCompatActivity {
 
     public void AddFood(View view){
         for(int i = 0; i < names.size(); i++) {
-            if(names.get(i) != null) { // If food not removed
-                int expiry = expiries.get(i); // Numbers of days until the expiry date.
+            if(names.get(i) != null) {          // If food not removed
+                int expiry = expiries.get(i);   // Numbers of days until the expiry date.
                 // TODO: CALL ALARM FROM HERE
                 ranNum = generateNumber();
 
@@ -234,11 +234,10 @@ public class ScanResults extends AppCompatActivity {
         mainMenu();
     }
 
-    /* Methods used fo Alarm */
-
+    /********* Methods used for Alarm **********/
     public int generateNumber() {
         Random r = new Random();
-        int num = r.nextInt(1000) + 1;
+        int num = r.nextInt(100000) + 1;
         return num;
     }
 
@@ -255,33 +254,30 @@ public class ScanResults extends AppCompatActivity {
         return this.ranNum;
     }
 
+    public void cancelNotification(int notifID) {
+        Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(pendingIntent);
+    }
+
     // TODO:  MSG. WHAT HAPPENS IF JANUARY 31 AND DAY IS ADDED
-    public void setAlarm(View view, int dayToExpire, int notifID, int alarmType) {
+    public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType) {
 
         Calendar calendar = Calendar.getInstance();     // possible redundancy here
-        //Calendar c = new GregorianCalendar();
 
         calendar.add(Calendar.SECOND, 10);
         //calendar.set(Calendar.HOUR_OF_DAY, 18);
-        calendar.add(Calendar.DAY_OF_YEAR, dayToExpire);
+        calendar.add(Calendar.DAY_OF_YEAR, daysTillExpire);
 
         android.util.Log.i("AFTER ",": " +calendar);
 
-        Long alertTime = System.currentTimeMillis() + 5000;
-
-        android.util.Log.i("Time Class ", " Time value in milliseconds "+alertTime);
-
+        // Issues a new notification to be sent
         Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
         intent.putExtra("NOTIF_TYPE", alarmType);
-
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
-        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
-
     }
 
 }
