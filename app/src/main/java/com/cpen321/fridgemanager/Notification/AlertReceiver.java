@@ -14,13 +14,16 @@ import com.cpen321.fridgemanager.R;
 public class AlertReceiver extends BroadcastReceiver {
 
     ScanResults number = new ScanResults();
-    int i1 = number.getNumber();
+    int uniqueID = number.getNumber();
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        int msgType = intent.getIntExtra("NOTIF_TYPE", 0);
 
-        createNotification(context, "Fridge Manager","Your food has expired","Alert", i1);
-        //createNotification(context, "Fridge Manager","Your food is expiring soon!","Alert", ScanResults.i1);
+        if(msgType == 0)
+            createNotification(context, "Fridge Manager","Your food has expired","Alert", uniqueID);
+        else
+            createNotification(context, "Fridge Manager","Your food is expiring soon!","Alert", uniqueID);
     }
 
     public void createNotification(Context context, String msg, String msgText, String msgAlert, int notifID) {

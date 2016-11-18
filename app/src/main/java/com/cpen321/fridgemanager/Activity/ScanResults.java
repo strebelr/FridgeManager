@@ -207,22 +207,22 @@ public class ScanResults extends AppCompatActivity {
             if(names.get(i) != null) { // If food not removed
                 int expiry = expiries.get(i); // Numbers of days until the expiry date.
                 // TODO: CALL ALARM FROM HERE
-                i1 = generateNumber();
+                ranNum = generateNumber();
 
 
                 //Alert a = new Alert();
                 //a.setAlarm(findViewById(R.id.scan_result), expiry);
-                setAlarm(view, expiry, i1);
+                //setAlarm(view, expiry, i1);
 
-                /*if(expiry > 4) {
-                    setAlarm(view, expiry - 3);     // sends notification 3 days before expiry
-                    setAlarm(view, expiry);
+                if(expiry > 4) {
+                    setAlarm(view, expiry - 3, ranNum + 1, PRE_EXPIRY);     // sends notification 3 days before expiry
+                    setAlarm(view, expiry, ranNum, EXPIRY);
                 } else if (expiry <= 3 && expiry > 1) {
-                    setAlarm(view, 1);     // sends notification the next day
-                    setAlarm(view, expiry);
+                    setAlarm(view, 1, ranNum + 1, PRE_EXPIRY);              // sends notification the next day
+                    setAlarm(view, expiry, ranNum, EXPIRY);
                 } else {
-                    setAlarm(view, expiry);         // only send notification on the day of expiry
-                } */
+                    setAlarm(view, expiry, ranNum, EXPIRY);         // only send notification on the day of expiry
+                }
 
                 if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
                     ti.addFoodToStorage(names.get(i), quantities.get(i), units.get(i), locations.get(i), expiry);
@@ -242,18 +242,21 @@ public class ScanResults extends AppCompatActivity {
         return num;
     }
 
-    private int i1;
+    private int ranNum; // random number to generate unique ID
+    private static final int EXPIRY = 0;        // expired
+    private static final int PRE_EXPIRY = 1;    // soon to expire
+
 
     public ScanResults() {
-        this.i1 = generateNumber();
+        this.ranNum = generateNumber();
     }
 
     public int getNumber() {
-        return this.i1;
+        return this.ranNum;
     }
 
-    // TODO: NEED TO TAKE IN UNIQUE ID, AND MSG. WHAT HAPPENS IF JANUARY 31 AND DAY IS ADDED
-    public void setAlarm(View view, int dayToExpire, int notifID) {
+    // TODO:  MSG. WHAT HAPPENS IF JANUARY 31 AND DAY IS ADDED
+    public void setAlarm(View view, int dayToExpire, int notifID, int alarmType) {
 
         Calendar calendar = Calendar.getInstance();     // possible redundancy here
         //Calendar c = new GregorianCalendar();
@@ -269,14 +272,12 @@ public class ScanResults extends AppCompatActivity {
         android.util.Log.i("Time Class ", " Time value in milliseconds "+alertTime);
 
         Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+        intent.putExtra("NOTIF_TYPE", alarmType);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-        //alarmManager.set(AlarmManager.RTC_WAKEUP, alertTime, pendingIntent);
-
-        /* Comment above line and uncomment this line once expiry date is ready) */
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
         //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
