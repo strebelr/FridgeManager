@@ -580,7 +580,7 @@ public class DatabaseInteraction {
      */
     public JSONArray getSortedExpiryArray() throws JSONException, ParseException {
 
-    String root = readFile(STORAGE_DEST);
+        String root = readFile(STORAGE_DEST);
         JSONArray fridge = extractArray(root, "Fridge");
         JSONArray freezer = extractArray(root, "Freezer");
         JSONArray pantry = extractArray(root, "Pantry");
@@ -653,6 +653,15 @@ public class DatabaseInteraction {
             }
         }
         return result;
+    }
+
+    public int findObject(JSONArray array, JSONObject obj) throws JSONException {
+        for (int i = 0; i < array.length(); i++){
+            if (array.getJSONObject(i).optString("name") == obj.optString("name")) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /*
