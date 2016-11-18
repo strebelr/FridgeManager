@@ -118,9 +118,6 @@ public class FoodStock extends Fragment{
     }
 
     private void createTable(int location) throws ParseException {
-        int DaysToExpiryDate = 3;
-        Calendar actDate = Calendar.getInstance();
-        actDate.set(Calendar.DAY_OF_YEAR, DaysToExpiryDate + actDate.get(Calendar.DAY_OF_YEAR));
 
         // Selects food location
         JSONArray foodList;
@@ -148,13 +145,6 @@ public class FoodStock extends Fragment{
         for (int i = 0; i < foodList.length(); i++) {
             try {
                 food = foodList.getJSONObject(i);
-
-                Calendar expDate = Calendar.getInstance();
-                String expiryDate = food.optString("expiry");
-                DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                Date date = formatter.parse(expiryDate);
-                expDate.setTime(date);
-                int time_diff = actDate.compareTo(expDate);
 
                 trs.add(new TableRow(getActivity()));
 
@@ -317,7 +307,7 @@ public class FoodStock extends Fragment{
                 TableRow.LayoutParams trLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
                 trLayoutParams.weight = 1;
                 food_name.setLayoutParams(trLayoutParams);
-                if (time_diff >= 0){
+                if (di.foodToExpire(food)){
                     food_name.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
                 }
                 trs.get(i + index).addView(food_name, 0);

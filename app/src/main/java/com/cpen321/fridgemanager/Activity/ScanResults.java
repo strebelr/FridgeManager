@@ -34,6 +34,9 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class ScanResults extends AppCompatActivity {
 
+    // Initial Texts
+    private ArrayList<String> texts = new ArrayList<String>();
+
     // Initialize ArrayLists  that store food data. Index corresponds between these three lists.
     private ArrayList<EditText> amounts = new ArrayList<EditText>();
     private ArrayList<Integer> units = new ArrayList<Integer>();
@@ -55,7 +58,7 @@ public class ScanResults extends AppCompatActivity {
 
         ti = new TextRecognitionInteraction(getApplicationContext());
         mTlayout = (TableLayout) findViewById(R.id.mTlayout);
-        ArrayList<String> texts = getIntent().getStringArrayListExtra("texts");
+        texts = getIntent().getStringArrayListExtra("texts");
 
         JSONObject food;
 
@@ -182,6 +185,13 @@ public class ScanResults extends AppCompatActivity {
 
     public void OcrCaptureActivity(View view){
         Intent intent = new Intent(this, OcrCaptureActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
+
+    public void OcrCaptureActivityWithArray(View view){
+        Intent intent = new Intent(this, OcrCaptureActivity.class);
+        intent.putStringArrayListExtra("texts", texts);
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }

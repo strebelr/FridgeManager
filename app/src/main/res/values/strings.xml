@@ -25,7 +25,8 @@
     <string name="foodstock">Empty</string>
     <string name="add_one_item">Add</string>
     <string name="add_all">Add all</string>
-    <string name="try_again">Try again</string>
+    <string name="try_again">Reset</string>
+    <string name="take_more">Take More</string>
     <string-array name="amount">
         <item>units</item>
         <item>grams</item>

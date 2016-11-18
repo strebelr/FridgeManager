@@ -6,12 +6,36 @@
     android:layout_height="match_parent"
     tools:context="com.cpen321.fridgemanager.Fragment.FoodToExpire">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Food to Expire"
-        android:textSize="40dp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"/>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="50px"
+        android:layout_marginLeft="50px"
+        android:scrollbars="none"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/scrollView2">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:id="@+id/TableToExpire">
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:text=" "
+                android:layout_below="@id/mTlayoutF"/>
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+
 
 </RelativeLayout>

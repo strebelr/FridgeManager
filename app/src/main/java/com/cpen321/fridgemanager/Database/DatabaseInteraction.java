@@ -1,5 +1,6 @@
 package com.cpen321.fridgemanager.Database;
 import android.content.Context;
+import android.util.Pair;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,9 +14,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -567,6 +574,87 @@ public class DatabaseInteraction {
         return extractArray(root, location);
     }
 
+        /*
+      @param -
+      @returns JSONArray containing all food items which are close to expiry sorted by expiry date
+     */
+    public JSONArray getSortedExpiryArray() throws JSONException, ParseException {
+
+    String root = readFile(STORAGE_DEST);
+        JSONArray fridge = extractArray(root, "Fridge");
+        JSONArray freezer = extractArray(root, "Freezer");
+        JSONArray pantry = extractArray(root, "Pantry");
+        JSONArray fresh = extractArray(root, "Fresh");
+        JSONArray closeToExpiry = concatArray(fridge, freezer, pantry, fresh);
+        JSONArray sortedArray = new JSONArray();
+
+        List<ExpDateJSON> sortedList = new ArrayList<ExpDateJSON>();
+
+        for (int i = 0; i < closeToExpiry.length(); i++) {
+            JSONObject food = closeToExpiry.getJSONObject(i);
+            if (foodToExpire(food))
+                sortedList.add(new ExpDateJSON(daysToExpire(food), food ));
+        }
+        Collections.sort(sortedList);
+
+
+        for (int i = 0; i < sortedList.size(); i++){
+            sortedArray.put(sortedList.get(i).getObject());
+        }
+
+        return sortedArray;
+    }
+
+    /*
+      Compares expiry date of food to actual time
+      @param JSONObject which should be compared
+      @returns 0 for not close to expiry, 1 for close to expiry
+     */
+    public boolean foodToExpire(JSONObject food) throws ParseException {
+        int DaysToExpiryDate = 3;
+        
+        int dayDiff = daysToExpire(food);
+        
+        return ( (dayDiff - DaysToExpiryDate) <= 0 );
+    }
+
+        /*
+      Finds days until food expires fractions of days are rounded off
+      @param JSONObject from whom you want the days
+      @returns days to expiry
+     */
+    private  int daysToExpire(JSONObject food) throws ParseException {
+        Calendar actDate = Calendar.getInstance();
+
+        Calendar expDate = Calendar.getInstance();
+        String expiryDate = food.optString("expiry");
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = formatter.parse(expiryDate);
+        expDate.setTime(date);
+
+        long today = actDate.getTimeInMillis();
+        long expiry = expDate.getTimeInMillis();
+        int millisPerDay = (24 * 60 * 60 * 1000);
+        
+        return (int) (expiry - today) / millisPerDay;
+    }
+
+    /*
+      Returns a JSONArray with attribute, provided a root object.
+      @param JSONArray to concatenate
+      @returns Concatenated JSONArray
+     */
+    private JSONArray concatArray(JSONArray... arrs)
+            throws JSONException {
+        JSONArray result = new JSONArray();
+        for (JSONArray arr : arrs) {
+            for (int i = 0; i < arr.length(); i++) {
+                result.put(arr.get(i));
+            }
+        }
+        return result;
+    }
+
     /*
       Returns a JSONArray with attribute, provided a root object.
       @param root object in string
@@ -683,4 +771,23 @@ public class DatabaseInteraction {
         return df.format(c.getTime());
     }
 
+}
+
+class ExpDateJSON implements Comparable<ExpDateJSON> {
+    int daysToExpire;
+    private JSONObject food;
+
+    public ExpDateJSON(int daysToExpire, JSONObject food) {
+        this.daysToExpire = daysToExpire;
+        this.food = food;
+    }
+
+    @Override
+    public int compareTo(ExpDateJSON o) {
+        return daysToExpire < o.daysToExpire ? -1 : daysToExpire > o.daysToExpire ? 1 : 0;
+    }
+
+    public JSONObject getObject(){
+        return this.food;
+    }
 }
