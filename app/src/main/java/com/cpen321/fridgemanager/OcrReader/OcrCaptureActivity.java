@@ -370,7 +370,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
             List<Line> lines = (List<Line>) textBlock.getComponents();
             for(int i =0; i < lines.size(); i++) {
                 texts.add(lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
-                Log.d(TAG, "line "+i+" is :" + lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
+                //Log.d(TAG, "line "+i+" is :" + lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
             }
         }
 
