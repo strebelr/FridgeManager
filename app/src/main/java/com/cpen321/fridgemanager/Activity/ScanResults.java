@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Random;
 
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -196,10 +197,12 @@ public class ScanResults extends AppCompatActivity {
             if(names.get(i) != null) { // If food not removed
                 int expiry = expiries.get(i); // Numbers of days until the expiry date.
                 // TODO: CALL ALARM FROM HERE
+                i1 = generateNumber();
+
 
                 //Alert a = new Alert();
                 //a.setAlarm(findViewById(R.id.scan_result), expiry);
-                setAlarm(view, expiry);
+                setAlarm(view, expiry, i1);
 
                 /*if(expiry > 4) {
                     setAlarm(view, expiry - 3);     // sends notification 3 days before expiry
@@ -221,8 +224,26 @@ public class ScanResults extends AppCompatActivity {
         mainMenu();
     }
 
+    /* Methods used fo Alarm */
+
+    public int generateNumber() {
+        Random r = new Random();
+        int num = r.nextInt(1000) + 1;
+        return num;
+    }
+
+    private int i1;
+
+    public ScanResults() {
+        this.i1 = generateNumber();
+    }
+
+    public int getNumber() {
+        return this.i1;
+    }
+
     // TODO: NEED TO TAKE IN UNIQUE ID, AND MSG. WHAT HAPPENS IF JANUARY 31 AND DAY IS ADDED
-    public void setAlarm(View view, int dayToExpire) {
+    public void setAlarm(View view, int dayToExpire, int notifID) {
 
         Calendar calendar = Calendar.getInstance();     // possible redundancy here
         //Calendar c = new GregorianCalendar();
@@ -239,7 +260,7 @@ public class ScanResults extends AppCompatActivity {
 
         Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
