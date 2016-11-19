@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 /**
  * Created by Kazuki Fukushima on 2016/10/22.
  * Handles the recognition of food items from the text read by OCRCaptureActivity
@@ -64,16 +66,21 @@ public class TextRecognitionInteraction {
 
             for (int i = 0; i < library.length(); i++) {
                 JSONObject jsonObject = library.getJSONObject(i);
-                String library_name = jsonObject.optString("name").toString();
 
-                if(name.length() >= library_name.length()) {
-                    //get the distance between the two strings
-                    int dist = Levenshtein.distance(name, library_name);
-                    //get the absolute distance (accounts for difference in string length
-                    int abs_dist = dist - Math.abs(library_name.length()-name.length());
-                    //if absolute distance is less than error, assume found and add to database
-                    if(abs_dist < margin){
-                        return jsonObject;
+                JSONArray jArray = jsonObject.getJSONArray("abb");
+
+                for(int ii=0; ii < jArray.length(); ii++) {
+                    String library_name = jArray.getString(ii);
+                    Log.d(TAG, "line "+ii+ " is :" + library_name);
+                    if (name.length() >= library_name.length()) {
+                        //get the distance between the two strings
+                        int dist = Levenshtein.distance(name, library_name);
+                        //get the absolute distance (accounts for difference in string length
+                        int abs_dist = dist - Math.abs (library_name.length() - name.length());
+                        //if absolute distance is less than error, assume found and add to database
+                        if (abs_dist < margin) {
+                            return jsonObject;
+                        }
                     }
                 }
             }
