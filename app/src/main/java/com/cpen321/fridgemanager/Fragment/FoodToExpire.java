@@ -40,7 +40,6 @@ public class FoodToExpire extends Fragment{
     TableLayout mTlayout;
     private JSONArray toExpire;
     TableRow titleToExpire;
-    private JSONObject food;
 
     public FoodToExpire() {
         // Required empty public constructor
@@ -106,7 +105,7 @@ public class FoodToExpire extends Fragment{
 
         for (int i = 0; i < toExpire.length(); i++) {
             try {
-                food = toExpire.getJSONObject(i);
+                JSONObject food = toExpire.getJSONObject(i);
 
                 trs.add(new TableRow(getActivity()));
 
@@ -157,8 +156,6 @@ public class FoodToExpire extends Fragment{
                 unit_name.setLayoutParams(trLayoutParams_unit);
                 trs.get(i).addView(unit_name);
 
-
-
                 // Create delete button
                 btn_del.setImageResource(R.drawable.ic_trash);
                 btn_del.setId(i);
@@ -166,26 +163,13 @@ public class FoodToExpire extends Fragment{
                 btn_del.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String location = food.optString("location");
-                        //location = "Fridge";
-
+                        int index = v.getId();
                         try {
-                            if (location == "Fridge") {
-                                di.removeFood(fridge.getJSONObject(di.findObject(fridge, food)), location);
-                                refresh();
-                            }
-                            else if (location == "Fresh") {
-                                di.removeFood(fresh.getJSONObject(di.findObject(fresh, food)), location);
-                                refresh();
-                            }
-                            else if (location == "Pantry"){
-                                di.removeFood(pantry.getJSONObject(di.findObject(pantry, food)), location);
-                                refresh();
-                            }
-                            else if (location == "Freezer") {
-                                di.removeFood(freezer.getJSONObject(di.findObject(freezer, food)), location);
-                                refresh();
-                            }
+                            di.removeFood((JSONObject) toExpire.get(index), "Fridge");
+                            di.removeFood((JSONObject) toExpire.get(index), "Fresh");
+                            di.removeFood((JSONObject) toExpire.get(index), "Pantry");
+                            di.removeFood((JSONObject) toExpire.get(index), "Freezer");
+                            refresh();
                         } catch(JSONException e) {}
 
                     }
