@@ -1,22 +1,12 @@
 package com.cpen321.fridgemanager.Activity;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,9 +15,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
-import com.cpen321.fridgemanager.Fragment.Expenditures;
-import com.cpen321.fridgemanager.Fragment.FoodStock;
-import com.cpen321.fridgemanager.Fragment.FoodToExpire;
 import com.cpen321.fridgemanager.R;
 
 import org.json.JSONArray;
@@ -35,7 +22,6 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
