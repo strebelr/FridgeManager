@@ -31,51 +31,129 @@
   {"name":"Tom Yum Soup","abb":["Tom Yum Soup"],"expiry":"60","unit":"0","location":"Pantry"},
 
 
+
+  {"name":"Apple","abb":["Apple","Apples"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Apple Juice","abb":["Apple Juice"],"expiry":"30","unit":"0", "location":"Pantry"},
   {"name":"Apricot","abb":["apricot","apricots"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"Asparagus","abb":["asparagus"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"Avocado","abb":["avocado","avocadoes"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"green bean","abb":["green bean"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"artichoke","abb":["artichoke"],"expiry":"5","unit":"0", "location":"Fresh"},
+
+  {"name":"Baking Powder","abb":["Baking Powder"],"expiry":"90","unit":"0", "location":"Pantry"},
+  {"name":"Baking Soda","abb":["Baking Soda"],"expiry":"90","unit":"0", "location":"Pantry"},
   {"name":"beetroot","abb":["beetroot","beetroots"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"bean","abb":["bean","beans"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"bean","abb":["bean","beans"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Beef","abb":["Beef"],"expiry":"5","unit":"0", "location":"Fridge"},
+  {"name":"Blueberry","abb":["Blueberry","Blueberries"],"expiry":"5","unit":"0", "location":"Fridge"},
+  {"name":"Boneless Breast","abb":["Boneless Breast"],"expiry":"7","unit":"0", "location":"Fridge"},
   {"name":"broccoli","abb":["broccoli"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"brussels sprout","abb":["brussels sprout"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"squash","abb":["squash"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Butter","abb":["Butter"],"expiry":"25","unit":"0", "location":"Fresh"},
+  {"name":"Brown Sugar","abb":["Brown Sugar"],"expiry":"90","unit":"0", "location":"Pantry"},
+  {"name":"Blood Orange","abb":["Blood Orange"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Blackberry","abb":["Blackberry", "Blackberries"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Bok Choy","abb":["bok Choy"],"expiry":"5","unit":"0", "location":"Fresh"},
+
+
+  {"name":"Cauliflower","abb":["Cauliflower","Cauliflowers"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"carrot","abb":["carrot","carrots"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"cherry","abb":["cherry","cherries"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Cheese","abb":["Cheese", "Sliced Cheese"],"expiry":"7","unit":"0", "location":"Fresh"},
+  {"name":"Cottage Cheese","abb":["Cottage Cheese"],"expiry":"7","unit":"0", "location":"Fresh"},
+  {"name":"Cream Cheese","abb":["Cream Cheese"],"expiry":"7","unit":"0", "location":"Fresh"},
+  {"name":"Cereal","abb":["Cereal","Cereals"],"expiry":"30","unit":"0", "location":"Pantry"},
+  {"name":"Cinnamon","abb":["Cinnamon"],"expiry":"90","unit":"0", "location":"Pantry"},
   {"name":"clementine","abb":["clementine","clementines"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Corn","abb":["Corn","Corns"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"courgette","abb":["courgette"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Chicken","abb":["Chicken"],"expiry":"5","unit":"0", "location":"Fridge"},
+  {"name":"Cod","abb":["Cod", "Cod Fillet"],"expiry":"7","unit":"0", "location":"Fridge"},
+
   {"name":"date","abb":["date","dates"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Durian","abb":["Durian","Durians"],"expiry":"5","unit":"0", "location":"Fresh"},
+
+  {"name":"Egg","abb":["Egg","Eggs"],"expiry":"30","unit":"0", "location":"Fresh"},
   {"name":"elderberry","abb":["elderberry","elderberries"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"endive","abb":["endive"],"expiry":"5","unit":"0", "location":"Fresh"},
+
   {"name":"fennel","abb":["fennel"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"fig","abb":["fig","figs"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Flour","abb":["Flour"],"expiry":"90","unit":"0", "location":"Pantry"},
+
   {"name":"garlic","abb":["garlic"],"expiry":"28","unit":"0", "location":"Fresh"},
+  {"name":"Garlic Salt","abb":["Garlic Salt"],"expiry":"90","unit":"0", "location":"Pantry"},
+  {"name":"Ginger","abb":["Ginger"],"expiry":"28","unit":"0", "location":"Fresh"},
+  {"name":"Grapefruit","abb":["Grapefruit"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"green bean","abb":["green bean"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"guava","abb":["guava"],"expiry":"5","unit":"0", "location":"Fresh"},
+
   {"name":"honeydew","abb":["honeydew"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Ham","abb":["Ham"],"expiry":"10","unit":"0", "location":"Fridge"},
+
+  {"name":"Ice Cream","abb":["Ice cream"],"expiry":"30","unit":"0", "location":"Fridge"},
+
+  {"name":"kiwi","abb":["kiwi", "kiwifruit"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Kale","abb":["Kale"],"expiry":"5","unit":"0", "location":"Fresh"},
+  
   {"name":"lettuce","abb":["lettuce"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"artichoke","abb":["artichoke"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"kiwi","abb":["kiwi"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"leek","abb":["leek"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"lemon","abb":["lemon"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Lobster","abb":["Lobster", "Lobsters"],"expiry":"3","unit":"0", "location":"Fridge"},
+  {"name":"Lychee","abb":["Lychee"],"expiry":"5","unit":"0", "location":"Fresh"},
+
   {"name":"mango","abb":["mango","mangoes"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Mandarin Orange","abb":["Mandarin Orange","Mandarin Oranges", "Mandarin"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Milk","abb":["Milk"],"expiry":"10","unit":"0", "location":"Fresh"},
+
   {"name":"nectarine","abb":["nectarine"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"walnut","abb":["walnut"],"expiry":"5","unit":"0", "location":"Fresh"},
+
+  {"name":"olive","abb":["olive","olives"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Onion Powder","abb":["Onion Powder"],"expiry":"30","unit":"0", "location":"Pantry"},
+  {"name":"Orange Juice","abb":["Orange Juice"],"expiry":"30","unit":"0", "location":"Pantry"},
+  {"name":"Oatmeal","abb":["Oatmeal"],"expiry":"30","unit":"0", "location":"Pantry"},
+
+  {"name":"Passion Fruit","abb":["Passion Fruit", "Passion Fruits"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Parsley","abb":["Parsley"],"expiry":"30","unit":"0", "location":"Fresh"},
+  {"name":"Papaya","abb":["Papaya"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Parsnip","abb":["Parsnip"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"peach","abb":["peach","peaches"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"peanut","abb":["peanut","peanuts"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"olive","abb":["olive","olives"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Plum","abb":["Plum","Plums"],"expiry":"5","unit":"0", "location":"Fridge"},
   {"name":"pear","abb":["pear","pears"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"pea","abb":["pea","peanuts"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"pepper","abb":["pepper","peppers"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"pepper","abb":["pepper","peppers"],"expiry":"30","unit":"0", "location":"Fresh"},
+  {"name":"Peanut Butter","abb":["Peanut Butter"],"expiry":"30","unit":"0", "location":"Pantry"},
   {"name":"pumpkin","abb":["pumpkin","pumpkins"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"pineapple","abb":["pineapple"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"Apple","abb":["Apple","Apples"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"radish","abb":["radish"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"raisin","abb":["raisin"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"rhubarb","abb":["rhubarb"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"sweet potato","abb":["sweet potato"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"potato","abb":["potato","potatoes"],"expiry":"5","unit":"0", "location":"Fresh"},
+
+  {"name":"radish","abb":["radish"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"rhubarb","abb":["rhubarb"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Raspberry","abb":["Raspberry", "Raspberries"],"expiry":"5","unit":"0", "location":"Fresh"},
+
+  {"name":"sweet potato","abb":["sweet potato"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Sausage","abb":["Sausage", "Sausages"],"expiry":"10","unit":"0", "location":"Fridge"},
+  {"name":"Scallop","abb":["Scallop", "Scallops"],"expiry":"10","unit":"0", "location":"Fridge"},
+  {"name":"Salt","abb":["Salt", "Table Salt"],"expiry":"90","unit":"0", "location":"Pantry"},
+  {"name":"Sugar","abb":["Sugar"],"expiry":"90","unit":"0", "location":"Pantry"},
+  {"name":"Salsa","abb":["Salsa"],"expiry":"15","unit":"0", "location":"Fresh"},
+  {"name":"squash","abb":["squash"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Steak","abb":["Steak"],"expiry":"10","unit":"0", "location":"Fridge"},
+
+  {"name":"Taro","abb":["Taro"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Tiger Shrimp","abb":["Tiger Shrimp", "Tiger Shrimps"],"expiry":"7","unit":"0", "location":"Fridge"},
+  {"name":"Tuna","abb":["Tuna", "Tune Fillet"],"expiry":"7","unit":"0", "location":"Fridge"},
   {"name":"turnip","abb":["turnip","turnips"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Turkey","abb":["Turkey"],"expiry":"7","unit":"0", "location":"Fridge"},
+
   {"name":"watercress","abb":["watercress"],"expiry":"5","unit":"0", "location":"Fresh"},
   {"name":"watermelon","abb":["watermelon"],"expiry":"5","unit":"0", "location":"Fresh"},
-  {"name":"yam","abb":["yam"],"expiry":"5","unit":"0", "location":"Fresh"}
+  {"name":"Winter Melon","abb":["Winter Melon"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"walnut","abb":["walnut"],"expiry":"5","unit":"0", "location":"Fresh"},
+
+  {"name":"yam","abb":["yam"],"expiry":"5","unit":"0", "location":"Fresh"},
+  {"name":"Yogurt","abb":["Yogurt"],"expiry":"10","unit":"0", "location":"Fresh"},
+  {"name":"Yuzi","abb":["Yuzi"],"expiry":"5","unit":"0", "location":"Fresh"}
+
 ]}
