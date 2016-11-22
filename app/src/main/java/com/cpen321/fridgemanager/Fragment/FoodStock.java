@@ -334,11 +334,50 @@ public class FoodStock extends Fragment{
 
                 // Switch to expiry date
                 // Only works when manually added and this code doesn't belong here or it'll only work on last entry
-                /* food_name.setOnClickListener(new View.OnClickListener() {
+                food_name.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String name = food.optString("name");
-                        String expiry = food.optString("expiry");
+                        int index = v.getId();
+                        int new_index;
+                        String location;
+                        String expiry ="";
+                        String name ="";
+                        if (index < fridge.length()) {
+                            new_index = index;
+                            location = "Fridge";
+                        }
+                        else if (index >= fridge.length() && index < fridge.length() + fresh.length()) {
+                            new_index = index - fridge.length();
+                            location = "Fresh";
+                        }
+                        else if (index >= fridge.length() + fresh.length() && index < fridge.length() + fresh.length() + pantry.length()) {
+                            new_index = index - fridge.length() - fresh.length();
+                            location = "Pantry";
+                        }
+                        else {
+                            new_index = index - fridge.length() - fresh.length() - pantry.length();
+                            location = "Freezer";
+                        }
+
+                        try {
+                            if (location == "Fridge") {
+                                name = fridge.getJSONObject(new_index).optString("name");
+                                expiry = fridge.getJSONObject(new_index).optString("expiry");
+                            }
+                            else if (location == "Fresh") {
+                                name = fresh.getJSONObject(new_index).optString("name");
+                                expiry = fresh.getJSONObject(new_index).optString("expiry");
+                            }
+                            else if (location == "Pantry"){
+                                name = pantry.getJSONObject(new_index).optString("name");
+                                expiry = pantry.getJSONObject(new_index).optString("expiry");
+                            }
+                            else if (location == "Freezer") {
+                                name = freezer.getJSONObject(new_index).optString("name");
+                                expiry = freezer.getJSONObject(new_index).optString("expiry");
+                            }
+                        } catch(JSONException e) {}
+
                         if(food_name.getText() == name) {
                             food_name.setText(expiry);
                         }
@@ -346,7 +385,7 @@ public class FoodStock extends Fragment{
                             food_name.setText(name);
                         }
                     }
-                }); */
+                });
 
             } catch (JSONException e) {
             }
