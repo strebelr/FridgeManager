@@ -16,6 +16,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
+import com.cpen321.fridgemanager.Notification.Alert;
 import com.cpen321.fridgemanager.Notification.AlertReceiver;
 import com.cpen321.fridgemanager.OcrReader.OcrCaptureActivity;
 import com.cpen321.fridgemanager.R;
@@ -51,12 +52,15 @@ public class ScanResults extends AppCompatActivity {
     // A Text Recognition Interaction Object
     private TextRecognitionInteraction ti;
 
+    private DatabaseInteraction di;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_result);
 
         ti = new TextRecognitionInteraction(getApplicationContext());
+        di = new DatabaseInteraction(getApplicationContext());
         mTlayout = (TableLayout) findViewById(R.id.mTlayout);
         texts = getIntent().getStringArrayListExtra("texts");
 
@@ -207,12 +211,14 @@ public class ScanResults extends AppCompatActivity {
             if(names.get(i) != null) {          // If food not removed
                 int expiry = expiries.get(i);   // Numbers of days until the expiry date.
                 // TODO: CALL ALARM FROM HERE
-                ranNum = generateNumber();
+
+                String cat = concatenate(names.get(i), String.valueOf(quantities.get(i)), di.getCurrentDate(), di.getFutureDate(expiry));
+                ranNum = convertToID(cat);
 
 
                 //Alert a = new Alert();
-                //a.setAlarm(findViewById(R.id.scan_result), expiry);
-                //setAlarm(view, expiry, i1);
+                //Alert.setAlarm(view, expiry, ranNum, EXPIRY);
+                //setAlarm(view, expiry, ranNum, EXPIRY);
 
                 if(expiry > 4) {
                     setAlarm(view, expiry - 3, ranNum + 1, PRE_EXPIRY);     // sends notification 3 days before expiry
@@ -241,6 +247,20 @@ public class ScanResults extends AppCompatActivity {
         return num;
     }
 
+    public String concatenate(String name, String quantity, String bought, String expiry) {
+        String cat = name;//+ quantity;
+        return cat;
+    }
+
+    public int convertToID(String cat) {
+        int ID = 0;
+        for(int i = 0; i < cat.length(); i++) {
+            ID += (int)cat.charAt(i);
+        }
+        //int ID = Integer.valueOf(cat);
+        return ID;
+    }
+
     private int ranNum; // random number to generate unique ID
     private static final int EXPIRY = 0;        // expired
     private static final int PRE_EXPIRY = 1;    // soon to expire
@@ -254,7 +274,7 @@ public class ScanResults extends AppCompatActivity {
         return this.ranNum;
     }
 
-    public void cancelNotification(int notifID) {
+    public void cancelAlarm(int notifID) {
         Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
