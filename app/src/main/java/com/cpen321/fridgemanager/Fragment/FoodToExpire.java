@@ -117,6 +117,7 @@ public class FoodToExpire extends Fragment{
                 final TextView food_name = new TextView(getActivity());
                 TextView unit_name = new TextView(getActivity());
                 TextView amount = new TextView(getActivity());
+                TextView expiry = new TextView(getActivity());
 
                 // Create unit text
                 switch (Integer.parseInt(food.optString("unit").toString())) {
@@ -137,6 +138,16 @@ public class FoodToExpire extends Fragment{
                         unit_name.setText(" cups");
                         break;
                 }
+
+                // Create exipry date text view
+                expiry.setId(i);
+                expiry.setText(food.optString("expiry").toString());
+                expiry.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+                TableRow.LayoutParams trLayoutParams_expiry = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+                expiry.setLayoutParams(trLayoutParams_expiry);
+                int padding_right = 50;
+                expiry.setPadding(0,0,padding_right,0);
+                trs.get(i).addView(expiry);
 
 
                 // Create amount text view
