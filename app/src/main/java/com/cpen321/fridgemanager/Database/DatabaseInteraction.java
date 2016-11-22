@@ -575,13 +575,17 @@ public class DatabaseInteraction {
         return extractArray(root, location);
     }
 
+    public JSONArray getSortedExpiryArray() throws JSONException, ParseException {
+        String root = readFile(STORAGE_DEST);
+        return getSortedExpiry(root);
+    }
+
         /*
-      @param -
+      @param root of the database
       @returns JSONArray containing all food items which are close to expiry sorted by expiry date
      */
-    public JSONArray getSortedExpiryArray() throws JSONException, ParseException {
+    private JSONArray getSortedExpiry(String root) throws JSONException, ParseException {
 
-        String root = readFile(STORAGE_DEST);
         JSONArray fridge = extractArray(root, "Fridge");
         JSONArray freezer = extractArray(root, "Freezer");
         JSONArray pantry = extractArray(root, "Pantry");
