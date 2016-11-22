@@ -3,106 +3,165 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/container_border"
     tools:context="com.cpen321.fridgemanager.Fragment.AddFoodToFoodStock">
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp"
-    android:fillViewport="false">
-
-<LinearLayout
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_gravity="center"
-    android:background="@drawable/container_border"
-    android:orientation="vertical"
-    android:weightSum="1">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:fillViewport="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
     <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="20px">
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Food/Grocery Item"
-            android:textColor="@android:color/black"
-            android:layout_weight="3"
-            android:textColorHighlight="@android:color/primary_text_dark"
-            android:textSize="25dp" />
-
-
-        <AutoCompleteTextView
-        android:id="@+id/addFoodName"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/field_input_border"
-        android:inputType="text"
-        android:textSize="25dp"
-            android:layout_weight="7"
-        android:paddingLeft="30px"
-        android:paddingRight="30px"
-        />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="20px"
+        android:orientation="vertical"
         android:weightSum="1">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:paddingLeft="40px"
-            android:paddingTop="10px"
-            android:paddingBottom="10px"
-            android:layout_marginTop="40px"
-            android:text="Amount"
-            android:textColor="@android:color/black"
-            android:textColorHighlight="@android:color/primary_text_dark"
-            android:textSize="25dp" />
+            android:orientation="horizontal"
+            android:paddingTop="20px">
 
-        <EditText
-            android:id="@+id/amounttext"
-            android:layout_width="150dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Food/Grocery Item"
+                android:textColor="@android:color/black"
+                android:layout_weight="3"
+                android:textColorHighlight="@android:color/primary_text_dark"
+                android:textSize="25dp" />
+
+
+            <AutoCompleteTextView
+            android:id="@+id/addFoodName"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:background="@drawable/field_input_border"
+            android:inputType="text"
+            android:textSize="25dp"
+                android:layout_weight="7"
             android:paddingLeft="30px"
             android:paddingRight="30px"
-            android:layout_marginLeft="40px"
-            android:background="@drawable/field_input_border"
-            android:inputType="numberDecimal"
-            android:layout_marginTop="40px"
-            android:paddingTop="10px"
-            android:paddingBottom="10px"
-            android:textSize="25dp"/>
+            />
 
-        <Spinner
-            android:id="@+id/amountspinner"
-            android:layout_marginRight="40px"
-            android:layout_marginTop="40px"
-            android:layout_width="match_parent"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/amount" />
+            android:orientation="horizontal"
+            android:paddingTop="20px"
+            android:weightSum="1">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingLeft="40px"
+                android:paddingTop="10px"
+                android:paddingBottom="10px"
+                android:layout_marginTop="40px"
+                android:text="Amount"
+                android:textColor="@android:color/black"
+                android:textColorHighlight="@android:color/primary_text_dark"
+                android:textSize="25dp" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="20px">
+            <EditText
+                android:id="@+id/amounttext"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingLeft="30px"
+                android:paddingRight="30px"
+                android:layout_marginLeft="40px"
+                android:background="@drawable/field_input_border"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="40px"
+                android:paddingTop="10px"
+                android:paddingBottom="10px"
+                android:textSize="25dp"/>
+
+            <Spinner
+                android:id="@+id/amountspinner"
+                android:layout_marginRight="40px"
+                android:layout_marginTop="40px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/amount" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="20px">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:paddingLeft="10px"
+                android:paddingTop="40px"
+                android:text="Expiry Date"
+                android:textColor="@android:color/black"
+                android:textColorHighlight="@android:color/primary_text_dark"
+                android:textSize="25dp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40px"
+                    android:layout_marginRight="40px"
+                    android:layout_marginTop="20px"
+                    android:layout_weight="4"
+                    android:background="@drawable/field_input_border"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="10px"
+                    android:paddingBottom="10px"
+                    android:textSize="25dp"
+                    android:id="@+id/expiry_date" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btn1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:onClick="showDatePickerDialog"
+                    android:src="@drawable/ic_calendar"
+                    android:text="Pick Date" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="20px">
 
 
         <TextView
@@ -111,97 +170,41 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:paddingLeft="10px"
-            android:paddingTop="40px"
-            android:text="Expiry Date"
+            android:paddingTop="20px"
+            android:text="Location"
             android:textColor="@android:color/black"
             android:textColorHighlight="@android:color/primary_text_dark"
             android:textSize="25dp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40px"
-                android:layout_marginRight="40px"
-                android:layout_marginTop="20px"
-                android:layout_weight="4"
-                android:background="@drawable/field_input_border"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="10px"
-                android:paddingBottom="10px"
-                android:textSize="25dp"
-                android:id="@+id/expiry_date" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="top"
-            android:orientation="vertical">
+        <Spinner
+            android:id="@+id/spinner1_for_location"
+            android:layout_marginRight="40px"
+            android:layout_marginLeft="40px"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:entries="@array/locations"
+            />
 
-            <ImageButton
-                android:id="@+id/btn1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:onClick="showDatePickerDialog"
-                android:src="@drawable/ic_calendar"
-                android:text="Pick Date" />
         </LinearLayout>
 
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="20px">
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center"
-        android:paddingLeft="10px"
-        android:paddingTop="20px"
-        android:text="Location"
-        android:textColor="@android:color/black"
-        android:textColorHighlight="@android:color/primary_text_dark"
-        android:textSize="25dp" />
-
-
-    <Spinner
-        android:id="@+id/spinner1_for_location"
-        android:layout_marginRight="40px"
-        android:layout_marginLeft="40px"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:entries="@array/locations"
-        />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:gravity="center|bottom"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/button_add_to_food_stock"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:gravity="center|bottom"
+            android:orientation="vertical">
 
-            android:text="ADD FOOD"
-            android:textSize="25dp" />
-        ... />
+            <Button
+                android:id="@+id/button_add_to_food_stock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
+                android:text="ADD FOOD"
+                android:textSize="25dp" />
+            ... />
+
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
-</ScrollView>
+    </ScrollView>
 </RelativeLayout>
