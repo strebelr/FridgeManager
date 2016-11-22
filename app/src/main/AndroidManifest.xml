@@ -32,9 +32,6 @@
             android:label="Scan Results"
             android:screenOrientation="portrait"
             ></activity>
-        
-        <activity android:name=".Activity.addFoodToFoodStock"
-        android:label="@string/add_food" />
 
         /* Alarms */
         <activity android:name=".Notification.Alert_Activity"/>
