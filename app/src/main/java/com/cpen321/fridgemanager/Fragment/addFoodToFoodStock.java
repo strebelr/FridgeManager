@@ -1,5 +1,7 @@
 package com.cpen321.fridgemanager.Fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -86,6 +88,14 @@ public class AddFoodToFoodStock extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+     super.onAttach(context);
+          if (context instanceof Activity){
+            myContext=(FragmentActivity) context;
+            }
+
+         }
 
 
     public void sendFeedback(View view) {
@@ -150,7 +160,7 @@ public class AddFoodToFoodStock extends Fragment {
 
     public void showDatePickerDialog(View v) {
         newFragment = new AddFoodToFoodStockDatePicker();
-        newFragment.show(getFragmentManager(), "datePicker");
+        newFragment.show(myContext.getSupportFragmentManager(), "datePicker");
     }
 
 }
