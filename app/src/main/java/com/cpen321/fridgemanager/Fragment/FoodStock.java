@@ -307,10 +307,27 @@ public class FoodStock extends Fragment{
                 TableRow.LayoutParams trLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
                 trLayoutParams.weight = 1;
                 food_name.setLayoutParams(trLayoutParams);
+
                 if (di.foodToExpire(food)){
                     food_name.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
                 }
                 trs.get(i + index).addView(food_name, 0);
+
+                // Switch to expiry date
+                // Only works when manually added and this code doesn't belong here or it'll only work on last entry
+                /* food_name.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String name = food.optString("name");
+                        String expiry = food.optString("expiry");
+                        if(food_name.getText() == name) {
+                            food_name.setText(expiry);
+                        }
+                        else {
+                            food_name.setText(name);
+                        }
+                    }
+                }); */
 
             } catch (JSONException e) {
             }

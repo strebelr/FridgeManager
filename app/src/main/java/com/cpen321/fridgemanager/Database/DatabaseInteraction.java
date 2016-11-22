@@ -773,7 +773,7 @@ public class DatabaseInteraction {
       @param days away from today
       @return date in String
      */
-    private String getFutureDate(int days) {
+    public String getFutureDate(int days) {
         Calendar c = new GregorianCalendar();
         c.add(Calendar.DATE, days);
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
