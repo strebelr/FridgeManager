@@ -463,7 +463,7 @@ public class DatabaseInteraction {
      */
     public void writeToStorage(String name, double quantity, int unit, String location, int expiry) {
         // Create the element
-        JSONObject element = create(name, quantity, unit, expiry);
+        JSONObject element = create(name, quantity, unit, expiry, location);
 
         // Get the root JSON String from File
         String jsonRoot = readFile(STORAGE_DEST);
@@ -485,7 +485,7 @@ public class DatabaseInteraction {
       @param expiry days until it expires
       @returns JSONObject with given attributes
      */
-    private JSONObject create(String name, double quantity, int unit, int expiry) {
+    private JSONObject create(String name, double quantity, int unit, int expiry, String location) {
         // Create a new JSON Object
         JSONObject element = new JSONObject();
         String date = getCurrentDate();
@@ -497,6 +497,7 @@ public class DatabaseInteraction {
             element.put("quantity", quantity);
             element.put("original_qty", quantity);
             element.put("unit", unit);
+            element.put("location", location);
         } catch (JSONException e) {}
         return element;
     }
@@ -574,13 +575,17 @@ public class DatabaseInteraction {
         return extractArray(root, location);
     }
 
+    public JSONArray getSortedExpiryArray() throws JSONException, ParseException {
+        String root = readFile(STORAGE_DEST);
+        return getSortedExpiry(root);
+    }
+
         /*
-      @param -
+      @param root of the database
       @returns JSONArray containing all food items which are close to expiry sorted by expiry date
      */
-    public JSONArray getSortedExpiryArray() throws JSONException, ParseException {
+    private JSONArray getSortedExpiry(String root) throws JSONException, ParseException {
 
-        String root = readFile(STORAGE_DEST);
         JSONArray fridge = extractArray(root, "Fridge");
         JSONArray freezer = extractArray(root, "Freezer");
         JSONArray pantry = extractArray(root, "Pantry");
