@@ -580,7 +580,7 @@ public class DatabaseInteraction {
         return getSortedExpiry(root);
     }
 
-        /*
+    /*
       @param root of the database
       @returns JSONArray containing all food items which are close to expiry sorted by expiry date
      */
@@ -767,7 +767,7 @@ public class DatabaseInteraction {
       Gets the current date in DD-MM-YYYY format.
       @return current date in String
     */
-    private String getCurrentDate() {
+    public String getCurrentDate() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         return df.format(c.getTime());

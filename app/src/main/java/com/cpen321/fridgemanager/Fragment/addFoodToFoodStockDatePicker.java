@@ -1,4 +1,4 @@
-package com.cpen321.fridgemanager.Activity;
+package com.cpen321.fridgemanager.Fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -11,7 +11,8 @@ import com.cpen321.fridgemanager.R;
 
 import java.util.Calendar;
 
-public class addFoodToFoodStockDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class
+AddFoodToFoodStockDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     int year;
     int month;

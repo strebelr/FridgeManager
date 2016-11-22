@@ -66,11 +66,25 @@ public class FoodToExpire extends Fragment{
         return view;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if(getActivity() != null) {
+                refresh();
+            }
+        }else{
+
+        }
+    }
+
     private void clearScreen() {
         for (int i = 0; i < trs.size(); i++) {
             mTlayout.removeView(trs.get(i));
         }
-        mTlayout.removeView(titleToExpire);
+        if(titleToExpire != null) {
+            mTlayout.removeView(titleToExpire);
+        }
     }
 
 
@@ -176,10 +190,7 @@ public class FoodToExpire extends Fragment{
                     public void onClick(View v) {
                         int index = v.getId();
                         try {
-                            di.removeFood((JSONObject) toExpire.get(index), "Fridge");
-                            di.removeFood((JSONObject) toExpire.get(index), "Fresh");
-                            di.removeFood((JSONObject) toExpire.get(index), "Pantry");
-                            di.removeFood((JSONObject) toExpire.get(index), "Freezer");
+                            di.removeFood((JSONObject) toExpire.get(index), ((JSONObject) toExpire.get(index)).optString("location").toString());
                             refresh();
                         } catch(JSONException e) {}
 
