@@ -1,11 +1,11 @@
 package com.cpen321.fridgemanager.Fragment;
 
-import android.app.Activity;
-import android.support.v4.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -79,22 +79,13 @@ public class AddFoodToFoodStock extends Fragment {
             }
         }
 
-        ArrayAdapter adapter = new ArrayAdapter(view.getContext(), R.layout.list_item, list);
+        ArrayAdapter adapter = new ArrayAdapter(getContext(), R.layout.list_item, list);
         text.setAdapter(adapter);
         text.setThreshold(2);
 
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof Activity){
-            myContext=(FragmentActivity) context;
-        }
-
-    }
 
 
     public void sendFeedback(View view) {
@@ -150,11 +141,16 @@ public class AddFoodToFoodStock extends Fragment {
         DatabaseInteraction di = new DatabaseInteraction(view.getContext());
         di.writeToStorage(name, amount, int_unit, location, difference);
 
+        FoodStock foodStockfragment = new FoodStock();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(android.R.id.content, foodStockfragment );
+        fragmentTransaction.commit();
     }
 
     public void showDatePickerDialog(View v) {
         newFragment = new AddFoodToFoodStockDatePicker();
-        newFragment.show(myContext.getSupportFragmentManager(), "datePicker");
+        newFragment.show(getFragmentManager(), "datePicker");
     }
 
 }
