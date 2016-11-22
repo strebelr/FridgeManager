@@ -74,14 +74,34 @@ public class FoodStock extends Fragment{
         return view;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if(getActivity() != null) {
+                refresh();
+            }
+        }else{
+
+        }
+    }
+
     private void clearScreen() {
         for (int i = 0; i < trs.size(); i++) {
             mTlayout.removeView(trs.get(i));
         }
-        mTlayout.removeView(titleFridge);
-        mTlayout.removeView(titleFresh);
-        mTlayout.removeView(titlePantry);
-        mTlayout.removeView(titleFreezer);
+        if(titleFridge != null) {
+            mTlayout.removeView(titleFridge);
+        }
+        if(titleFresh != null) {
+            mTlayout.removeView(titleFresh);
+        }
+        if(titlePantry != null) {
+            mTlayout.removeView(titlePantry);
+        }
+        if(titleFreezer != null) {
+            mTlayout.removeView(titleFreezer);
+        }
     }
 
     private void refresh() {

@@ -580,7 +580,7 @@ public class DatabaseInteraction {
         return getSortedExpiry(root);
     }
 
-        /*
+    /*
       @param root of the database
       @returns JSONArray containing all food items which are close to expiry sorted by expiry date
      */
