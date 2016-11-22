@@ -1,12 +1,16 @@
-package com.cpen321.fridgemanager.Activity;
+package com.cpen321.fridgemanager.Fragment;
 
-import android.content.Intent;
+import android.app.Activity;
+import android.support.v4.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,12 +29,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static android.R.id.message;
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-
-public class addFoodToFoodStock extends AppCompatActivity {
+public class AddFoodToFoodStock extends Fragment {
 
     AutoCompleteTextView text;
+    private FragmentActivity myContext;
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -40,18 +42,22 @@ public class addFoodToFoodStock extends AppCompatActivity {
             R.drawable.ic_expenditures
     };
 
-    addFoodToFoodStockDatePicker newFragment;
+    AddFoodToFoodStockDatePicker newFragment;
 
-    public addFoodToFoodStock() {
+    public AddFoodToFoodStock() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_food);
-        Button btnAddFoodToFoodStock = (Button) findViewById(R.id.button_add_to_food_stock);
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                               Bundle savedInstanceState ){
+        View view = inflater.inflate(R.layout.activity_add_food, container, false);
+        Button btnAddFoodToFoodStock = (Button) view.findViewById(R.id.button_add_to_food_stock);
         btnAddFoodToFoodStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,8 +65,8 @@ public class addFoodToFoodStock extends AppCompatActivity {
             }
         });
 
-        text = (AutoCompleteTextView) findViewById(R.id.addFoodName);
-        DatabaseInteraction di = new DatabaseInteraction(getApplicationContext());
+        text = (AutoCompleteTextView) view.findViewById(R.id.addFoodName);
+        DatabaseInteraction di = new DatabaseInteraction(view.getContext());
         List<String>  list = new ArrayList<>();
         JSONArray jsonArray = di.getArray("Library");
         if (jsonArray != null) {
@@ -73,73 +79,30 @@ public class addFoodToFoodStock extends AppCompatActivity {
             }
         }
 
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.list_item, list);
+        ArrayAdapter adapter = new ArrayAdapter(view.getContext(), R.layout.list_item, list);
         text.setAdapter(adapter);
         text.setThreshold(2);
 
-        /*
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        return view;
+    }
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();*/
+        if (context instanceof Activity){
+            myContext=(FragmentActivity) context;
+        }
 
     }
 
-    /*private void setupTabIcons() {
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new FoodStock(), "Stock");
-        adapter.addFrag(new FoodToExpire(), "Alert");
-        adapter.addFrag(new Expenditures(), "Spent");
-        viewPager.setAdapter(adapter);
-    }
-
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFrag(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return null;
-        }
-    }*/
 
     public void sendFeedback(View view) {
 
-        EditText foodItem =  (EditText) findViewById(R.id.addFoodName);
+        EditText foodItem =  (EditText) view.findViewById(R.id.addFoodName);
         String name = foodItem.getText().toString();
 
-        final EditText amountEditText = (EditText) findViewById(R.id.amounttext);
+        final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
         String amountValue = amountEditText.getText().toString();
         double amount = 0;
 
@@ -147,7 +110,7 @@ public class addFoodToFoodStock extends AppCompatActivity {
             amount = Double.parseDouble(amountValue);
         } catch (NumberFormatException e) {}
 
-        Spinner amountSpinner = (Spinner) findViewById(R.id.amountspinner);
+        Spinner amountSpinner = (Spinner) view.findViewById(R.id.amountspinner);
         String amountUnitsValue = amountSpinner.getSelectedItem().toString();
         int int_unit;
         if (amountUnitsValue.equals("units"))
@@ -161,10 +124,10 @@ public class addFoodToFoodStock extends AppCompatActivity {
         else
             int_unit = 4;
 
-        Spinner locationSpinner = (Spinner) findViewById(R.id.spinner1_for_location);
+        Spinner locationSpinner = (Spinner) view.findViewById(R.id.spinner1_for_location);
         String location = locationSpinner.getSelectedItem().toString();
 
-        TextView expiryField =  (TextView) findViewById(R.id.expiry_date);
+        TextView expiryField =  (TextView) view.findViewById(R.id.expiry_date);
         String expiryDate = expiryField.getText().toString(); // This contains the expiry date value that has to be formatted correctly.
 
         String[] strings;
@@ -184,17 +147,14 @@ public class addFoodToFoodStock extends AppCompatActivity {
             difference = (int) TimeUnit.DAYS.convert(expiry.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS) + 1;
         }
 
-        DatabaseInteraction di = new DatabaseInteraction(getApplicationContext());
+        DatabaseInteraction di = new DatabaseInteraction(view.getContext());
         di.writeToStorage(name, amount, int_unit, location, difference);
 
-        Intent intent = new Intent(this, MainMenu.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
     }
 
     public void showDatePickerDialog(View v) {
-        newFragment = new addFoodToFoodStockDatePicker();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+        newFragment = new AddFoodToFoodStockDatePicker();
+        newFragment.show(myContext.getSupportFragmentManager(), "datePicker");
     }
 
 }
