@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:fillViewport="false">
+
+<LinearLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -8,36 +17,36 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="60px"
-        android:paddingLeft="10px"
-        android:paddingTop="20px"
-        android:paddingBottom="20px"
-        android:text="Food/Grocery Item"
-        android:textColor="@android:color/black"
-        android:textColorHighlight="@android:color/primary_text_dark"
-        android:textSize="25dp" />
+        android:orientation="horizontal"
+        android:paddingTop="20px">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Food/Grocery Item"
+            android:textColor="@android:color/black"
+            android:layout_weight="3"
+            android:textColorHighlight="@android:color/primary_text_dark"
+            android:textSize="25dp" />
 
 
-    <AutoCompleteTextView
+        <AutoCompleteTextView
         android:id="@+id/addFoodName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40px"
-        android:layout_marginRight="40px"
-        android:paddingBottom="10px"
-        android:paddingTop="10px"
         android:background="@drawable/field_input_border"
         android:inputType="text"
         android:textSize="25dp"
+            android:layout_weight="7"
         android:paddingLeft="30px"
         android:paddingRight="30px"
         />
 
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -84,23 +93,24 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center"
-        android:paddingLeft="10px"
-        android:paddingTop="40px"
-        android:text="Expiry Date"
-        android:textColor="@android:color/black"
-        android:textColorHighlight="@android:color/primary_text_dark"
-        android:textSize="25dp" />
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="20px">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:paddingLeft="10px"
+            android:paddingTop="40px"
+            android:text="Expiry Date"
+            android:textColor="@android:color/black"
+            android:textColorHighlight="@android:color/primary_text_dark"
+            android:textSize="25dp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -139,6 +149,13 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="20px">
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -161,6 +178,8 @@
         android:entries="@array/locations"
         />
 
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
@@ -179,3 +198,4 @@
 
     </LinearLayout>
 </LinearLayout>
+</ScrollView>

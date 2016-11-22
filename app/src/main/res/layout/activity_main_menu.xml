@@ -38,27 +38,6 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
 
-            <ImageButton
-                android:id="@+id/add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="1dp"
-                android:layout_marginTop="10dp"
-                app:fabSize = "mini"
-                android:scaleType="center"
-                android:src="@android:drawable/ic_menu_add"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd = "true"
-                android:layout_gravity="top|end"
-                android:tint="@color/navigationBarColor"
-                app:backgroundTint="@color/colorPrimary"
-                app:elevation="4dp"
-                android:onClick="addFoodToFoodStock"
-                />
-
         </android.support.v7.widget.Toolbar>
 
 

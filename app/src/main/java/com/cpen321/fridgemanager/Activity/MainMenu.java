@@ -1,14 +1,13 @@
 package com.cpen321.fridgemanager.Activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -33,7 +32,7 @@ public class MainMenu extends AppCompatActivity {
     private int[] tabIcons = {
             R.drawable.ic_food_stock,
             R.drawable.ic_food_to_expire,
-            R.drawable.ic_expenditures
+            R.drawable.ic_plus
     };
 
 
@@ -110,10 +109,5 @@ public class MainMenu extends AppCompatActivity {
         startActivity(intent);
     }
     
-    public void addFoodToFoodStock(View view){
-        Intent intent = new Intent(this, addFoodToFoodStock.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
-    }
 
 }
