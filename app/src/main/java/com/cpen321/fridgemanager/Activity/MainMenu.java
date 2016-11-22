@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
-import com.cpen321.fridgemanager.Fragment.Expenditures;
+import com.cpen321.fridgemanager.Fragment.AddFoodToFoodStock;
 import com.cpen321.fridgemanager.Fragment.FoodStock;
 import com.cpen321.fridgemanager.Fragment.FoodToExpire;
 import com.cpen321.fridgemanager.OcrReader.OcrCaptureActivity;
@@ -87,7 +87,7 @@ public class MainMenu extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new FoodStock(), "Stock");
         adapter.addFrag(new FoodToExpire(), "Alert");
-        adapter.addFrag(new Expenditures(), "Spent");
+        adapter.addFrag(new AddFoodToFoodStock(), "Add Food");
         viewPager.setAdapter(adapter);
     }
 
