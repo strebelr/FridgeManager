@@ -1,5 +1,6 @@
 package com.cpen321.fridgemanager.Fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -56,7 +57,6 @@ public class FoodStock extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -64,20 +64,39 @@ public class FoodStock extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_food_stock, container, false);
 
-        TextRecognitionInteraction ti = new TextRecognitionInteraction(getContext());
         mTlayout = (TableLayout) view.findViewById(R.id.mTlayoutF);
 
         di = new DatabaseInteraction(getContext());
+
+        refresh();
+
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    private void clearScreen() {
+        for (int i = 0; i < trs.size(); i++) {
+            mTlayout.removeView(trs.get(i));
+        }
+        mTlayout.removeView(titleFridge);
+        mTlayout.removeView(titleFresh);
+        mTlayout.removeView(titlePantry);
+        mTlayout.removeView(titleFreezer);
+    }
+
+    private void refresh() {
+
+        clearScreen();
 
         titleFridge = new TableRow(getActivity());
         titleFresh = new TableRow(getActivity());
         titlePantry = new TableRow(getActivity());
         titleFreezer = new TableRow(getActivity());
+
         TextView titleFridgeText = new TextView(getActivity());
         TextView titleFreshText = new TextView(getActivity());
         TextView titlePantryText = new TextView(getActivity());
         TextView titleFreezerText = new TextView(getActivity());
-
         try {
             trs.clear();
             fridge = di.getArray("Fridge");
@@ -95,15 +114,9 @@ public class FoodStock extends Fragment{
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        // Inflate the layout for this fragment
-        return view;
     }
 
-    public void createTable(int location) throws ParseException {
-        int DaysToExpiryDate = 3;
-        Calendar actDate = Calendar.getInstance();
-        actDate.set(Calendar.DAY_OF_YEAR, DaysToExpiryDate + actDate.get(Calendar.DAY_OF_YEAR));
+    private void createTable(int location) throws ParseException {
 
         // Selects food location
         JSONArray foodList;
@@ -132,19 +145,13 @@ public class FoodStock extends Fragment{
             try {
                 food = foodList.getJSONObject(i);
 
-                Calendar expDate = Calendar.getInstance();
-                String expiryDate = food.optString("expiry");
-                DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                Date date = formatter.parse(expiryDate);
-                expDate.setTime(date);
-                int time_diff = actDate.compareTo(expDate);
-
                 trs.add(new TableRow(getActivity()));
 
                 // Add table row to layout
                 if(trs.get(i + index).getParent() != null)
                     ((ViewGroup)trs.get(i + index).getParent()).removeView(trs.get(i + index));
                 mTlayout.addView(trs.get(i + index));
+                ImageButton btn_decr = new ImageButton(getActivity());
                 ImageButton btn_del = new ImageButton(getActivity());
                 final TextView food_name = new TextView(getActivity());
                 TextView unit_name = new TextView(getActivity());
@@ -170,7 +177,8 @@ public class FoodStock extends Fragment{
                         break;
                 }
 
-                // Create unit text view
+
+                // Create amount text view
                 amount.setId(i + index);
                 amount.setText(food.optString("quantity").toString());
                 amount.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
@@ -186,6 +194,59 @@ public class FoodStock extends Fragment{
                 unit_name.setWidth(unit_name.getPaddingLeft() + unit_name.getPaddingRight() + (int) measure);
                 unit_name.setLayoutParams(trLayoutParams_unit);
                 trs.get(i + index).addView(unit_name);
+
+                // Create decrease button
+                btn_decr.setImageResource(R.drawable.ic_minus);
+                btn_decr.setId(i + index);
+                // Set on click listener
+                btn_decr.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int index = v.getId();
+                        int new_index;
+                        String location;
+                        if (index < fridge.length()) {
+                            new_index = index;
+                            location = "Fridge";
+                        }
+                        else if (index >= fridge.length() && index < fridge.length() + fresh.length()) {
+                            new_index = index - fridge.length();
+                            location = "Fresh";
+                        }
+                        else if (index >= fridge.length() + fresh.length() && index < fridge.length() + fresh.length() + pantry.length()) {
+                            new_index = index - fridge.length() - fresh.length();
+                            location = "Pantry";
+                        }
+                        else {
+                            new_index = index - fridge.length() - fresh.length() - pantry.length();
+                            location = "Freezer";
+                        }
+
+                        // Remove table row from table layout
+                        int check;
+
+                        try {
+                            if (location == "Fridge") {
+                                check = di.decrementFood(fridge.getJSONObject(new_index), location);
+                               refresh();
+                            }
+                            else if (location == "Fresh") {
+                                check = di.decrementFood(fresh.getJSONObject(new_index), location);
+                                refresh();
+                            }
+                            else if (location == "Pantry"){
+                                check = di.decrementFood(pantry.getJSONObject(new_index), location);
+                                refresh();
+                            }
+                            else if (location == "Freezer") {
+                                check = di.decrementFood(freezer.getJSONObject(new_index), location);
+                                refresh();
+                            }
+                        } catch(JSONException e) {}
+
+                    }
+                });
+                trs.get(i + index).addView(btn_decr);
 
                 // Create delete button
                 btn_del.setImageResource(R.drawable.ic_trash);
@@ -214,32 +275,22 @@ public class FoodStock extends Fragment{
                             location = "Freezer";
                         }
 
-                        // Remove table row from table layout
-                        mTlayout.removeView(trs.get(index));
                         try {
                             if (location == "Fridge") {
                                 di.removeFood(fridge.getJSONObject(new_index), location);
-                                if (di.getArray("Fridge").length() == 0) {
-                                    mTlayout.removeView(titleFridge);
-                                }
+                                refresh();
                             }
                             else if (location == "Fresh") {
                                 di.removeFood(fresh.getJSONObject(new_index), location);
-                                if (di.getArray("Fresh").length() == 0) {
-                                    mTlayout.removeView(titleFresh);
-                                }
+                                refresh();
                             }
                             else if (location == "Pantry"){
                                 di.removeFood(pantry.getJSONObject(new_index), location);
-                                if (di.getArray("Pantry").length() == 0) {
-                                    mTlayout.removeView(titlePantry);
-                                }
+                                refresh();
                             }
                             else if (location == "Freezer") {
                                 di.removeFood(freezer.getJSONObject(new_index), location);
-                                if (di.getArray("Freezer").length() == 0) {
-                                    mTlayout.removeView(titleFreezer);
-                                }
+                                refresh();
                             }
                         } catch(JSONException e) {}
 
@@ -255,27 +306,27 @@ public class FoodStock extends Fragment{
                 TableRow.LayoutParams trLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
                 trLayoutParams.weight = 1;
                 food_name.setLayoutParams(trLayoutParams);
-                if (time_diff >= 0){
+
+                if (di.foodToExpire(food)){
                     food_name.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
                 }
                 trs.get(i + index).addView(food_name, 0);
 
-                /*food_name.setOnClickListener(new View.OnClickListener() {
+                // Switch to expiry date
+                // Only works when manually added and this code doesn't belong here or it'll only work on last entry
+                /* food_name.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int index = v.getId();
-                        int new_index;
-                        //food_name.setText(food.optString("name").toString());
-                        food_name.setText(food.optString("expiry").toString());
-
-                        //if ("Boiling Point K".equals(boilingpointK.getText().toString()))
-                        //    boilingpointK.setText("2792");
-                        //else if ("2792".equals(boilingpointK.getText().toString()))
-                        //    boilingpointK.setText("Boiling Point K");
+                        String name = food.optString("name");
+                        String expiry = food.optString("expiry");
+                        if(food_name.getText() == name) {
+                            food_name.setText(expiry);
+                        }
+                        else {
+                            food_name.setText(name);
+                        }
                     }
-                });*/
-
-
+                }); */
 
             } catch (JSONException e) {
             }
@@ -295,5 +346,10 @@ public class FoodStock extends Fragment{
             title.addView(textTitle);
         }
 
+    }
+
+    public void undo() {
+        di.popUndo();
+        di.fixStack();
     }
 }

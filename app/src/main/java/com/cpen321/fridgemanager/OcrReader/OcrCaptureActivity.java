@@ -93,6 +93,9 @@ public class OcrCaptureActivity extends AppCompatActivity {
     // A TextToSpeech engine for speaking a String value.
     private TextToSpeech tts;
 
+    // Texts Arraylist
+    ArrayList<String> texts;
+
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -102,8 +105,13 @@ public class OcrCaptureActivity extends AppCompatActivity {
         super.onCreate(bundle);
         setContentView(R.layout.ocr_capture);
 
-        // Create an instance of Database Interaction
-
+        // Get Text
+        if(getIntent().getStringArrayListExtra("texts") == null) {
+            texts = new ArrayList<>();
+        }
+        else {
+            texts = getIntent().getStringArrayListExtra("texts");
+        }
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<OcrGraphic>) findViewById(R.id.graphicOverlay);
@@ -343,7 +351,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
         TextBlock textBlock = null;
 
         Set<OcrGraphic> graphics = mGraphicOverlay.getAllGraphics();
-        ArrayList<String> texts = new ArrayList<String>();
+
 
         //Create a sorted list to sort the graphics by the X and Y value of the rect of textblock
         List<OcrGraphic> sortedGraphics = new ArrayList<OcrGraphic>();
@@ -362,7 +370,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
             List<Line> lines = (List<Line>) textBlock.getComponents();
             for(int i =0; i < lines.size(); i++) {
                 texts.add(lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
-                Log.d(TAG, "line "+i+" is :" + lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
+                //Log.d(TAG, "line "+i+" is :" + lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
             }
         }
 

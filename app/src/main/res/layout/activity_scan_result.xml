@@ -12,15 +12,48 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cpen321.fridgemanager.Activity.ScanResults">
 
+    <Button
+        android:text="@string/take_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="OcrCaptureActivityWithArray" />
+
+    <Button
+        android:text="@string/try_again"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button3"
+        android:onClick="OcrCaptureActivity"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/button"
+        android:layout_toStartOf="@+id/button"
+        android:layout_marginRight="13dp"
+        android:layout_marginEnd="13dp" />
+
+    <Button
+        android:text="@string/add_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button2"
+        android:onClick="AddFood"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="14dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/button"
+        android:layout_toEndOf="@+id/button" />
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scrollbars="none"
         android:layout_weight="1"
-        android:layout_above="@+id/button3"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/button">
 
         <TableLayout
             android:layout_width="match_parent"
@@ -29,31 +62,5 @@
 
         </TableLayout>
     </ScrollView>
-
-    <Button
-        android:text="@string/try_again"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button3"
-        android:layout_marginLeft="50dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="50dp"
-        android:layout_alignParentStart="true"
-        android:onClick="OcrCaptureActivity"
-        android:layout_alignParentBottom="true"
-   />
-
-    <Button
-        android:text="@string/add_all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button2"
-        android:onClick="AddFood"
-        android:layout_marginRight="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
- />
 
 </RelativeLayout>

@@ -8,19 +8,25 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import com.cpen321.fridgemanager.Activity.MainMenu;
+import com.cpen321.fridgemanager.Activity.ScanResults;
 import com.cpen321.fridgemanager.R;
 
 public class AlertReceiver extends BroadcastReceiver {
 
+    ScanResults number = new ScanResults();
+    int uniqueID = number.getNumber();
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        int msgType = intent.getIntExtra("NOTIF_TYPE", 0);
 
-        createNotification(context, "Expired Food","Your food has expired","Alert");
-
+        if(msgType == 0)
+            createNotification(context, "Fridge Manager","Your food has expired","Alert", uniqueID);
+        else
+            createNotification(context, "Fridge Manager","Your food is expiring soon!","Alert", uniqueID);
     }
 
-    public void createNotification(Context context, String msg, String msgText, String msgAlert) {
+    public void createNotification(Context context, String msg, String msgText, String msgAlert, int notifID) {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -28,7 +34,7 @@ public class AlertReceiver extends BroadcastReceiver {
         Intent repeating_intent = new Intent(context, MainMenu.class);
         repeating_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 100, repeating_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, notifID, repeating_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContentIntent(pendingIntent)
@@ -44,7 +50,9 @@ public class AlertReceiver extends BroadcastReceiver {
         //LED
         builder.setLights( 0xFFC125, 100, 50);
 
-        notificationManager.notify(100, builder.build());
+        notificationManager.notify(notifID, builder.build());
+        android.util.Log.i("Notification ID ", " ID: "+notifID);
+
 
     }
 

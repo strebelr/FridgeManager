@@ -53,6 +53,20 @@ public class MainMenu extends AppCompatActivity {
         setupTabIcons();
 
         new DatabaseInteraction(getApplicationContext()).setUp();
+
+        /* Uncomment to use Instruction page */
+        /*SharedPreferences settings = getSharedPreferences("prefs",0);
+        boolean firstRun = settings.getBoolean("firstRun",false);
+        if(firstRun == false)//if running for first time
+        {
+            SharedPreferences.Editor editor=settings.edit();
+            editor.putBoolean("firstRun",true);
+            editor.commit();
+            Intent i = new Intent(this,Instruction.class);//Activity to be launched For the First time
+            startActivity(i);
+            finish();
+        }*/
+
     }
 
     @Override

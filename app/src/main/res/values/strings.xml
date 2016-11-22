@@ -9,6 +9,7 @@
     <string name="foodStock_Fresh">Fresh</string>
     <string name="foodStock_Pantry">Pantry</string>
     <string name="foodStock_Freezer">Freezer</string>
+    <string name="toExpire">Food to Expire</string>
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
@@ -25,7 +26,8 @@
     <string name="foodstock">Empty</string>
     <string name="add_one_item">Add</string>
     <string name="add_all">Add all</string>
-    <string name="try_again">Try again</string>
+    <string name="try_again">Reset</string>
+    <string name="take_more">Take More</string>
     <string-array name="amount">
         <item>units</item>
         <item>grams</item>

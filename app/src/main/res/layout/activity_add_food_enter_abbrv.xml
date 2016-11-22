@@ -16,19 +16,37 @@
         android:orientation="vertical"
         android:weightSum="1">
 
-        <TextView
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="20px">
+
+
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:layout_marginTop="60px"
-            android:paddingLeft="10px"
-            android:paddingTop="20px"
-            android:paddingBottom="20px"
-            android:text="Enter food abbreviation if exists:"
+        android:layout_weight="3"
+            android:text="Food Abbreviation:"
             android:textColor="@android:color/black"
             android:textColorHighlight="@android:color/primary_text_dark"
             android:textSize="25dp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/addFoodName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/field_input_border"
+            android:inputType="text"
+            android:textSize="25dp"
+            android:layout_weight="7"
+            android:paddingLeft="30px"
+            android:paddingRight="30px"
+            />
+
+    </LinearLayout>
 
     </LinearLayout>
 
