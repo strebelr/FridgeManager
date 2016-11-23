@@ -2,6 +2,7 @@ package com.cpen321.fridgemanager.Notification;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,9 +10,28 @@ import android.view.View;
 import java.util.Calendar;
 //This class is currently unused
 public class Alert extends AppCompatActivity {
+    /*public Alert() {
+
+    }*/
+
+    public void cancelAlarm(int notifID) {
+
+        Intent myIntent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notifID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+
+        // cancel the alarm
+        alarmManager.cancel(pendingIntent);
+
+        // delete the PendingIntent
+
+        pendingIntent.cancel();
+        android.util.Log.i("Notification ID"," Cancelled ID: "+notifID);
+    }
 
     // TODO:  MSG. WHAT HAPPENS IF JANUARY 31 AND DAY IS ADDED
     public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType) {
+        android.util.Log.i("Notification ID ", " Set ID: "+notifID);
 
         Calendar calendar = Calendar.getInstance();     // possible redundancy here
 
@@ -29,4 +49,17 @@ public class Alert extends AppCompatActivity {
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
+    public static String concatenate(String name, String quantity, String bought, String expiry) {
+        String cat = name + quantity; //+ bought + expiry;
+        return cat;
+    }
+
+
+    public static int convertToID(String cat) {
+        int ID = 0;
+        for(int i = 0; i < cat.length(); i++) {
+            ID += (int)cat.charAt(i);
+        }
+        return ID;
+    }
 }

@@ -2,6 +2,7 @@ package com.cpen321.fridgemanager.Activity;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,8 +34,7 @@ import java.util.Random;
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-public class ScanResults extends AppCompatActivity {
-
+public class ScanResults extends Alert {
     // Initial Texts
     private ArrayList<String> texts = new ArrayList<String>();
 
@@ -212,22 +212,17 @@ public class ScanResults extends AppCompatActivity {
                 int expiry = expiries.get(i);   // Numbers of days until the expiry date.
                 // TODO: CALL ALARM FROM HERE
 
-                String cat = concatenate(names.get(i), String.valueOf(quantities.get(i)), di.getCurrentDate(), di.getFutureDate(expiry));
-                ranNum = convertToID(cat);
-
-
-                //Alert a = new Alert();
-                //Alert.setAlarm(view, expiry, ranNum, EXPIRY);
-                //setAlarm(view, expiry, ranNum, EXPIRY);
+                String catted = concatenate(names.get(i), String.valueOf(quantities.get(i)), di.getCurrentDate(), di.getFutureDate(expiry));
+                ID = convertToID(catted);
 
                 if(expiry > 4) {
-                    setAlarm(view, expiry - 3, ranNum + 1, PRE_EXPIRY);     // sends notification 3 days before expiry
-                    setAlarm(view, expiry, ranNum, EXPIRY);
+                    setAlarm(view, expiry - 3, ID + 1, PRE_EXPIRY);     // sends notification 3 days before expiry
+                    setAlarm(view, expiry, ID, EXPIRY);
                 } else if (expiry <= 3 && expiry > 1) {
-                    setAlarm(view, 1, ranNum + 1, PRE_EXPIRY);              // sends notification the next day
-                    setAlarm(view, expiry, ranNum, EXPIRY);
+                    setAlarm(view, 1, ID + 1, PRE_EXPIRY);              // sends notification the next day
+                    setAlarm(view, expiry, ID, EXPIRY);
                 } else {
-                    setAlarm(view, expiry, ranNum, EXPIRY);         // only send notification on the day of expiry
+                    setAlarm(view, expiry, ID, EXPIRY);         // only send notification on the day of expiry
                 }
 
                 if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
@@ -240,64 +235,10 @@ public class ScanResults extends AppCompatActivity {
         mainMenu();
     }
 
-    /********* Methods used for Alarm **********/
-    public int generateNumber() {
-        Random r = new Random();
-        int num = r.nextInt(100000) + 1;
-        return num;
-    }
+    /********* Variables used for Alarm **********/
 
-    public String concatenate(String name, String quantity, String bought, String expiry) {
-        String cat = name;//+ quantity;
-        return cat;
-    }
-
-    public int convertToID(String cat) {
-        int ID = 0;
-        for(int i = 0; i < cat.length(); i++) {
-            ID += (int)cat.charAt(i);
-        }
-        //int ID = Integer.valueOf(cat);
-        return ID;
-    }
-
-    private int ranNum; // random number to generate unique ID
+    public static int ID; // random number to generate unique ID
     private static final int EXPIRY = 0;        // expired
     private static final int PRE_EXPIRY = 1;    // soon to expire
-
-
-    public ScanResults() {
-        this.ranNum = generateNumber();
-    }
-
-    public int getNumber() {
-        return this.ranNum;
-    }
-
-    public void cancelAlarm(int notifID) {
-        Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.cancel(pendingIntent);
-    }
-
-    // TODO:  MSG. WHAT HAPPENS IF JANUARY 31 AND DAY IS ADDED
-    public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType) {
-
-        Calendar calendar = Calendar.getInstance();     // possible redundancy here
-
-        calendar.add(Calendar.SECOND, 10);
-        //calendar.set(Calendar.HOUR_OF_DAY, 18);
-        calendar.add(Calendar.DAY_OF_YEAR, daysTillExpire);
-
-        android.util.Log.i("AFTER ",": " +calendar);
-
-        // Issues a new notification to be sent
-        Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
-        intent.putExtra("NOTIF_TYPE", alarmType);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-    }
 
 }

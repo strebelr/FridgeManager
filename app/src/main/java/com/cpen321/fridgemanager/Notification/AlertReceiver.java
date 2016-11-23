@@ -12,9 +12,7 @@ import com.cpen321.fridgemanager.Activity.ScanResults;
 import com.cpen321.fridgemanager.R;
 
 public class AlertReceiver extends BroadcastReceiver {
-
-    ScanResults number = new ScanResults();
-    int uniqueID = number.getNumber();
+    int uniqueID = ScanResults.ID;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -48,10 +46,10 @@ public class AlertReceiver extends BroadcastReceiver {
         builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000 });
 
         //LED
-        builder.setLights( 0xFFC125, 100, 50);
+        builder.setLights( 0xFFFF00, 100, 50);
 
         notificationManager.notify(notifID, builder.build());
-        android.util.Log.i("Notification ID ", " ID: "+notifID);
+        android.util.Log.i("Notification ID", " Sent ID: "+notifID);
 
 
     }

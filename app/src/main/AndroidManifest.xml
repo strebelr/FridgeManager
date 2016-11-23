@@ -40,6 +40,8 @@
         /* Instruction */
         <activity android:name=".Activity.Instruction"/>
 
+
+
     </application>
 
 </manifest>

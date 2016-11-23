@@ -1,5 +1,9 @@
 package com.cpen321.fridgemanager.Fragment;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +18,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.cpen321.fridgemanager.Activity.ScanResults;
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
+import com.cpen321.fridgemanager.Notification.Alert;
+import com.cpen321.fridgemanager.Notification.AlertReceiver;
 import com.cpen321.fridgemanager.R;
 import com.cpen321.fridgemanager.Algorithm.TextRecognitionInteraction;
 
@@ -28,6 +35,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import static android.content.Context.ALARM_SERVICE;
+import static com.cpen321.fridgemanager.Activity.ScanResults.ID;
 
 
 public class FoodStock extends Fragment{
@@ -49,6 +59,8 @@ public class FoodStock extends Fragment{
     TableRow titlePantry;
     TableRow titleFreezer;
 
+    //Alert alert;
+
     public FoodStock() {
         // Required empty public constructor
 
@@ -68,6 +80,7 @@ public class FoodStock extends Fragment{
 
         di = new DatabaseInteraction(getContext());
 
+        //alert = new Alert();
         refresh();
 
         // Inflate the layout for this fragment
@@ -168,8 +181,8 @@ public class FoodStock extends Fragment{
                 trs.add(new TableRow(getActivity()));
 
                 // Add table row to layout
-                if(trs.get(i + index).getParent() != null)
-                    ((ViewGroup)trs.get(i + index).getParent()).removeView(trs.get(i + index));
+                if (trs.get(i + index).getParent() != null)
+                    ((ViewGroup) trs.get(i + index).getParent()).removeView(trs.get(i + index));
                 mTlayout.addView(trs.get(i + index));
                 ImageButton btn_decr = new ImageButton(getActivity());
                 ImageButton btn_del = new ImageButton(getActivity());
@@ -228,16 +241,13 @@ public class FoodStock extends Fragment{
                         if (index < fridge.length()) {
                             new_index = index;
                             location = "Fridge";
-                        }
-                        else if (index >= fridge.length() && index < fridge.length() + fresh.length()) {
+                        } else if (index >= fridge.length() && index < fridge.length() + fresh.length()) {
                             new_index = index - fridge.length();
                             location = "Fresh";
-                        }
-                        else if (index >= fridge.length() + fresh.length() && index < fridge.length() + fresh.length() + pantry.length()) {
+                        } else if (index >= fridge.length() + fresh.length() && index < fridge.length() + fresh.length() + pantry.length()) {
                             new_index = index - fridge.length() - fresh.length();
                             location = "Pantry";
-                        }
-                        else {
+                        } else {
                             new_index = index - fridge.length() - fresh.length() - pantry.length();
                             location = "Freezer";
                         }
@@ -248,21 +258,19 @@ public class FoodStock extends Fragment{
                         try {
                             if (location == "Fridge") {
                                 check = di.decrementFood(fridge.getJSONObject(new_index), location);
-                               refresh();
-                            }
-                            else if (location == "Fresh") {
+                                refresh();
+                            } else if (location == "Fresh") {
                                 check = di.decrementFood(fresh.getJSONObject(new_index), location);
                                 refresh();
-                            }
-                            else if (location == "Pantry"){
+                            } else if (location == "Pantry") {
                                 check = di.decrementFood(pantry.getJSONObject(new_index), location);
                                 refresh();
-                            }
-                            else if (location == "Freezer") {
+                            } else if (location == "Freezer") {
                                 check = di.decrementFood(freezer.getJSONObject(new_index), location);
                                 refresh();
                             }
-                        } catch(JSONException e) {}
+                        } catch (JSONException e) {
+                        }
 
                     }
                 });
@@ -281,16 +289,13 @@ public class FoodStock extends Fragment{
                         if (index < fridge.length()) {
                             new_index = index;
                             location = "Fridge";
-                        }
-                        else if (index >= fridge.length() && index < fridge.length() + fresh.length()) {
+                        } else if (index >= fridge.length() && index < fridge.length() + fresh.length()) {
                             new_index = index - fridge.length();
                             location = "Fresh";
-                        }
-                        else if (index >= fridge.length() + fresh.length() && index < fridge.length() + fresh.length() + pantry.length()) {
+                        } else if (index >= fridge.length() + fresh.length() && index < fridge.length() + fresh.length() + pantry.length()) {
                             new_index = index - fridge.length() - fresh.length();
                             location = "Pantry";
-                        }
-                        else {
+                        } else {
                             new_index = index - fridge.length() - fresh.length() - pantry.length();
                             location = "Freezer";
                         }
@@ -299,22 +304,36 @@ public class FoodStock extends Fragment{
                             if (location == "Fridge") {
                                 di.removeFood(fridge.getJSONObject(new_index), location);
                                 refresh();
-                            }
-                            else if (location == "Fresh") {
+                            } else if (location == "Fresh") {
                                 di.removeFood(fresh.getJSONObject(new_index), location);
                                 refresh();
-                            }
-                            else if (location == "Pantry"){
+                            } else if (location == "Pantry") {
                                 di.removeFood(pantry.getJSONObject(new_index), location);
                                 refresh();
-                            }
-                            else if (location == "Freezer") {
+                            } else if (location == "Freezer") {
                                 di.removeFood(freezer.getJSONObject(new_index), location);
                                 refresh();
                             }
-                        } catch(JSONException e) {}
+                        } catch (JSONException e) {
+                        }
+
+                        // Cancel notification
+                        String catted = Alert.concatenate(food.optString("name").toString(), food.optString("quantity").toString(), "", "");
+                        int ID = Alert.convertToID(catted);
+                        //alert.cancelAlarm(ID);
+
+                        Intent myIntent = new Intent(getActivity(), AlertReceiver.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                        // cancel the alarm
+                        alarmManager.cancel(pendingIntent);
+                        // delete the PendingIntent
+                        pendingIntent.cancel();
+                        android.util.Log.i("Notification ID", " Cancelled ID: "+ID);
+
 
                     }
+
                 });
                 trs.get(i + index).addView(btn_del);
 
@@ -322,39 +341,35 @@ public class FoodStock extends Fragment{
                 food_name.setText(food.optString("name").toString());
                 food_name.setId(i + index);
                 food_name.setGravity(Gravity.CENTER_VERTICAL);
-                food_name.setPadding((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.foodStock_paddingLeft), getResources().getDisplayMetrics()),0,0,0);
+                food_name.setPadding((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.foodStock_paddingLeft), getResources().getDisplayMetrics()), 0, 0, 0);
                 TableRow.LayoutParams trLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
                 trLayoutParams.weight = 1;
                 food_name.setLayoutParams(trLayoutParams);
 
-                if (di.foodToExpire(food)){
-                    food_name.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
+                if (di.foodToExpire(food)) {
+                    food_name.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
                 }
                 trs.get(i + index).addView(food_name, 0);
 
                 // Switch to expiry date
-                // Only works when manually added and this code doesn't belong here or it'll only work on last entry
                 food_name.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int index = v.getId();
                         int new_index;
                         String location;
-                        String expiry ="";
-                        String name ="";
+                        String expiry = "";
+                        String name = "";
                         if (index < fridge.length()) {
                             new_index = index;
                             location = "Fridge";
-                        }
-                        else if (index >= fridge.length() && index < fridge.length() + fresh.length()) {
+                        } else if (index >= fridge.length() && index < fridge.length() + fresh.length()) {
                             new_index = index - fridge.length();
                             location = "Fresh";
-                        }
-                        else if (index >= fridge.length() + fresh.length() && index < fridge.length() + fresh.length() + pantry.length()) {
+                        } else if (index >= fridge.length() + fresh.length() && index < fridge.length() + fresh.length() + pantry.length()) {
                             new_index = index - fridge.length() - fresh.length();
                             location = "Pantry";
-                        }
-                        else {
+                        } else {
                             new_index = index - fridge.length() - fresh.length() - pantry.length();
                             location = "Freezer";
                         }
@@ -363,25 +378,22 @@ public class FoodStock extends Fragment{
                             if (location == "Fridge") {
                                 name = fridge.getJSONObject(new_index).optString("name");
                                 expiry = fridge.getJSONObject(new_index).optString("expiry");
-                            }
-                            else if (location == "Fresh") {
+                            } else if (location == "Fresh") {
                                 name = fresh.getJSONObject(new_index).optString("name");
                                 expiry = fresh.getJSONObject(new_index).optString("expiry");
-                            }
-                            else if (location == "Pantry"){
+                            } else if (location == "Pantry") {
                                 name = pantry.getJSONObject(new_index).optString("name");
                                 expiry = pantry.getJSONObject(new_index).optString("expiry");
-                            }
-                            else if (location == "Freezer") {
+                            } else if (location == "Freezer") {
                                 name = freezer.getJSONObject(new_index).optString("name");
                                 expiry = freezer.getJSONObject(new_index).optString("expiry");
                             }
-                        } catch(JSONException e) {}
-
-                        if(food_name.getText() == name) {
-                            food_name.setText(expiry);
+                        } catch (JSONException e) {
                         }
-                        else {
+
+                        if (food_name.getText() == name) {
+                            food_name.setText(expiry);
+                        } else {
                             food_name.setText(name);
                         }
                     }
@@ -389,7 +401,6 @@ public class FoodStock extends Fragment{
 
             } catch (JSONException e) {
             }
-
         }
     }
     private void createTitle(TableRow title, TextView textTitle, int nameTitle, int length ){
@@ -412,3 +423,5 @@ public class FoodStock extends Fragment{
         di.fixStack();
     }
 }
+
+
