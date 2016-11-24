@@ -160,7 +160,8 @@ public class DatabaseInteraction {
         String root = readFile(UNDO_DEST);
         try{
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(undo_stack, Context.MODE_PRIVATE));
-            write(outputStreamWriter, decStack(root).toString());
+            if(decStack(root) != null)
+                write(outputStreamWriter, decStack(root).toString());
         } catch (FileNotFoundException e) {}
     }
 
@@ -200,7 +201,8 @@ public class DatabaseInteraction {
         if (rootU == "" || rootS == "") return;
         try {  // Output the new JSON Root Object to File
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
-            write(outputStreamWriter, undo(rootU, rootS).toString());
+            if (undo(rootU, rootS) != null)
+                write(outputStreamWriter, undo(rootU, rootS).toString());
         } catch (FileNotFoundException e) {}
     }
 

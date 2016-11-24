@@ -35,6 +35,7 @@ public class MainMenu extends AppCompatActivity {
             R.drawable.ic_plus
     };
 
+    DatabaseInteraction di;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,8 @@ public class MainMenu extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
-        new DatabaseInteraction(getApplicationContext()).setUp();
+        di = new DatabaseInteraction(getApplicationContext());
+        di.setUp();
 
         /* Uncomment to use Instruction page */
         /*SharedPreferences settings = getSharedPreferences("prefs",0);
@@ -125,6 +127,10 @@ public class MainMenu extends AppCompatActivity {
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
-    
+
+    public void undo(View view) {
+        di.popUndo();
+        di.fixStack();
+    }
 
 }

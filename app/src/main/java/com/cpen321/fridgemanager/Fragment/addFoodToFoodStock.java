@@ -17,9 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.cpen321.fridgemanager.Activity.MainMenu;
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
 import com.cpen321.fridgemanager.R;
 
@@ -38,6 +40,7 @@ public class AddFoodToFoodStock extends Fragment {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private View view;
     private int[] tabIcons = {
             R.drawable.ic_food_stock,
             R.drawable.ic_food_to_expire,
@@ -58,12 +61,12 @@ public class AddFoodToFoodStock extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                Bundle savedInstanceState ){
-        View view = inflater.inflate(R.layout.activity_add_food, container, false);
+        this.view = inflater.inflate(R.layout.activity_add_food, container, false);
         Button btnAddFoodToFoodStock = (Button) view.findViewById(R.id.button_add_to_food_stock);
         btnAddFoodToFoodStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendFeedback(v);
+                sendFeedback();
             }
         });
 
@@ -85,6 +88,16 @@ public class AddFoodToFoodStock extends Fragment {
         text.setAdapter(adapter);
         text.setThreshold(2);
 
+        ImageButton button = (ImageButton) view.findViewById(R.id.btn_image);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+
+        viewPager = (ViewPager) getActivity().findViewById(R.id.viewpager);
+
         return view;
     }
 
@@ -98,9 +111,9 @@ public class AddFoodToFoodStock extends Fragment {
          }
 
 
-    public void sendFeedback(View view) {
+    public void sendFeedback() {
 
-        EditText foodItem =  (EditText) view.findViewById(R.id.addFoodName);
+        final EditText foodItem =  (EditText) view.findViewById(R.id.addFoodName);
         String name = foodItem.getText().toString();
 
         final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
@@ -151,14 +164,10 @@ public class AddFoodToFoodStock extends Fragment {
         DatabaseInteraction di = new DatabaseInteraction(view.getContext());
         di.writeToStorage(name, amount, int_unit, location, difference);
 
-        FoodStock foodStockfragment = new FoodStock();
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(android.R.id.content, foodStockfragment );
-        fragmentTransaction.commit();
+        viewPager.setCurrentItem(0);
     }
 
-    public void showDatePickerDialog(View v) {
+    public void showDatePickerDialog() {
         newFragment = new AddFoodToFoodStockDatePicker();
         newFragment.show(myContext.getSupportFragmentManager(), "datePicker");
     }

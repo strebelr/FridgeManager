@@ -418,10 +418,6 @@ public class FoodStock extends Fragment{
 
     }
 
-    public void undo() {
-        di.popUndo();
-        di.fixStack();
-    }
 }
 
 
