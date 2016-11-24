@@ -35,10 +35,18 @@ public class MainMenu extends AppCompatActivity {
             R.drawable.ic_plus
     };
 
+    private FoodStock foodstock;
+    private FoodToExpire foodtoexpire;
+
+    DatabaseInteraction di;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        foodstock = new FoodStock();
+        foodtoexpire = new FoodToExpire();
+
         setContentView(R.layout.activity_main_menu);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -55,7 +63,8 @@ public class MainMenu extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
-        new DatabaseInteraction(getApplicationContext()).setUp();
+        di = new DatabaseInteraction(getApplicationContext());
+        di.setUp();
 
         /* Uncomment to use Instruction page */
         /*SharedPreferences settings = getSharedPreferences("prefs",0);
@@ -85,8 +94,8 @@ public class MainMenu extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new FoodStock(), "Stock");
-        adapter.addFrag(new FoodToExpire(), "Alert");
+        adapter.addFrag(foodstock, "Stock");
+        adapter.addFrag(foodtoexpire, "Alert");
         adapter.addFrag(new AddFoodToFoodStock(), "Add Food");
         viewPager.setAdapter(adapter);
     }
@@ -125,6 +134,13 @@ public class MainMenu extends AppCompatActivity {
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
-    
+
+    public void undo(View view) {
+        if(di.popUndo()) {
+            di.fixStack();
+            foodstock.refresh();
+            foodtoexpire.refresh();
+        }
+    }
 
 }
