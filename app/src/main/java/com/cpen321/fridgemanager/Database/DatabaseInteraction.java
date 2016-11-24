@@ -194,16 +194,22 @@ public class DatabaseInteraction {
 
     /*
       Undo Last Delete.
+      @returns false if undo fails
+               true if succeeds
      */
-    public void popUndo() {
+    public boolean popUndo() {
         String rootU = readFile(UNDO_DEST);
         String rootS = readFile(STORAGE_DEST);
-        if (rootU == "" || rootS == "") return;
+        if (rootU == "" || rootS == "") return false;
         try {  // Output the new JSON Root Object to File
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
-            if (undo(rootU, rootS) != null)
+            if (undo(rootU, rootS) != null) {
                 write(outputStreamWriter, undo(rootU, rootS).toString());
+                return true;
+            }
         } catch (FileNotFoundException e) {}
+
+        return false;
     }
 
     /*

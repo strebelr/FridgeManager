@@ -35,11 +35,18 @@ public class MainMenu extends AppCompatActivity {
             R.drawable.ic_plus
     };
 
+    private FoodStock foodstock;
+    private FoodToExpire foodtoexpire;
+
     DatabaseInteraction di;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        foodstock = new FoodStock();
+        foodtoexpire = new FoodToExpire();
+
         setContentView(R.layout.activity_main_menu);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -87,8 +94,8 @@ public class MainMenu extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new FoodStock(), "Stock");
-        adapter.addFrag(new FoodToExpire(), "Alert");
+        adapter.addFrag(foodstock, "Stock");
+        adapter.addFrag(foodtoexpire, "Alert");
         adapter.addFrag(new AddFoodToFoodStock(), "Add Food");
         viewPager.setAdapter(adapter);
     }
@@ -129,8 +136,11 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void undo(View view) {
-        di.popUndo();
-        di.fixStack();
+        if(di.popUndo()) {
+            di.fixStack();
+            foodstock.refresh();
+            foodtoexpire.refresh();
+        }
     }
 
 }

@@ -117,7 +117,7 @@ public class FoodStock extends Fragment{
         }
     }
 
-    private void refresh() {
+    public void refresh() {
 
         clearScreen();
 
