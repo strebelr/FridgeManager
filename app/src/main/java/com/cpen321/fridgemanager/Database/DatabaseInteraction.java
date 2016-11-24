@@ -202,12 +202,12 @@ public class DatabaseInteraction {
         String rootS = readFile(STORAGE_DEST);
         if (rootU == "" || rootS == "") return false;
         try {  // Output the new JSON Root Object to File
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
-            if (undo(rootU, rootS) != null) {
+            if (undo(rootU, rootS) != null  && !(new JSONObject(rootU).optString("size").equals("0"))) {
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
                 write(outputStreamWriter, undo(rootU, rootS).toString());
                 return true;
             }
-        } catch (FileNotFoundException e) {}
+        } catch (FileNotFoundException | JSONException e) {}
 
         return false;
     }
