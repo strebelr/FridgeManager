@@ -44,7 +44,7 @@ public class AddFoodToFoodStock extends Fragment {
     private int[] tabIcons = {
             R.drawable.ic_food_stock,
             R.drawable.ic_food_to_expire,
-            R.drawable.ic_expenditures
+            R.drawable.ic_plus
     };
 
     AddFoodToFoodStockDatePicker newFragment;
