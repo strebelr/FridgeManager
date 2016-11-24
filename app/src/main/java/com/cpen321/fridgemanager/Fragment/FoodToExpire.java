@@ -22,8 +22,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static com.cpen321.fridgemanager.R.id.mTlayout;
 
@@ -155,7 +159,11 @@ public class FoodToExpire extends Fragment{
 
                 // Create exipry date text view
                 expiry.setId(i);
-                expiry.setText(food.optString("expiry").toString());
+                String expiryDate = food.optString("expiry");
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                Date date = formatter.parse(expiryDate);
+                formatter.applyPattern("dd MMM yy");
+                expiry.setText(formatter.format(date));
                 expiry.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
                 TableRow.LayoutParams trLayoutParams_expiry = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
                 expiry.setLayoutParams(trLayoutParams_expiry);
