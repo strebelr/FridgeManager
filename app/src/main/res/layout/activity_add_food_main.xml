@@ -1,38 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp"
-    android:fillViewport="false">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Food/Grocery Item"
-        android:textColor="@android:color/black"
-        android:layout_weight="3"
-        android:textColorHighlight="@android:color/primary_text_dark"
-        android:textSize="25dp" />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/container_border">
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        <CheckBox android:id="@+id/checkbox_meat"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enter food abbreviation"
-            android:onClick="onCheckboxClicked"/>
-        <CheckBox android:id="@+id/checkbox_cheese"
+            android:layout_gravity="center"
+            android:text="Add items to food stock"
+            android:textColor="@android:color/black"
+            android:textColorHighlight="@android:color/primary_text_dark"
+            android:textSize="25dp" />
+        <RadioGroup
+            android:id="@+id/radioSex"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enter food form"
-            android:onClick="onCheckboxClicked"/>
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/radioMale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter Food Abbreviation"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/radioFemale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter Food Form" />
+
+        </RadioGroup>
     </LinearLayout>
 
-</ScrollView>
+</RelativeLayout>
