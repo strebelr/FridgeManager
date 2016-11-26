@@ -34,7 +34,6 @@
             ></activity>
 
         /* Alarms */
-        <activity android:name=".Notification.Alert_Activity"/>
         <receiver android:name=".Notification.AlertReceiver"/>
 
         /* Instruction */

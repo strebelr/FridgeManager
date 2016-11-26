@@ -323,12 +323,16 @@ public class FoodStock extends Fragment{
                         //alert.cancelAlarm(ID);
 
                         Intent myIntent = new Intent(getActivity(), AlertReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                        // cancel the alarm
-                        alarmManager.cancel(pendingIntent);
-                        // delete the PendingIntent
-                        pendingIntent.cancel();
+                        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getActivity(), ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getActivity(), ID + 1, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        AlarmManager alarmManager1 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                        AlarmManager alarmManager2 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                        // cancel the alarms
+                        alarmManager1.cancel(pendingIntent1);
+                        alarmManager2.cancel(pendingIntent2);
+                        // delete the PendingIntents
+                        pendingIntent1.cancel();
+                        pendingIntent2.cancel();
                         android.util.Log.i("Notification ID", " Cancelled ID: "+ID);
 
 

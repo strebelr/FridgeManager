@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -216,14 +217,18 @@ public class ScanResults extends Alert {
                 ID = convertToID(catted);
 
                 if(expiry > 4) {
-                    setAlarm(view, expiry - 3, ID + 1, PRE_EXPIRY);     // sends notification 3 days before expiry
-                    setAlarm(view, expiry, ID, EXPIRY);
+                    setAlarm(view, expiry - 3, ID + 1, PRE_EXPIRY, names.get(i));     // sends notification 3 days before expiry
+                    setAlarm(view, expiry, ID, EXPIRY, names.get(i));
                 } else if (expiry <= 3 && expiry > 1) {
-                    setAlarm(view, 1, ID + 1, PRE_EXPIRY);              // sends notification the next day
-                    setAlarm(view, expiry, ID, EXPIRY);
+                    setAlarm(view, 1, ID + 1, PRE_EXPIRY, names.get(i));              // sends notification the next day
+                    setAlarm(view, expiry, ID, EXPIRY, names.get(i));
                 } else {
-                    setAlarm(view, expiry, ID, EXPIRY);         // only send notification on the day of expiry
+                    setAlarm(view, expiry, ID, EXPIRY, names.get(i));         // only send notification on the day of expiry
                 }
+
+
+
+
 
                 if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
                     ti.addFoodToStorage(names.get(i), quantities.get(i), units.get(i), locations.get(i), expiry);
@@ -240,5 +245,6 @@ public class ScanResults extends Alert {
     public static int ID; // random number to generate unique ID
     private static final int EXPIRY = 0;        // expired
     private static final int PRE_EXPIRY = 1;    // soon to expire
+
 
 }
