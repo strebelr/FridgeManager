@@ -50,8 +50,8 @@ public class MainMenu extends AppCompatActivity {
     private FoodToExpire foodtoexpire;
 
     // Settings Value
-    private int decrement_percent;
-    private int expiry_warning;
+    private int decrement_percent = 20;
+    private int expiry_warning = 3;
 
     DatabaseInteraction di; // Database Interaction Initialization
 
@@ -110,9 +110,10 @@ public class MainMenu extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_daysToExpire:
-
+                    menu_daysToExpiry();
+                break;
             case R.id.menu_decrease:
-
+                    menu_decrease();
                 break;
         }
         return true;
@@ -182,7 +183,7 @@ public class MainMenu extends AppCompatActivity {
         }
     }
 
-    public void settings(View view) {
+    public void menu_decrease() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setCancelable(true);
@@ -212,11 +213,11 @@ public class MainMenu extends AppCompatActivity {
                 });
 
         builder.setPositiveButton(
-                "Next",
+                "Confirm",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
-                        settings_continued();
+                        write_settings();
                     }
                 });
         builder.setNegativeButton(
@@ -232,7 +233,7 @@ public class MainMenu extends AppCompatActivity {
         alert.show();
     }
 
-    private void settings_continued() {
+    private void menu_daysToExpiry() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setCancelable(true);
