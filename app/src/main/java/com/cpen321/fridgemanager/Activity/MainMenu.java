@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
 import com.cpen321.fridgemanager.Fragment.AddFoodToFoodStock;
@@ -140,6 +141,8 @@ public class MainMenu extends AppCompatActivity {
             di.fixStack();
             foodstock.refresh();
             foodtoexpire.refresh();
+            Toast toast = Toast.makeText(getApplicationContext(), "Undo Success!", Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 
