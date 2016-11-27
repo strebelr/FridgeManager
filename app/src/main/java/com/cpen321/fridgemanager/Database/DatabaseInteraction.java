@@ -647,9 +647,9 @@ public class DatabaseInteraction {
 
         long today = actDate.getTimeInMillis();
         long expiry = expDate.getTimeInMillis();
-        int millisPerDay = (24 * 60 * 60 * 1000);
-        
-        return (int) (expiry - today) / millisPerDay;
+        long millisPerDay = (24 * 60 * 60 * 1000);
+        long daydiff = (expiry - today) / millisPerDay;
+        return (int)daydiff;
     }
 
     /*

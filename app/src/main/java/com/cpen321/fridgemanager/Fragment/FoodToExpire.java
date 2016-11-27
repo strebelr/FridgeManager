@@ -162,7 +162,7 @@ public class FoodToExpire extends Fragment{
                 String expiryDate = food.optString("expiry");
                 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                 Date date = formatter.parse(expiryDate);
-                formatter.applyPattern("dd MMM yy");
+                formatter.applyPattern("dd MMM ''yy");
                 expiry.setText(formatter.format(date));
                 expiry.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
                 TableRow.LayoutParams trLayoutParams_expiry = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
