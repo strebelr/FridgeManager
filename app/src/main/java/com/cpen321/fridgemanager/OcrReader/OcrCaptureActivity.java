@@ -113,6 +113,8 @@ public class OcrCaptureActivity extends AppCompatActivity {
             texts = getIntent().getStringArrayListExtra("texts");
         }
 
+
+
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<OcrGraphic>) findViewById(R.id.graphicOverlay);
 
@@ -132,7 +134,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        Snackbar.make(mGraphicOverlay, "Pinch/Stretch to zoom, make key words as large as possible",
+        Snackbar.make(mGraphicOverlay, "Tap to Scan After Seeing Text Overlays. Pinch to Zoom.",
                 Snackbar.LENGTH_LONG)
                 .show();
 
@@ -373,6 +375,9 @@ public class OcrCaptureActivity extends AppCompatActivity {
                 //Log.d(TAG, "line "+i+" is :" + lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
             }
         }
+
+        Toast toast = Toast.makeText(getApplicationContext(), "Scan Complete", Toast.LENGTH_SHORT);
+        toast.show();
 
         // starts scanResult activity
         Intent intent = new Intent(this, ScanResults.class);
