@@ -37,6 +37,7 @@ public class DatabaseInteraction {
     private final static int LIBRARY_DEST = 1;
     private final static int ASSETS_DEST = 2;
     private final static int UNDO_DEST = 3;
+    private final static int CONF_DEST = 4;
 
     // Defined variables to select unit encoded in integers
     public final static int UNIT = 0;
@@ -57,6 +58,7 @@ public class DatabaseInteraction {
     private final static String library = "library.json";
     private final static String undo_stack = "undo_stack.json";
     private final static String default_lib = "default_library.json"; // Default library in assets
+    private final static String config = "config.txt"; // Settings file
 
     /*
       Default constructor
@@ -74,6 +76,7 @@ public class DatabaseInteraction {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
             write(outputStreamWriter, makeRoot().toString());
         } catch (FileNotFoundException e) {}
+        writeConfig("2500");
     }
 
     /*
@@ -482,6 +485,16 @@ public class DatabaseInteraction {
     }
 
     /*
+      Overwrite the config file with new variables.
+      @param settings keys to overwrite
+     */
+    public void writeConfig(String conf) {
+        try {
+            write(new OutputStreamWriter(context.openFileOutput(config, Context.MODE_PRIVATE)), conf);
+        } catch (FileNotFoundException e) {}
+    }
+
+    /*
       Make a new JSON Object with provided attributes.
       @param name of the food
       @param quantity
@@ -732,6 +745,13 @@ public class DatabaseInteraction {
             } catch (IOException e) {
             }
         }
+        else if (destination == CONF_DEST) {
+            try {
+                isr = new InputStreamReader(context.openFileInput(config));
+                return read(isr);
+            } catch (IOException e) {
+            }
+        }
 
         return "";
     }
@@ -758,6 +778,24 @@ public class DatabaseInteraction {
         } catch (IOException e) {}
 
         return root;
+    }
+
+    /*
+      Read decrement percentage variable.
+     */
+    public int getDecrement() {
+        String config = readFile(CONF_DEST);
+        config = config.substring(0,2);
+        return Integer.parseInt(config);
+    }
+
+    /*
+      Read food to expire variable.
+    */
+    public int getExpiry() {
+        String config = readFile(CONF_DEST);
+        config = config.substring(2,4);
+        return Integer.parseInt(config);
     }
 
     /*

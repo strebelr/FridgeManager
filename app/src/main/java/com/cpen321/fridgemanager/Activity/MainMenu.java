@@ -244,7 +244,14 @@ public class MainMenu extends AppCompatActivity {
     }
 
     private void write_settings() {
-        // TODO: WRITE VALUES TO CONFIG FILE
+        String conf = "";
+        if(expiry_warning < 10) {
+            conf = decrement_percent + "0" + expiry_warning;
+        }
+        else {
+            conf = "" + decrement_percent + expiry_warning;
+        }
+        di.writeConfig(conf);
     }
 
 }
