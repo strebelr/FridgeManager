@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cpen321.fridgemanager.Activity.ScanResults;
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
@@ -255,31 +256,59 @@ public class FoodStock extends Fragment{
 
                         try {
                             if (location == "Fridge") {
+                                String name = fridge.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(fridge.getJSONObject(new_index), location);
                                 if(check == 1) {
                                     expiry = fridge.getJSONObject(new_index).optString("expiry");
                                     cancelAlarm(expiry);
+                                    Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                                else {
+                                    Toast toast = Toast.makeText(getContext(), name + " decremented.", Toast.LENGTH_SHORT);
+                                    toast.show();
                                 }
                                 refresh();
                             } else if (location == "Fresh") {
+                                String name = fresh.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(fresh.getJSONObject(new_index), location);
                                 if(check == 1) {
                                     expiry = fresh.getJSONObject(new_index).optString("expiry");
                                     cancelAlarm(expiry);
+                                    Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                                else {
+                                    Toast toast = Toast.makeText(getContext(), name + " decremented.", Toast.LENGTH_SHORT);
+                                    toast.show();
                                 }
                                 refresh();
                             } else if (location == "Pantry") {
+                                String name = pantry.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(pantry.getJSONObject(new_index), location);
                                 if(check == 1) {
                                     expiry = pantry.getJSONObject(new_index).optString("expiry");
                                     cancelAlarm(expiry);
+                                    Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                                else {
+                                    Toast toast = Toast.makeText(getContext(), name + " decremented.", Toast.LENGTH_SHORT);
+                                    toast.show();
                                 }
                                 refresh();
                             } else if (location == "Freezer") {
+                                String name = freezer.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(freezer.getJSONObject(new_index), location);
                                 if(check == 1) {
                                     expiry = freezer.getJSONObject(new_index).optString("expiry");
                                     cancelAlarm(expiry);
+                                    Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                                else {
+                                    Toast toast = Toast.makeText(getContext(), name + " decremented.", Toast.LENGTH_SHORT);
+                                    toast.show();
                                 }
                                 refresh();
                             }
@@ -317,18 +346,26 @@ public class FoodStock extends Fragment{
 
                         try {
                             if (location == "Fridge") {
+                                Toast toast = Toast.makeText(getContext(), fridge.getJSONObject(new_index).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                                toast.show();
                                 di.removeFood(fridge.getJSONObject(new_index), location);
                                 expiry = fridge.getJSONObject(new_index).optString("expiry");
                                 refresh();
                             } else if (location == "Fresh") {
+                                Toast toast = Toast.makeText(getContext(), fresh.getJSONObject(new_index).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                                toast.show();
                                 di.removeFood(fresh.getJSONObject(new_index), location);
                                 expiry = fresh.getJSONObject(new_index).optString("expiry");
                                 refresh();
                             } else if (location == "Pantry") {
+                                Toast toast = Toast.makeText(getContext(), pantry.getJSONObject(new_index).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                                toast.show();
                                 di.removeFood(pantry.getJSONObject(new_index), location);
                                 expiry = pantry.getJSONObject(new_index).optString("expiry");
                                 refresh();
                             } else if (location == "Freezer") {
+                                Toast toast = Toast.makeText(getContext(), freezer.getJSONObject(new_index).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                                toast.show();
                                 di.removeFood(freezer.getJSONObject(new_index), location);
                                 expiry = freezer.getJSONObject(new_index).optString("expiry");
                                 refresh();

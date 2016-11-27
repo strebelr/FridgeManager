@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cpen321.fridgemanager.Activity.MainMenu;
 import com.cpen321.fridgemanager.Algorithm.TextRecognitionInteraction;
@@ -198,6 +199,8 @@ public class FoodToExpire extends Fragment{
                     public void onClick(View v) {
                         int index = v.getId();
                         try {
+                            Toast toast = Toast.makeText(getContext(), ((JSONObject) toExpire.get(index)).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                            toast.show();
                             di.removeFood((JSONObject) toExpire.get(index), ((JSONObject) toExpire.get(index)).optString("location").toString());
                             refresh();
                         } catch(JSONException e) {}
