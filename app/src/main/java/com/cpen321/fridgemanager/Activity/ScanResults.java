@@ -214,9 +214,33 @@ public class ScanResults extends Alert {
                 // TODO: CALL ALARM FROM HERE
 
                 String catted = concatenate(names.get(i), String.valueOf(quantities.get(i)), di.getCurrentDate(), di.getFutureDate(expiry));
-                ID = convertToID(catted);
+                EXPIRY_ID = convertToID(catted);
+                PRE_EXPIRY_ID = convertToID(catted) + 50000;
 
-                if(expiry > 4) {
+                if(counterID[EXPIRY_ID] == 0 || counterID[PRE_EXPIRY_ID] == 0) {
+                    //set alarm with cases
+                    if(expiry > 4) {
+                        setAlarm(view, expiry - 3, PRE_EXPIRY_ID, PRE_EXPIRY);     // sends notification 3 days before expiry
+                        setAlarm(view, expiry, EXPIRY_ID, EXPIRY);
+                    } else if (expiry <= 3 && expiry > 1) {
+                        setAlarm(view, 1, PRE_EXPIRY_ID, PRE_EXPIRY);              // sends notification the next day
+                        setAlarm(view, expiry, EXPIRY_ID, EXPIRY);
+                    } else {
+                        setAlarm(view, expiry, EXPIRY_ID, EXPIRY);         // only send notification on the day of expiry
+                    }
+                    counterID[EXPIRY_ID]++;
+                    counterID[PRE_EXPIRY_ID]++;
+                    android.util.Log.i("Notification ID", " ID Remaining: "+counterID[EXPIRY_ID] +" and "+counterID[PRE_EXPIRY_ID]);
+                }
+                else {
+                    counterID[EXPIRY_ID]++;
+                    counterID[PRE_EXPIRY_ID]++;
+                    android.util.Log.i("Notification ID", " ID Remaining: "+counterID[EXPIRY_ID] +" and "+counterID[PRE_EXPIRY_ID]);
+
+                }
+
+
+                /*if(expiry > 4) {
                     setAlarm(view, expiry - 3, ID + 1, PRE_EXPIRY, names.get(i));     // sends notification 3 days before expiry
                     setAlarm(view, expiry, ID, EXPIRY, names.get(i));
                 } else if (expiry <= 3 && expiry > 1) {
@@ -224,11 +248,7 @@ public class ScanResults extends Alert {
                     setAlarm(view, expiry, ID, EXPIRY, names.get(i));
                 } else {
                     setAlarm(view, expiry, ID, EXPIRY, names.get(i));         // only send notification on the day of expiry
-                }
-
-
-
-
+                }*/
 
                 if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
                     ti.addFoodToStorage(names.get(i), quantities.get(i), units.get(i), locations.get(i), expiry);
@@ -242,9 +262,10 @@ public class ScanResults extends Alert {
 
     /********* Variables used for Alarm **********/
 
-    public static int ID; // random number to generate unique ID
+    public static int EXPIRY_ID; // random number to generate unique ID
+    public static int PRE_EXPIRY_ID;
     private static final int EXPIRY = 0;        // expired
     private static final int PRE_EXPIRY = 1;    // soon to expire
-
+    public static int[] counterID = new int[100000];
 
 }

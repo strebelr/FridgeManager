@@ -36,8 +36,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static android.content.Context.ALARM_SERVICE;
-import static com.cpen321.fridgemanager.Activity.ScanResults.ID;
 
 
 public class FoodStock extends Fragment{
@@ -80,7 +78,6 @@ public class FoodStock extends Fragment{
 
         di = new DatabaseInteraction(getContext());
 
-        //alert = new Alert();
         refresh();
 
         // Inflate the layout for this fragment
@@ -237,6 +234,7 @@ public class FoodStock extends Fragment{
                     public void onClick(View v) {
                         int index = v.getId();
                         int new_index;
+                        String expiry = "";
                         String location;
                         if (index < fridge.length()) {
                             new_index = index;
@@ -258,15 +256,31 @@ public class FoodStock extends Fragment{
                         try {
                             if (location == "Fridge") {
                                 check = di.decrementFood(fridge.getJSONObject(new_index), location);
+                                if(check == 1) {
+                                    expiry = fridge.getJSONObject(new_index).optString("expiry");
+                                    cancelAlarm(expiry);
+                                }
                                 refresh();
                             } else if (location == "Fresh") {
                                 check = di.decrementFood(fresh.getJSONObject(new_index), location);
+                                if(check == 1) {
+                                    expiry = fresh.getJSONObject(new_index).optString("expiry");
+                                    cancelAlarm(expiry);
+                                }
                                 refresh();
                             } else if (location == "Pantry") {
                                 check = di.decrementFood(pantry.getJSONObject(new_index), location);
+                                if(check == 1) {
+                                    expiry = pantry.getJSONObject(new_index).optString("expiry");
+                                    cancelAlarm(expiry);
+                                }
                                 refresh();
                             } else if (location == "Freezer") {
                                 check = di.decrementFood(freezer.getJSONObject(new_index), location);
+                                if(check == 1) {
+                                    expiry = freezer.getJSONObject(new_index).optString("expiry");
+                                    cancelAlarm(expiry);
+                                }
                                 refresh();
                             }
                         } catch (JSONException e) {
@@ -286,6 +300,7 @@ public class FoodStock extends Fragment{
                         int index = v.getId();
                         int new_index;
                         String location;
+                        String expiry = "";
                         if (index < fridge.length()) {
                             new_index = index;
                             location = "Fridge";
@@ -303,26 +318,63 @@ public class FoodStock extends Fragment{
                         try {
                             if (location == "Fridge") {
                                 di.removeFood(fridge.getJSONObject(new_index), location);
+                                expiry = fridge.getJSONObject(new_index).optString("expiry");
                                 refresh();
                             } else if (location == "Fresh") {
                                 di.removeFood(fresh.getJSONObject(new_index), location);
+                                expiry = fresh.getJSONObject(new_index).optString("expiry");
                                 refresh();
                             } else if (location == "Pantry") {
                                 di.removeFood(pantry.getJSONObject(new_index), location);
+                                expiry = pantry.getJSONObject(new_index).optString("expiry");
                                 refresh();
                             } else if (location == "Freezer") {
                                 di.removeFood(freezer.getJSONObject(new_index), location);
+                                expiry = freezer.getJSONObject(new_index).optString("expiry");
                                 refresh();
                             }
-                        } catch (JSONException e) {
-                        }
+                        } catch (JSONException e) {}
 
                         // Cancel notification
-                        String catted = Alert.concatenate(food.optString("name").toString(), food.optString("quantity").toString(), "", "");
-                        int ID = Alert.convertToID(catted);
-                        //alert.cancelAlarm(ID);
 
-                        Intent myIntent = new Intent(getActivity(), AlertReceiver.class);
+                        cancelAlarm(expiry);
+
+                        /*int EXPIRY_ID = Alert.convertToID(expiry);
+                        int PRE_EXPIRY_ID = Alert.convertToID(expiry) + 50000;
+                        //android.util.Log.i("Notification ID", " IDs are set: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
+
+
+                        //playing around here
+                        if(ScanResults.counterID[EXPIRY_ID] == 1 || ScanResults.counterID[PRE_EXPIRY_ID] == 1) {
+                            Intent myIntent = new Intent(getActivity(), AlertReceiver.class);
+                            PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getActivity(), EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                            PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getActivity(), PRE_EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                            AlarmManager alarmManager1 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                            AlarmManager alarmManager2 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                            // cancel the alarms
+                            alarmManager1.cancel(pendingIntent1);
+                            alarmManager2.cancel(pendingIntent2);
+                            // delete the PendingIntents
+                            pendingIntent1.cancel();
+                            pendingIntent2.cancel();
+
+                            ScanResults.counterID[EXPIRY_ID]--;
+                            ScanResults.counterID[PRE_EXPIRY_ID]--;
+
+                            android.util.Log.i("Notification ID", " Cancelled ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
+                            android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
+
+                        } else {
+                            if (ScanResults.counterID[EXPIRY_ID] > 0 || ScanResults.counterID[PRE_EXPIRY_ID] > 0) {
+                                ScanResults.counterID[EXPIRY_ID]--;
+                                ScanResults.counterID[PRE_EXPIRY_ID]--;
+                                android.util.Log.i("Notification ID", " Decrease from counter ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
+                            }
+
+                            android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
+                         }*/
+
+                        /*Intent myIntent = new Intent(getActivity(), AlertReceiver.class);
                         PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getActivity(), ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getActivity(), ID + 1, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         AlarmManager alarmManager1 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -333,12 +385,13 @@ public class FoodStock extends Fragment{
                         // delete the PendingIntents
                         pendingIntent1.cancel();
                         pendingIntent2.cancel();
-                        android.util.Log.i("Notification ID", " Cancelled ID: "+ID);
+                        android.util.Log.i("Notification ID", " Cancelled ID: "+ID);*/
 
 
                     }
 
                 });
+
                 trs.get(i + index).addView(btn_del);
 
                 // Create food text
@@ -421,6 +474,44 @@ public class FoodStock extends Fragment{
         }
 
     }
+
+    private void cancelAlarm(String expiry) {
+        int EXPIRY_ID = Alert.convertToID(expiry);
+        int PRE_EXPIRY_ID = Alert.convertToID(expiry) + 50000;
+        //android.util.Log.i("Notification ID", " IDs are set: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
+
+
+        //playing around here
+        if(ScanResults.counterID[EXPIRY_ID] == 1 || ScanResults.counterID[PRE_EXPIRY_ID] == 1) {
+            Intent myIntent = new Intent(getActivity(), AlertReceiver.class);
+            PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getActivity(), EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getActivity(), PRE_EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager1 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            AlarmManager alarmManager2 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            // cancel the alarms
+            alarmManager1.cancel(pendingIntent1);
+            alarmManager2.cancel(pendingIntent2);
+            // delete the PendingIntents
+            pendingIntent1.cancel();
+            pendingIntent2.cancel();
+
+            ScanResults.counterID[EXPIRY_ID]--;
+            ScanResults.counterID[PRE_EXPIRY_ID]--;
+
+            android.util.Log.i("Notification ID", " Cancelled ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
+            android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
+
+        } else {
+            if (ScanResults.counterID[EXPIRY_ID] > 0 || ScanResults.counterID[PRE_EXPIRY_ID] > 0) {
+                ScanResults.counterID[EXPIRY_ID]--;
+                ScanResults.counterID[PRE_EXPIRY_ID]--;
+                android.util.Log.i("Notification ID", " Decrease from counter ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
+            }
+
+            android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
+        }
+    }
+
 
 }
 

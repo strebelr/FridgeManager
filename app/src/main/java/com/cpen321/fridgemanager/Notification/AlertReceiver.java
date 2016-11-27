@@ -15,15 +15,13 @@ import com.cpen321.fridgemanager.Activity.ScanResults;
 import com.cpen321.fridgemanager.R;
 
 public class AlertReceiver extends BroadcastReceiver {
-
     @Override
     public void onReceive(Context context, Intent intent) {
         int msgType = intent.getIntExtra("NOTIF_TYPE", 0);
         int uniqueID = intent.getIntExtra("ID", 0);
-        String foodName = intent.getStringExtra("FOOD_NAME");
-        
-        String msgExpire = foodName + " has expired";
-        String msgSoonExpire = foodName + " is expiring soon!";
+
+        String msgExpire = "Your food has expired!"; //foodName + " has expired";
+        String msgSoonExpire = "Your food is expiring!"; //foodName + " is expiring soon!";
 
         if (msgType == 0) {
             createNotification(context, "Fridge Manager", msgExpire, "Alert", uniqueID);
@@ -48,14 +46,11 @@ public class AlertReceiver extends BroadcastReceiver {
                 .setContentTitle(msg)
                 .setContentText(msgText)
                 .setTicker(msgAlert)
-                //.setGroup(GROUP_KEY_FOODS)
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000}) // Vibration
                 .setLights(0xFFFF00, 100, 50) // LED
                 .setAutoCancel(true);
 
         notificationManager.notify(notifID, builder.build());
-        android.util.Log.i("Notification ID", " Sent ID: " + notifID);
-
     }
 
 

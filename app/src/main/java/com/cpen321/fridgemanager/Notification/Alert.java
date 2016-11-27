@@ -10,9 +10,6 @@ import android.view.View;
 import java.util.Calendar;
 //This class is currently unused
 public class Alert extends AppCompatActivity {
-    /*public Alert() {
-
-    }*/
 
     public void cancelAlarm(int notifID) {
 
@@ -30,7 +27,7 @@ public class Alert extends AppCompatActivity {
     }
 
     // TODO:  MSG. WHAT HAPPENS IF JANUARY 31 AND DAY IS ADDED
-    public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType, String food) {
+    public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType) {
         android.util.Log.i("Notification ID ", " Set ID: "+notifID);
 
         Calendar calendar = Calendar.getInstance();
@@ -44,7 +41,6 @@ public class Alert extends AppCompatActivity {
         // Issues a new notification to be sent
         Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
         intent.putExtra("NOTIF_TYPE", alarmType);
-        intent.putExtra("FOOD_NAME", food);
         intent.putExtra("ID", notifID);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -52,7 +48,7 @@ public class Alert extends AppCompatActivity {
     }
 
     public static String concatenate(String name, String quantity, String bought, String expiry) {
-        String cat = name + quantity; //+ bought + expiry;
+        String cat = expiry;    // decides encoding
         return cat;
     }
 
