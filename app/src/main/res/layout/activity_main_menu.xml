@@ -52,6 +52,18 @@
                 android:cropToPadding="false"
                 android:layout_weight="0.50" />
 
+            <ImageButton
+                android:id="@+id/settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_settings"
+                android:background="@drawable/toolbar_button"
+                android:layout_marginEnd="@dimen/foodStock_paddingBottom"
+                android:layout_marginRight="@dimen/foodStock_paddingBottom"
+                android:layout_gravity="right"
+                android:cropToPadding="false"
+                android:layout_weight="0.50" />
+
         </android.support.v7.widget.Toolbar>
 
 
