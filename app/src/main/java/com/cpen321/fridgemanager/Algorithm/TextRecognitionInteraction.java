@@ -71,7 +71,7 @@ public class TextRecognitionInteraction {
 
                 for(int ii=0; ii < jArray.length(); ii++) {
                     String library_name = jArray.getString(ii);
-                    Log.d(TAG, "line "+ii+ " is :" + library_name);
+                    //Log.d(TAG, "line "+ii+ " is :" + library_name);
                     if (name.length() >= library_name.length()) {
                         //get the distance between the two strings
                         int dist = Levenshtein.distance(name, library_name);

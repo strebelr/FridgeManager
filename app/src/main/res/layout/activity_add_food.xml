@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/container_border"
     tools:context="com.cpen321.fridgemanager.Fragment.AddFoodToFoodStock">
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -64,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingLeft="40px"
+            android:paddingLeft="10px"
             android:paddingTop="10px"
             android:paddingBottom="10px"
             android:layout_marginTop="40px"

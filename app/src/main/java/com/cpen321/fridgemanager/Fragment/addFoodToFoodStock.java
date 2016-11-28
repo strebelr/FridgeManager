@@ -1,7 +1,10 @@
 package com.cpen321.fridgemanager.Fragment;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -22,7 +25,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cpen321.fridgemanager.Activity.MainMenu;
+import com.cpen321.fridgemanager.Activity.ScanResults;
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
+import com.cpen321.fridgemanager.Notification.Alert;
+import com.cpen321.fridgemanager.Notification.AlertReceiver;
 import com.cpen321.fridgemanager.R;
 
 import org.json.JSONArray;
@@ -32,6 +38,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static android.content.Context.ALARM_SERVICE;
+import static com.cpen321.fridgemanager.Activity.ScanResults.EXPIRY_ID;
+import static com.cpen321.fridgemanager.Activity.ScanResults.PRE_EXPIRY_ID;
+import static com.cpen321.fridgemanager.Activity.ScanResults.counterID;
 
 public class AddFoodToFoodStock extends Fragment {
 
@@ -44,7 +55,7 @@ public class AddFoodToFoodStock extends Fragment {
     private int[] tabIcons = {
             R.drawable.ic_food_stock,
             R.drawable.ic_food_to_expire,
-            R.drawable.ic_expenditures
+            R.drawable.ic_plus
     };
 
     AddFoodToFoodStockDatePicker newFragment;
@@ -164,12 +175,66 @@ public class AddFoodToFoodStock extends Fragment {
         DatabaseInteraction di = new DatabaseInteraction(view.getContext());
         di.writeToStorage(name, amount, int_unit, location, difference);
 
+        //Set alarms
+        String catted = Alert.concatenate(name, String.valueOf(amount), di.getCurrentDate(), di.getFutureDate(difference));
+        EXPIRY_ID = Alert.convertToID(catted);
+        PRE_EXPIRY_ID = Alert.convertToID(catted) + 50000;
+
+        if(counterID[EXPIRY_ID] == 0 || counterID[PRE_EXPIRY_ID] == 0) {
+            //set alarm with cases
+            if(difference > 4) {
+                setAlarm(view, difference - 3, PRE_EXPIRY_ID, PRE_EXPIRY);     // sends notification 3 days before expiry
+                setAlarm(view, difference, EXPIRY_ID, EXPIRY);
+            } else if (difference <= 3 && difference > 1) {
+                setAlarm(view, 1, PRE_EXPIRY_ID, PRE_EXPIRY);              // sends notification the next day
+                setAlarm(view, difference, EXPIRY_ID, EXPIRY);
+            } else {
+                setAlarm(view, difference, EXPIRY_ID, EXPIRY);         // only send notification on the day of expiry
+            }
+            counterID[EXPIRY_ID]++;
+            counterID[PRE_EXPIRY_ID]++;
+            android.util.Log.i("Notification ID", " ID Remaining: "+counterID[EXPIRY_ID] +" and "+counterID[PRE_EXPIRY_ID]);
+        }
+        else {
+            counterID[EXPIRY_ID]++;
+            counterID[PRE_EXPIRY_ID]++;
+            android.util.Log.i("Notification ID", " ID Remaining: "+counterID[EXPIRY_ID] +" and "+counterID[PRE_EXPIRY_ID]);
+
+        }
+
+
         viewPager.setCurrentItem(0);
     }
 
     public void showDatePickerDialog() {
         newFragment = new AddFoodToFoodStockDatePicker();
         newFragment.show(myContext.getSupportFragmentManager(), "datePicker");
+    }
+
+    /**Notifications**/
+    private static final int EXPIRY = 0;        // expired
+    private static final int PRE_EXPIRY = 1;    // soon to expire
+    //public static int EXPIRY_ID; // random number to generate unique ID
+    //public static int PRE_EXPIRY_ID;
+
+    public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType) {
+        android.util.Log.i("Notification ID ", " Set ID: "+notifID);
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.add(Calendar.SECOND, 10);
+        //calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.add(Calendar.DAY_OF_YEAR, daysTillExpire);
+
+        android.util.Log.i("AFTER ",": " +calendar);
+
+        // Issues a new notification to be sent
+        Intent intent = new Intent(getActivity(), AlertReceiver.class);
+        intent.putExtra("NOTIF_TYPE", alarmType);
+        intent.putExtra("ID", notifID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
 }
