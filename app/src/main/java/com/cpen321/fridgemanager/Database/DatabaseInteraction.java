@@ -659,7 +659,7 @@ public class DatabaseInteraction {
         
         int dayDiff = daysToExpire(food);
         
-        return ( (dayDiff - DaysToExpiryDate) <= 0 );
+        return ( (dayDiff - DaysToExpiryDate) < 0 );
     }
 
         /*
