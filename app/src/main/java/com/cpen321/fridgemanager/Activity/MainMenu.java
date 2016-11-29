@@ -181,6 +181,10 @@ public class MainMenu extends AppCompatActivity {
             Toast toast = Toast.makeText(getApplicationContext(), "Undo Success!", Toast.LENGTH_SHORT);
             toast.show();
         }
+        else {
+            Toast toast = Toast.makeText(getApplicationContext(), "No more to undo", Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     public void menu_decrease() {

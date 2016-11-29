@@ -313,7 +313,7 @@ public class DatabaseInteraction {
             return Double.parseDouble(food.optString("quantity").toString()) == 1;
         }
         else {
-            return Double.parseDouble(food.optString("quantity").toString()) <= getDecrement() * Double.parseDouble(food.optString("original_qty").toString());
+            return Double.parseDouble(food.optString("quantity").toString()) <= new BigDecimal(getDecrementString()).multiply(new BigDecimal(food.optString("original_qty").toString())).doubleValue();
         }
     }
 
@@ -365,7 +365,7 @@ public class DatabaseInteraction {
                         if (Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()) == UNIT)
                             new_qty = Integer.parseInt(jsonArray.getJSONObject(i).optString("quantity").toString()) - 1;
                         else
-                            new_qty = new BigDecimal(Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString())).subtract(new BigDecimal(getDecrement()).multiply(new BigDecimal(Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString())))).doubleValue();
+                            new_qty = new BigDecimal(jsonArray.getJSONObject(i).optString("quantity").toString()).subtract(new BigDecimal(getDecrementString()).multiply(new BigDecimal(jsonArray.getJSONObject(i).optString("original_qty").toString()))).doubleValue();
                         decrement.put("quantity", new_qty);
                         stack.put("quantity", Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()));
                         decrement.put("original_qty", Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()));
@@ -487,8 +487,8 @@ public class DatabaseInteraction {
                 (element.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) &&
                 (element.optString("expiry").toString().equals(jsonArray.getJSONObject(i).optString("expiry").toString())) )
                 {
-                    element = create(name, new BigDecimal(Double.parseDouble(element.optString("quantity").toString())).add(new BigDecimal(Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()))).doubleValue(),
-                            new BigDecimal(Double.parseDouble(element.optString("original_qty").toString())).add(new BigDecimal(Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()))).doubleValue(),
+                    element = create(name, new BigDecimal(element.optString("quantity").toString()).add(new BigDecimal(jsonArray.getJSONObject(i).optString("quantity").toString())).doubleValue(),
+                            new BigDecimal(element.optString("original_qty").toString()).add(new BigDecimal(jsonArray.getJSONObject(i).optString("original_qty").toString())).doubleValue(),
                             unit, expiry, location);
                     removeFood(jsonArray.getJSONObject(i), location);
                     jsonRoot = readFile(STORAGE_DEST);
@@ -799,15 +799,18 @@ public class DatabaseInteraction {
     }
 
     /*
-      Read decrement percentage variable.
+      Read decrement decimal variable in String.
      */
-    public double getDecrement() {
+    private String getDecrementString() {
         String config = readFile(CONF_DEST);
         config = config.substring(0,2);
         config = "0." + config;
-        return Double.parseDouble(config);
+        return config;
     }
 
+    /*
+      Read decrement percentage variable in int.
+    */
     public int getDecrementPercent() {
         String config = readFile(CONF_DEST);
         config = config.substring(0,2);
