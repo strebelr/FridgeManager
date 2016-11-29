@@ -42,7 +42,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.ic_fridge_filled)
+                .setSmallIcon(R.drawable.ic_fridge_empty)
                 .setContentTitle(msg)
                 .setContentText(msgText)
                 .setTicker(msgAlert)

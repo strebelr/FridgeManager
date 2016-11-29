@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:id="@+id/layout_main">
 
     <!-- other widgets go here-->
@@ -13,7 +14,6 @@
 
     <TextView
         android:text="  Welcome to Fridge Manager! This is an app that helps you manage your food more easily!
-
     The current version consists of three main components: Fridge, Food to Expire, and Manual Entry.
 "
         android:layout_width="match_parent"
@@ -100,22 +100,87 @@
         android:id="@+id/fridge"/>
 
     <TextView
-        android:text="Displays all food items in your Fridge, Fresh, Pantry, and Freezer.
-The amount of food can be decreased using “Decrement Button”. "
+        android:text="Displays all food items in your Fridge, Fresh, Pantry, and Freezer."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:layout_toRightOf="@+id/fridge"
         android:layout_below="@+id/menuIconText"
+        android:id="@+id/fridgeText1"/>
 
-        android:id="@+id/fridgeText"/>
+    <TextView
+        android:text="The amount of food can be decreased using “Decrement Button”."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:layout_below="@+id/fridgeText1"
+        android:id="@+id/fridgeText2"/>
 
+    <TextView
+        android:text="Food to Expire"
+        android:textStyle="bold"
+        android:textSize="@dimen/titles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:layout_below="@+id/fridgeText2"
+        android:id="@+id/expire"/>
 
-    <!-- <TextView
-         android:text="click anywhere to access main page"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:id="@+id/textView2" />
-         -->
+    <TextView
+        android:text="Displays all food items that will expire within X days."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:layout_toRightOf="@+id/expire"
+        android:layout_below="@+id/fridgeText2"
+        android:id="@+id/expireText1"/>
+
+    <TextView
+        android:text="You can adjust X under “time to alert” tab in the “drop down menu”. The food can be deleted using “Delete Button” after it is consumed."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:layout_below="@+id/expireText1"
+        android:id="@+id/expireText2"/>
+
+    <TextView
+        android:text="Manual Entry"
+        android:textStyle="bold"
+        android:textSize="@dimen/titles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:layout_below="@+id/expireText2"
+        android:id="@+id/manual"/>
+
+    <TextView
+        android:text="You can manually add food with its name, amount, expire date, and"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:layout_toRightOf="@+id/manual"
+        android:layout_below="@+id/expireText2"
+        android:id="@+id/manualText1"/>
+
+    location to be stored. The added food will be displayed on “Fridge” page.
+
+    <TextView
+        android:text="location to be stored. The added food will be displayed on “Fridge” page.
+        "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:layout_below="@+id/manualText1"
+        android:id="@+id/manualText2"/>
+
+    <TextView
+        android:text="click anywhere to access main page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="75dp"
+        android:layout_below="@+id/manualText2"
+
+        android:id="@+id/textView" />
+
 
 </RelativeLayout>
