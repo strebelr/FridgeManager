@@ -182,6 +182,10 @@ public class MainMenu extends AppCompatActivity {
             Toast toast = Toast.makeText(getApplicationContext(), "Undo Success!", Toast.LENGTH_SHORT);
             toast.show();
         }
+        else {
+            Toast toast = Toast.makeText(getApplicationContext(), "No more to undo", Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     public void menu_decrease() {
@@ -218,6 +222,7 @@ public class MainMenu extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
+                        expiry_warning = di.getExpiry();
                         write_settings();
                     }
                 });
@@ -249,6 +254,7 @@ public class MainMenu extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         expiry_warning = Integer.parseInt(String.valueOf(numberPicker.getValue()));
+                        decrement_percent = di.getDecrementPercent();
                         dialog.dismiss();
                         write_settings();
                     }
@@ -279,6 +285,7 @@ public class MainMenu extends AppCompatActivity {
             conf = "" + decrement_percent + expiry_warning;
         }
         di.writeConfig(conf);
+        foodtoexpire.refresh();
     }
 
 }
