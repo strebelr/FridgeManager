@@ -214,8 +214,6 @@ public class AddFoodToFoodStock extends Fragment {
     /**Notifications**/
     private static final int EXPIRY = 0;        // expired
     private static final int PRE_EXPIRY = 1;    // soon to expire
-    //public static int EXPIRY_ID; // random number to generate unique ID
-    //public static int PRE_EXPIRY_ID;
 
     public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType) {
         android.util.Log.i("Notification ID ", " Set ID: "+notifID);

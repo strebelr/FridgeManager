@@ -278,16 +278,6 @@ public class ScanResults extends Alert {
                     }
 
 
-                /*if(expiry > 4) {
-                    setAlarm(view, expiry - 3, ID + 1, PRE_EXPIRY, names.get(i));     // sends notification 3 days before expiry
-                    setAlarm(view, expiry, ID, EXPIRY, names.get(i));
-                } else if (expiry <= 3 && expiry > 1) {
-                    setAlarm(view, 1, ID + 1, PRE_EXPIRY, names.get(i));              // sends notification the next day
-                    setAlarm(view, expiry, ID, EXPIRY, names.get(i));
-                } else {
-                    setAlarm(view, expiry, ID, EXPIRY, names.get(i));         // only send notification on the day of expiry
-                }*/
-
                     if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
                         ti.addFoodToStorage(names.get(i), quantities.get(i), units.get(i), locations.get(i), expiry);
                     } else {

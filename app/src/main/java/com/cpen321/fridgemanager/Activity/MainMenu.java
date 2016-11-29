@@ -3,6 +3,7 @@ package com.cpen321.fridgemanager.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -82,7 +83,7 @@ public class MainMenu extends AppCompatActivity {
         di.setUp();
 
         /* Uncomment to use Instruction page */
-        /*SharedPreferences settings = getSharedPreferences("prefs",0);
+        SharedPreferences settings = getSharedPreferences("prefs",0);
         boolean firstRun = settings.getBoolean("firstRun",false);
         if(firstRun == false)//if running for first time
         {
@@ -92,7 +93,7 @@ public class MainMenu extends AppCompatActivity {
             Intent i = new Intent(this,Instruction.class);//Activity to be launched For the First time
             startActivity(i);
             finish();
-        }*/
+        }
 
     }
 

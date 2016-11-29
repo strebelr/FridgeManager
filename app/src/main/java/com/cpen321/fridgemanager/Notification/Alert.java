@@ -33,7 +33,7 @@ public class Alert extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
 
         calendar.add(Calendar.SECOND, 10);
-        //calendar.set(Calendar.HOUR_OF_DAY, 18);
+        //calendar.set(Calendar.HOUR_OF_DAY, 12);
         calendar.add(Calendar.DAY_OF_YEAR, daysTillExpire);
 
         android.util.Log.i("AFTER ",": " +calendar);

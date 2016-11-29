@@ -1,8 +1,10 @@
 package com.cpen321.fridgemanager.Fragment;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.NumberPicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -143,7 +146,7 @@ public class FoodToExpire extends Fragment{
                 final TextView food_name = new TextView(getActivity());
                 TextView unit_name = new TextView(getActivity());
                 TextView amount = new TextView(getActivity());
-                TextView expiry = new TextView(getActivity());
+                final TextView expiry = new TextView(getActivity());
 
                 // Create unit text
                 switch (Integer.parseInt(food.optString("unit").toString())) {
@@ -178,7 +181,6 @@ public class FoodToExpire extends Fragment{
                 int padding_right = 50;
                 expiry.setPadding(0,0,padding_right,0);
                 trs.get(i).addView(expiry);
-
 
                 // Create amount text view
                 amount.setId(i);
@@ -230,6 +232,20 @@ public class FoodToExpire extends Fragment{
                 food_name.setLayoutParams(trLayoutParams);
                 trs.get(i).addView(food_name, 0);
 
+                // Allow user to edit expiry date from holding the expiry date
+                food_name.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        // TODO Auto-generated method stub
+                        //call edit button here
+                        promptExpiryWarning();
+
+                        food_name.setText("test");
+                        return true;
+                    }
+                });
+
+
             } catch (JSONException e) {
             }
 
@@ -249,6 +265,47 @@ public class FoodToExpire extends Fragment{
             title.addView(textTitle);
         }
 
+    }
+
+    private void promptExpiryWarning() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setCancelable(true);
+        builder.setTitle("Do you want to edit the expiry date of this food?");
+
+        builder.setPositiveButton(
+                "Edit",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                        editExpiryDate();
+                    }
+                });
+        builder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+
+        alert.setCanceledOnTouchOutside(false);
+
+        alert.show();
+    }
+
+    AddFoodToFoodStockDatePicker newFragment;
+
+    private void editExpiryDate(){
+        showDatePickerDialog();
+    }
+
+
+    public void showDatePickerDialog() {
+        newFragment = new AddFoodToFoodStockDatePicker();
+        newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
     }
 
     private void cancelAlarm(String expiry) {
