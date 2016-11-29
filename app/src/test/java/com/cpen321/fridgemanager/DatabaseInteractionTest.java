@@ -1,5 +1,6 @@
 package com.cpen321.fridgemanager;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.provider.ContactsContract;
 
@@ -239,6 +240,34 @@ public class DatabaseInteractionTest{
         // Test
         assertEquals("Fail: When removing from empty", exp_root1, (JSONObject) method.invoke(di, "", "Foods", element));
         assertEquals("Fail: When removing", exp_root2, ((JSONObject) method.invoke(di, root_before, "Foods", element)).toString());
+    }
+
+    @Test
+    public void getSortedExpiry_test() throws  Exception {
+        // Reflection
+        Method method = DatabaseInteraction.class.getDeclaredMethod("getSortedExpiry", String.class);
+        method.setAccessible(true);
+
+        // Input Test Case
+        String spinach = "{\"name\":\"Spinach\",\"bought\":\"20-11-2016\",\"expiry\":\"28-11-2016\",\"quantity\":1,\"original_qty\":1,\"unit\":0,\"location\":\"Fridge\"}";
+        String pea = "{\"name\":\"pea\",\"bought\":\"30-11-2016\",\"expiry\":\"29-11-2016\",\"quantity\":1,\"original_qty\":1,\"unit\":0,\"location\":\"Fresh\"}";
+        String zucchini = "{\"name\":\"Zucchini\",\"bought\":\"30-11-2016\",\"expiry\":\"30-11-2016\",\"quantity\":1,\"original_qty\":1,\"unit\":0,\"location\":\"Fridge\"}";
+        String cod = "{\"name\":\"Pork\",\"bought\":\"30-11-2016\",\"expiry\":\"05-12-2016\",\"quantity\":1,\"original_qty\":1,\"unit\":0,\"location\":\"Fridge\"}";
+        String pork ="{\"name\":\"Cod\",\"bought\":\"30-11-2016\",\"expiry\":\"01-12-2016\",\"quantity\":1,\"original_qty\":1,\"unit\":0,\"location\":\"Fridge\"}";
+        String root_before = "{\"Fridge\":[" + zucchini + "," + spinach + "," + pork + "," + cod + "],\"Fresh\":[" + pea + "],\"Pantry\":[],\"Freezer\":[]}";
+
+        //Expected Value
+        JSONArray expectedSort = new JSONArray();
+        expectedSort.put(new JSONObject(spinach));
+        expectedSort.put(new JSONObject(pea));
+        expectedSort.put(new JSONObject(zucchini));
+        expectedSort.put(new JSONObject(cod));
+        expectedSort.put(new JSONObject(pork));
+
+        //Test
+        JSONArray sortedFood = (JSONArray) method.invoke(di, root_before);
+        assertEquals(expectedSort.toString(), sortedFood.toString());
+
     }
 
 }
