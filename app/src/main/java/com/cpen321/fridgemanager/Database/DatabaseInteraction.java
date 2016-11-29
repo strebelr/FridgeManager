@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,9 +46,6 @@ public class DatabaseInteraction {
     public final static int KG = 2;
     public final static int L = 3;
     public final static int CUP = 4;
-
-    // Decrement Percentage
-    private final static double DECREMENT_P = 0.20;
 
     // Remove or Decrement Select
     private final static String DEC_SEL = "dec";
@@ -315,7 +313,7 @@ public class DatabaseInteraction {
             return Double.parseDouble(food.optString("quantity").toString()) == 1;
         }
         else {
-            return Double.parseDouble(food.optString("quantity").toString()) == DECREMENT_P * Double.parseDouble(food.optString("original_qty").toString());
+            return Double.parseDouble(food.optString("quantity").toString()) <= getDecrement() * Double.parseDouble(food.optString("original_qty").toString());
         }
     }
 
@@ -367,7 +365,7 @@ public class DatabaseInteraction {
                         if (Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()) == UNIT)
                             new_qty = Integer.parseInt(jsonArray.getJSONObject(i).optString("quantity").toString()) - 1;
                         else
-                            new_qty = Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()) - DECREMENT_P * Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString());
+                            new_qty = new BigDecimal(Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString())).subtract(new BigDecimal(getDecrement()).multiply(new BigDecimal(Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString())))).doubleValue();
                         decrement.put("quantity", new_qty);
                         stack.put("quantity", Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()));
                         decrement.put("original_qty", Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()));
@@ -489,8 +487,8 @@ public class DatabaseInteraction {
                 (element.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) &&
                 (element.optString("expiry").toString().equals(jsonArray.getJSONObject(i).optString("expiry").toString())) )
                 {
-                    element = create(name, Double.parseDouble(element.optString("quantity").toString()) + Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()),
-                            Double.parseDouble(element.optString("original_qty").toString()) + Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()),
+                    element = create(name, new BigDecimal(Double.parseDouble(element.optString("quantity").toString())).add(new BigDecimal(Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()))).doubleValue(),
+                            new BigDecimal(Double.parseDouble(element.optString("original_qty").toString())).add(new BigDecimal(Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()))).doubleValue(),
                             unit, expiry, location);
                     removeFood(jsonArray.getJSONObject(i), location);
                     jsonRoot = readFile(STORAGE_DEST);
@@ -618,14 +616,14 @@ public class DatabaseInteraction {
 
     public JSONArray getSortedExpiryArray() throws JSONException, ParseException {
         String root = readFile(STORAGE_DEST);
-        return getSortedExpiry(root);
+        return getSortedExpiry(root, getExpiry());
     }
 
     /*
       @param root of the database
       @returns JSONArray containing all food items which are close to expiry sorted by expiry date
      */
-    private JSONArray getSortedExpiry(String root) throws JSONException, ParseException {
+    private JSONArray getSortedExpiry(String root, int expiry) throws JSONException, ParseException {
 
         JSONArray fridge = extractArray(root, "Fridge");
         JSONArray freezer = extractArray(root, "Freezer");
@@ -638,7 +636,7 @@ public class DatabaseInteraction {
 
         for (int i = 0; i < closeToExpiry.length(); i++) {
             JSONObject food = closeToExpiry.getJSONObject(i);
-            if (foodToExpire(food))
+            if (foodToExpire(food, expiry))
                 sortedList.add(new ExpDateJSON(daysToExpire(food), food ));
         }
         Collections.sort(sortedList);
@@ -656,8 +654,8 @@ public class DatabaseInteraction {
       @param JSONObject which should be compared
       @returns 0 for not close to expiry, 1 for close to expiry
      */
-    public boolean foodToExpire(JSONObject food) throws ParseException {
-        int DaysToExpiryDate = 3;
+    public boolean foodToExpire(JSONObject food, int expiry) throws ParseException {
+        int DaysToExpiryDate = expiry;
         
         int dayDiff = daysToExpire(food);
         
@@ -803,7 +801,14 @@ public class DatabaseInteraction {
     /*
       Read decrement percentage variable.
      */
-    public int getDecrement() {
+    public double getDecrement() {
+        String config = readFile(CONF_DEST);
+        config = config.substring(0,2);
+        config = "0." + config;
+        return Double.parseDouble(config);
+    }
+
+    public int getDecrementPercent() {
         String config = readFile(CONF_DEST);
         config = config.substring(0,2);
         return Integer.parseInt(config);
