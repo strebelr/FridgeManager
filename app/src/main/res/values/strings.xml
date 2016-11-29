@@ -28,8 +28,8 @@
     <string name="add_all">Add all</string>
     <string name="try_again">Reset</string>
     <string name="take_more">Take More</string>
-    <string name="daysToExpire">time to alert</string>
-    <string name="decrease">decrease steps</string>
+    <string name="daysToExpire">Time to Alert</string>
+    <string name="decrease">Amount Consumed</string>
     <string-array name="amount">
         <item>units</item>
         <item>grams</item>
