@@ -244,7 +244,7 @@ public class DatabaseInteraction {
                 boolean remove = true; // Keeps track of if item has been removed already
                 for(int i = 0; i < jsonArray.length(); i++) {
                     if(!(toAdd.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
-                            !(toAdd.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
+                            !(toAdd.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) ||
                             !(toAdd.optString("expiry").toString().equals(jsonArray.getJSONObject(i).optString("expiry").toString())) ||
                             !remove) { // If item doesn't match
                             newArray.put(jsonArray.get(i)); // Add item to new array
@@ -352,7 +352,7 @@ public class DatabaseInteraction {
                 boolean remove = true; // Keeps track of if item has been removed already
                 for(int i = 0; i < jsonArray.length(); i++) {
                     if(!(element.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
-                            !(element.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
+                            !(element.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) ||
                             !(element.optString("quantity").toString().equals(jsonArray.getJSONObject(i).optString("quantity").toString())) ||
                             !remove) { // If item doesn't match
                         newArray.put(jsonArray.get(i)); // Add item to new array
@@ -362,8 +362,6 @@ public class DatabaseInteraction {
                         stack = new JSONObject();
                         decrement.put("name", jsonArray.getJSONObject(i).optString("name").toString());
                         stack.put("name", jsonArray.getJSONObject(i).optString("name").toString());
-                        decrement.put("bought", jsonArray.getJSONObject(i).optString("bought").toString());
-                        stack.put("bought", jsonArray.getJSONObject(i).optString("bought").toString());
                         decrement.put("expiry", jsonArray.getJSONObject(i).optString("expiry").toString());
                         stack.put("expiry", jsonArray.getJSONObject(i).optString("expiry").toString());
                         if (Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()) == UNIT)
@@ -438,7 +436,7 @@ public class DatabaseInteraction {
                 boolean remove = true; // Keeps track of if item has been removed already
                 for(int i = 0; i < jsonArray.length(); i++) {
                     if(!(element.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
-                            !(element.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
+                            !(element.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) ||
                             !(element.optString("quantity").toString().equals(jsonArray.getJSONObject(i).optString("quantity").toString())) ||
                             !remove) { // If item doesn't match
                         newArray.put(jsonArray.get(i)); // Add item to new array
@@ -474,12 +472,35 @@ public class DatabaseInteraction {
      */
     public void writeToStorage(String name, double quantity, int unit, String location, int expiry) {
         // Create the element
-        JSONObject element = create(name, quantity, unit, expiry, location);
+        JSONObject element = create(name, quantity, quantity, unit, expiry, location);
 
         // Get the root JSON String from File
         String jsonRoot = readFile(STORAGE_DEST);
 
-        try{ // Output the new JSON Root Object to File
+        try {
+            // Make a JSON Object from root String
+            JSONObject jsonRootObject = new JSONObject(jsonRoot);
+            // Get the JSON Array containing "Foods"
+            JSONArray jsonArray = jsonRootObject.optJSONArray(location);
+
+            // Remove duplicate
+            for (int i = 0; i < jsonArray.length(); i++) {
+                if ((element.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString()))  &&
+                (element.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) &&
+                (element.optString("expiry").toString().equals(jsonArray.getJSONObject(i).optString("expiry").toString())) )
+                {
+                    element = create(name, Double.parseDouble(element.optString("quantity").toString()) + Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()),
+                            Double.parseDouble(element.optString("original_qty").toString()) + Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()),
+                            unit, expiry, location);
+                    removeFood(jsonArray.getJSONObject(i), location);
+                    jsonRoot = readFile(STORAGE_DEST);
+                    break;
+                }
+            }
+        } catch (JSONException e) {}
+
+        try {
+            // Output the new JSON Root Object to File
             write(new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE)), add_to_root(element, jsonRoot, location));
         } catch (FileNotFoundException e) {}
     }
@@ -506,17 +527,16 @@ public class DatabaseInteraction {
       @param expiry days until it expires
       @returns JSONObject with given attributes
      */
-    private JSONObject create(String name, double quantity, int unit, int expiry, String location) {
+    private JSONObject create(String name, double quantity, double original_qty, int unit, int expiry, String location) {
         // Create a new JSON Object
         JSONObject element = new JSONObject();
         String date = getCurrentDate();
         String expiry_date = getFutureDate(expiry);
         try {
             element.put("name", name);
-            element.put("bought", date);
             element.put("expiry", expiry_date);
             element.put("quantity", quantity);
-            element.put("original_qty", quantity);
+            element.put("original_qty", original_qty);
             element.put("unit", unit);
             element.put("location", location);
         } catch (JSONException e) {}

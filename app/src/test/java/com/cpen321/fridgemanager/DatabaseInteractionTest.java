@@ -1,7 +1,6 @@
 package com.cpen321.fridgemanager;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
 
