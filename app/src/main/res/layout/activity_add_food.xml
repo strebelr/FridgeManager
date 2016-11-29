@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Food/Grocery Item"
+            android:text="Food Item"
             android:textColor="@android:color/black"
             android:layout_weight="3"
             android:textColorHighlight="@android:color/primary_text_dark"
