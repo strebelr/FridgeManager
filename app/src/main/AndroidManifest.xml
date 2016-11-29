@@ -2,15 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cpen321.fridgemanager">
 
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="com.android.alarm.permission.VIBRATE" />
     <uses-permission android:name="com.android.alarm.permission.WAKE_LOCK" />
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
