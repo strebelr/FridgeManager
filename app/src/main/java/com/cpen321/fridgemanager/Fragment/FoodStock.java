@@ -440,7 +440,7 @@ public class FoodStock extends Fragment{
                 trLayoutParams.weight = 1;
                 food_name.setLayoutParams(trLayoutParams);
 
-                if (di.foodToExpire(food)) {
+                if (di.foodToExpire(food, di.getExpiry())) {
                     food_name.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
                 }
                 trs.get(i + index).addView(food_name, 0);
