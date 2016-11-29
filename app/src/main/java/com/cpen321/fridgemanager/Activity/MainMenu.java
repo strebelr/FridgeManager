@@ -116,6 +116,8 @@ public class MainMenu extends AppCompatActivity {
             case R.id.menu_decrease:
                     menu_decrease();
                 break;
+            case R.id.menu_help:
+                    menu_showInstruction();
         }
         return true;
     }
@@ -274,6 +276,11 @@ public class MainMenu extends AppCompatActivity {
         alert.setCanceledOnTouchOutside(false);
 
         alert.show();
+    }
+
+    private void menu_showInstruction() {
+        Intent i = new Intent(this,Instruction.class);//Activity to be launched For the First time
+        startActivity(i);
     }
 
     private void write_settings() {
