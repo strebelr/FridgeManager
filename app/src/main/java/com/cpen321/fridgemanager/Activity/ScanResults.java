@@ -360,7 +360,7 @@ public class ScanResults extends AppCompatActivity {
                 if (names.get(index) != null) {          // If food not removed
                     // Alarm
                     int expiry = expirys.get(index);   // Numbers of days until the expiry date.
-                    setAlarm(expiry, view, index);
+                    prepAlarm(expiry, view, index);
                     // Add food
                     writeDatabase(index, expiry);
                     // Increment food counter
@@ -374,30 +374,36 @@ public class ScanResults extends AppCompatActivity {
         }
     }
 
-    private void setAlarm(int expiry, View view, int index) {
-        //String catted =  myAlarm.concatenate(names.get(i), String.valueOf(quantities.get(i)), di.getCurrentDate(), di.getFutureDate(expiry));
+    /*
+      Decides which days the alarm will be set on and the message given
+      @param expiry
+      @param view
+      @param index
+    */
+    private void prepAlarm(int expiry, View view, int index) {
         EXPIRY_ID =  mAlarm.convertToID(di.getFutureDate(expiry));
         PRE_EXPIRY_ID =  mAlarm.convertToID(di.getFutureDate(expiry)) + 50000;
 
         if (counterID[EXPIRY_ID] == 0 || counterID[PRE_EXPIRY_ID] == 0) {
-            //set alarm with cases
+
+            //sets alarm with cases
             if (expiry > 4) {
-                mAlarm.setAlarm(mContext, view, expiry - 3, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(index));     // sends notification 3 days before expiry
+                mAlarm.setAlarm(mContext, view, expiry - 3, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(index));  // sends notification 3 days before expiry
                 mAlarm.setAlarm(mContext, view, expiry, EXPIRY_ID, EXPIRY, quantities.get(index));
             } else if (expiry <= 3 && expiry > 1) {
-                mAlarm.setAlarm(mContext, view, 1, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(index));              // sends notification the next day
+                mAlarm.setAlarm(mContext, view, 1, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(index));           // sends notification the next day
                 mAlarm.setAlarm(mContext, view, expiry, EXPIRY_ID, EXPIRY, quantities.get(index));
             } else {
-                mAlarm.setAlarm(mContext, view, expiry, EXPIRY_ID, EXPIRY, quantities.get(index));         // only send notification on the day of expiry
+                mAlarm.setAlarm(mContext, view, expiry, EXPIRY_ID, EXPIRY, quantities.get(index));              // only sends notification on the day of expiry
             }
             counterID[EXPIRY_ID] += quantities.get(index);
             counterID[PRE_EXPIRY_ID]+= quantities.get(index);
             android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
         } else {
+
             counterID[EXPIRY_ID]+= quantities.get(index);
             counterID[PRE_EXPIRY_ID]+= quantities.get(index);;
             android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
-
         }
     }
 
@@ -408,27 +414,5 @@ public class ScanResults extends AppCompatActivity {
             ti.addFoodToStorage(names.get(index), Double.parseDouble(amounts.get(index).getText().toString()), units.get(index), locations.get(index), expiry);
         }
     }
-
-
-    /*public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType, int amount) {
-        android.util.Log.i("Notification ID ", " Set ID: "+notifID);
-
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.add(Calendar.SECOND, 10);
-        //calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.add(Calendar.DAY_OF_YEAR, daysTillExpire);
-
-        android.util.Log.i("AFTER ",": " +calendar);
-
-        // Issues a new notification to be sent
-        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-        intent.putExtra("NOTIF_TYPE", alarmType);
-        intent.putExtra("ID", notifID);
-        intent.putExtra("AMOUNT", amount);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-    }*/
 
 }
