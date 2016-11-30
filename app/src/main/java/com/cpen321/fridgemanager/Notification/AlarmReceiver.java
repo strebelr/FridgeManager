@@ -46,6 +46,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentTitle(msg)
                 .setContentText(msgText)
                 .setTicker(msgAlert)
+                .setColor(0xFFC107)
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000}) // Vibration
                 .setLights(0xFFFF00, 100, 50) // LED
                 .setAutoCancel(true);

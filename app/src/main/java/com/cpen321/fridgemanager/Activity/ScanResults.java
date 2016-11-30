@@ -309,7 +309,7 @@ public class ScanResults extends AppCompatActivity {
     public static int PRE_EXPIRY_ID;
     private static final int EXPIRY = 0;        // expired
     private static final int PRE_EXPIRY = 1;    // soon to expire
-    public static double[] counterID = new double[100000];
+    public static double[] counterID = new double[400000];
 
 
     /*public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType, int amount) {
