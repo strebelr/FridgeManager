@@ -807,7 +807,7 @@ public class DatabaseInteraction {
     /*
       Read decrement decimal variable in String.
      */
-    private String getDecrementString() {
+    public String getDecrementString() {
         String config = readFile(CONF_DEST);
         config = config.substring(0,2);
         config = "0." + config;

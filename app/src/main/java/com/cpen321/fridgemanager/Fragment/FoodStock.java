@@ -27,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -242,6 +243,7 @@ public class FoodStock extends Fragment{
                         int new_index;
                         String expiry = "";
                         String location;
+                        double amount = 0.0;
                         if (index < fridge.length()) {
                             new_index = index;
                             location = "Fridge";
@@ -264,7 +266,12 @@ public class FoodStock extends Fragment{
                                 String name = fridge.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(fridge.getJSONObject(new_index), location);
                                 expiry = fridge.getJSONObject(new_index).optString("expiry");
-                                myAlarm.cancelAlarm(myContext, expiry, 1);
+
+                                if(Integer.parseInt(food.optString("unit").toString()) == DatabaseInteraction.UNIT)
+                                    amount = 1.0;
+                                else
+                                    amount = new BigDecimal(di.getDecrementString()).multiply(new BigDecimal(fridge.getJSONObject(new_index).optString("original_qty").toString())).doubleValue();
+                                myAlarm.cancelAlarm(myContext, expiry, amount);
 
                                 if(check == 1) {
                                     Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
@@ -279,7 +286,12 @@ public class FoodStock extends Fragment{
                                 String name = fresh.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(fresh.getJSONObject(new_index), location);
                                 expiry = fresh.getJSONObject(new_index).optString("expiry");
-                                myAlarm.cancelAlarm(myContext, expiry, 1);
+
+                                if(Integer.parseInt(food.optString("unit").toString()) == DatabaseInteraction.UNIT)
+                                    amount = 1.0;
+                                else
+                                    amount = new BigDecimal(di.getDecrementString()).multiply(new BigDecimal(fresh.getJSONObject(new_index).optString("original_qty").toString())).doubleValue();
+                                myAlarm.cancelAlarm(myContext, expiry, amount);
 
                                 if(check == 1) {
                                     Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
@@ -294,7 +306,12 @@ public class FoodStock extends Fragment{
                                 String name = pantry.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(pantry.getJSONObject(new_index), location);
                                 expiry = pantry.getJSONObject(new_index).optString("expiry");
-                                myAlarm.cancelAlarm(myContext, expiry, 1);
+
+                                if(Integer.parseInt(food.optString("unit").toString()) == DatabaseInteraction.UNIT)
+                                    amount = 1.0;
+                                else
+                                    amount = new BigDecimal(di.getDecrementString()).multiply(new BigDecimal(pantry.getJSONObject(new_index).optString("original_qty").toString())).doubleValue();
+                                myAlarm.cancelAlarm(myContext, expiry, amount);
 
                                 if(check == 1) {
                                     Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
@@ -308,7 +325,12 @@ public class FoodStock extends Fragment{
                             } else if (location == "Freezer") {
                                 String name = freezer.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(freezer.getJSONObject(new_index), location);
-                                myAlarm.cancelAlarm(myContext, expiry, 1);
+
+                                if(Integer.parseInt(food.optString("unit").toString()) == DatabaseInteraction.UNIT)
+                                    amount = 1.0;
+                                else
+                                    amount = new BigDecimal(di.getDecrementString()).multiply(new BigDecimal(freezer.getJSONObject(new_index).optString("original_qty").toString())).doubleValue();
+                                myAlarm.cancelAlarm(myContext, expiry, amount);
 
                                 if(check == 1) {
                                     Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
@@ -336,7 +358,7 @@ public class FoodStock extends Fragment{
                     public void onClick(View v) {
                         int index = v.getId();
                         int new_index;
-                        int amount = 0;
+                        double amount = 0.0;
                         String location;
                         String expiry = "";
                         if (index < fridge.length()) {
@@ -359,28 +381,28 @@ public class FoodStock extends Fragment{
                                 toast.show();
                                 di.removeFood(fridge.getJSONObject(new_index), location);
                                 expiry = fridge.getJSONObject(new_index).optString("expiry");
-                                amount = Integer.parseInt(fridge.getJSONObject(new_index).optString("quantity"));
+                                amount = Double.parseDouble(fridge.getJSONObject(new_index).optString("quantity"));
                                 refresh();
                             } else if (location == "Fresh") {
                                 Toast toast = Toast.makeText(getContext(), fresh.getJSONObject(new_index).optString("name") + " removed.", Toast.LENGTH_SHORT);
                                 toast.show();
                                 di.removeFood(fresh.getJSONObject(new_index), location);
                                 expiry = fresh.getJSONObject(new_index).optString("expiry");
-                                amount = Integer.parseInt(fresh.getJSONObject(new_index).optString("quantity"));
+                                amount = Double.parseDouble(fresh.getJSONObject(new_index).optString("quantity"));
                                 refresh();
                             } else if (location == "Pantry") {
                                 Toast toast = Toast.makeText(getContext(), pantry.getJSONObject(new_index).optString("name") + " removed.", Toast.LENGTH_SHORT);
                                 toast.show();
                                 di.removeFood(pantry.getJSONObject(new_index), location);
                                 expiry = pantry.getJSONObject(new_index).optString("expiry");
-                                amount = Integer.parseInt(pantry.getJSONObject(new_index).optString("quantity"));
+                                amount = Double.parseDouble(pantry.getJSONObject(new_index).optString("quantity"));
                                 refresh();
                             } else if (location == "Freezer") {
                                 Toast toast = Toast.makeText(getContext(), freezer.getJSONObject(new_index).optString("name") + " removed.", Toast.LENGTH_SHORT);
                                 toast.show();
                                 di.removeFood(freezer.getJSONObject(new_index), location);
                                 expiry = freezer.getJSONObject(new_index).optString("expiry");
-                                amount = Integer.parseInt(freezer.getJSONObject(new_index).optString("quantity"));
+                                amount = Double.parseDouble(freezer.getJSONObject(new_index).optString("quantity"));
                                 refresh();
                             }
                         } catch (JSONException e) {}

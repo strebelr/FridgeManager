@@ -16,7 +16,7 @@ import static android.content.Context.ALARM_SERVICE;
 public class Alarm extends Fragment {
 
     // TODO:  MSG. WHAT HAPPENS IF JANUARY 31 AND DAY IS ADDED
-    public void setAlarm(Context context, View view, int daysTillExpire, int notifID, int alarmType, int amount) {
+    public void setAlarm(Context context, View view, int daysTillExpire, int notifID, int alarmType, double amount) {
         android.util.Log.i("Notification ID ", " Set ID: "+notifID);
 
         Calendar calendar = Calendar.getInstance();
@@ -37,12 +37,12 @@ public class Alarm extends Fragment {
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
-    public void cancelAlarm(Context context, String expiry, int amount) {
+    public void cancelAlarm(Context context, String expiry, double amount) {
         int EXPIRY_ID = Alert.convertToID(expiry);
         int PRE_EXPIRY_ID = Alert.convertToID(expiry) + 50000;
         //android.util.Log.i("Notification ID", " IDs are set: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
 
-        if (ScanResults.counterID[EXPIRY_ID] == amount || ScanResults.counterID[PRE_EXPIRY_ID] == amount) {
+        if (ScanResults.counterID[EXPIRY_ID] <= amount || ScanResults.counterID[PRE_EXPIRY_ID] <= amount) {
             Intent myIntent = new Intent(context, AlarmReceiver.class);
             PendingIntent pendingIntent1 = PendingIntent.getBroadcast(context, EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             PendingIntent pendingIntent2 = PendingIntent.getBroadcast(context, PRE_EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -55,14 +55,14 @@ public class Alarm extends Fragment {
             pendingIntent1.cancel();
             pendingIntent2.cancel();
 
-            ScanResults.counterID[EXPIRY_ID] -= amount;
-            ScanResults.counterID[PRE_EXPIRY_ID] -= amount;
+            ScanResults.counterID[EXPIRY_ID] = 0.0;//amount;
+            ScanResults.counterID[PRE_EXPIRY_ID] = 0.0;//amount;
 
             android.util.Log.i("Notification ID", " Cancelled ID: " + EXPIRY_ID + " and " + PRE_EXPIRY_ID);
             android.util.Log.i("Notification ID", " ID Remaining: " + ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
 
         } else {
-            if (ScanResults.counterID[EXPIRY_ID] > 0 || ScanResults.counterID[PRE_EXPIRY_ID] > 0) {
+            if (ScanResults.counterID[EXPIRY_ID] > 0.0 || ScanResults.counterID[PRE_EXPIRY_ID] > 0.0) {
                 ScanResults.counterID[EXPIRY_ID] -= amount;
                 ScanResults.counterID[PRE_EXPIRY_ID] -= amount;
                 android.util.Log.i("Notification ID", " Decrease from counter ID: " + EXPIRY_ID + " and " + PRE_EXPIRY_ID);

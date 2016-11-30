@@ -173,24 +173,24 @@ public class AddFoodToFoodStock extends Fragment {
         EXPIRY_ID = myAlarm.convertToID(di.getFutureDate(difference));
         PRE_EXPIRY_ID = myAlarm.convertToID(di.getFutureDate(difference)) + 50000;
 
-        if(counterID[EXPIRY_ID] == 0 || counterID[PRE_EXPIRY_ID] == 0) {
+        if(counterID[EXPIRY_ID] == 0.0 || counterID[PRE_EXPIRY_ID] == 0.0) {
             //set alarm with cases
             if(difference > 4) {
-                myAlarm.setAlarm(myContext, view, difference - 3, PRE_EXPIRY_ID, PRE_EXPIRY, (int)amount);     // sends notification 3 days before expiry
-                myAlarm.setAlarm(myContext, view, difference, EXPIRY_ID, EXPIRY, (int)amount);
+                myAlarm.setAlarm(myContext, view, difference - 3, PRE_EXPIRY_ID, PRE_EXPIRY, amount);     // sends notification 3 days before expiry
+                myAlarm.setAlarm(myContext, view, difference, EXPIRY_ID, EXPIRY, amount);
             } else if (difference <= 3 && difference > 1) {
-                myAlarm.setAlarm(myContext, view, 1, PRE_EXPIRY_ID, PRE_EXPIRY, (int)amount);              // sends notification the next day
-                myAlarm.setAlarm(myContext, view, difference, EXPIRY_ID, EXPIRY, (int)amount);
+                myAlarm.setAlarm(myContext, view, 1, PRE_EXPIRY_ID, PRE_EXPIRY, amount);              // sends notification the next day
+                myAlarm.setAlarm(myContext, view, difference, EXPIRY_ID, EXPIRY, amount);
             } else {
-                myAlarm.setAlarm(myContext, view, difference, EXPIRY_ID, EXPIRY, (int)amount);         // only send notification on the day of expiry
+                myAlarm.setAlarm(myContext, view, difference, EXPIRY_ID, EXPIRY, amount);         // only send notification on the day of expiry
             }
-            counterID[EXPIRY_ID]+= (int)amount;
-            counterID[PRE_EXPIRY_ID]+= (int)amount;
+            counterID[EXPIRY_ID]+= amount;
+            counterID[PRE_EXPIRY_ID]+= amount;
             android.util.Log.i("Notification ID", " ID Remaining: "+counterID[EXPIRY_ID] +" and "+counterID[PRE_EXPIRY_ID]);
         }
         else {
-            counterID[EXPIRY_ID]+= (int)amount;
-            counterID[PRE_EXPIRY_ID]+= (int)amount;
+            counterID[EXPIRY_ID]+= amount;
+            counterID[PRE_EXPIRY_ID]+= amount;
             android.util.Log.i("Notification ID", " ID Remaining: "+counterID[EXPIRY_ID] +" and "+counterID[PRE_EXPIRY_ID]);
 
         }
