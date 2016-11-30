@@ -287,6 +287,25 @@ public class DatabaseInteractionTest{
         int daysToExpire = 4;
         JSONArray sortedFood = (JSONArray) method.invoke(di, root_before, daysToExpire);
         assertEquals(expectedSort.toString(), sortedFood.toString());
+    }
+
+    @Test
+    public void daysToExpire_test() throws Exception {
+        // Reflection
+        Method method = DatabaseInteraction.class.getDeclaredMethod("daysToExpire", JSONObject.class);
+        method.setAccessible(true);
+
+        // Input Test Case
+        long millisPerDay = (24 * 60 * 60 * 1000);
+        long dayDiff = 10;
+        Calendar actDate = Calendar.getInstance();
+        Calendar spinachDate = Calendar.getInstance();
+        spinachDate.setTimeInMillis(actDate.getTimeInMillis()+ millisPerDay * dayDiff);
+
+        String spinach = "{\"name\":\"Spinach\",\"bought\":\"20-11-2016\",\"expiry\":\"" + spinachDate.get(Calendar.DAY_OF_MONTH) + "-" + (spinachDate.get(Calendar.MONTH)+1) + "-" + spinachDate.get(Calendar.YEAR) + "\",\"quantity\":1,\"original_qty\":1,\"unit\":0,\"location\":\"Fridge\"}";
+
+        //Test
+        assertEquals(dayDiff,  (int)method.invoke(di, new JSONObject(spinach)));
 
     }
 

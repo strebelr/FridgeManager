@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class DatabaseInteraction {
     Context context;
@@ -659,7 +660,7 @@ public class DatabaseInteraction {
         
         int dayDiff = daysToExpire(food);
         
-        return ( (dayDiff - DaysToExpiryDate) < 0 );
+        return ( (dayDiff - DaysToExpiryDate) <= 0 );
     }
 
         /*
@@ -669,6 +670,8 @@ public class DatabaseInteraction {
      */
     private  int daysToExpire(JSONObject food) throws ParseException {
         Calendar actDate = Calendar.getInstance();
+        TimeZone myZone = TimeZone.getDefault();
+        long offsetUTC = myZone.getRawOffset();
 
         Calendar expDate = Calendar.getInstance();
         String expiryDate = food.optString("expiry");
@@ -676,11 +679,14 @@ public class DatabaseInteraction {
         Date date = formatter.parse(expiryDate);
         expDate.setTime(date);
 
-        long today = actDate.getTimeInMillis();
-        long expiry = expDate.getTimeInMillis();
         long millisPerDay = (24 * 60 * 60 * 1000);
-        long daydiff = (expiry - today) / millisPerDay;
-        return (int)daydiff;
+        long today = actDate.getTimeInMillis() + offsetUTC;
+        long daysToday = today /millisPerDay;
+
+        long expiry = expDate.getTimeInMillis() + offsetUTC;
+        long daysExpiry = expiry /millisPerDay;
+
+        return (int)(daysExpiry-daysToday);
     }
 
     /*
