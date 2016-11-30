@@ -32,7 +32,7 @@
             ></activity>
 
         /* Alarms */
-        <receiver android:name=".Notification.AlertReceiver"/>
+        <receiver android:name=".Notification.AlarmReceiver"/>
 
         /* Instruction */
         <activity android:name=".Activity.Instruction"/>

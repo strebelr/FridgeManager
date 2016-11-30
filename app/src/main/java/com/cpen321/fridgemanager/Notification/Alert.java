@@ -13,7 +13,7 @@ public class Alert extends AppCompatActivity {
 
     public void cancelAlarm(int notifID) {
 
-        Intent myIntent = new Intent(this, AlertReceiver.class);
+        Intent myIntent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notifID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 
@@ -39,7 +39,7 @@ public class Alert extends AppCompatActivity {
         android.util.Log.i("AFTER ",": " +calendar);
 
         // Issues a new notification to be sent
-        Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
         intent.putExtra("NOTIF_TYPE", alarmType);
         intent.putExtra("ID", notifID);
         intent.putExtra("AMOUNT", amount);

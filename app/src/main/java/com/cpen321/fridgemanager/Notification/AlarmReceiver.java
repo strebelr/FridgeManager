@@ -14,14 +14,14 @@ import com.cpen321.fridgemanager.Activity.MainMenu;
 import com.cpen321.fridgemanager.Activity.ScanResults;
 import com.cpen321.fridgemanager.R;
 
-public class AlertReceiver extends BroadcastReceiver {
+public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int msgType = intent.getIntExtra("NOTIF_TYPE", 0);
         int uniqueID = intent.getIntExtra("ID", 0);
 
         String msgExpire = "Your food has expired!"; //foodName + " has expired";
-        String msgSoonExpire = "Your food is expiring!"; //foodName + " is expiring soon!";
+        String msgSoonExpire = "Your food is about to expire!"; //foodName + " is expiring soon!";
 
         if (msgType == 0) {
             createNotification(context, "Fridge Manager", msgExpire, "Alert", uniqueID);

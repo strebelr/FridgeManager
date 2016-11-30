@@ -1,8 +1,6 @@
 package com.cpen321.fridgemanager.Activity;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,8 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
-import com.cpen321.fridgemanager.Notification.Alert;
-import com.cpen321.fridgemanager.Notification.AlertReceiver;
+import com.cpen321.fridgemanager.Notification.Alarm;
 import com.cpen321.fridgemanager.OcrReader.OcrCaptureActivity;
 import com.cpen321.fridgemanager.R;
 import com.cpen321.fridgemanager.Algorithm.TextRecognitionInteraction;
@@ -29,16 +26,11 @@ import com.cpen321.fridgemanager.Algorithm.TextRecognitionInteraction;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Random;
-import java.util.Vector;
 
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-public class ScanResults extends Alert {
+public class ScanResults extends AppCompatActivity {
     // Initial Texts
     private ArrayList<String> texts = new ArrayList<String>();
 
@@ -58,10 +50,16 @@ public class ScanResults extends Alert {
 
     private DatabaseInteraction di;
 
+    private Context myContext;
+    private Alarm myAlarm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_result);
+
+        myContext = getApplicationContext();
+        myAlarm = new Alarm();
 
         ti = new TextRecognitionInteraction(getApplicationContext());
         di = new DatabaseInteraction(getApplicationContext());
@@ -252,27 +250,27 @@ public class ScanResults extends Alert {
                     int expiry = expiries.get(i);   // Numbers of days until the expiry date.
                     // TODO: CALL ALARM FROM HERE
 
-                    String catted = concatenate(names.get(i), String.valueOf(quantities.get(i)), di.getCurrentDate(), di.getFutureDate(expiry));
-                    EXPIRY_ID = convertToID(catted);
-                    PRE_EXPIRY_ID = convertToID(catted) + 50000;
+                    //String catted =  myAlarm.concatenate(names.get(i), String.valueOf(quantities.get(i)), di.getCurrentDate(), di.getFutureDate(expiry));
+                    EXPIRY_ID =  myAlarm.convertToID(di.getFutureDate(expiry));
+                    PRE_EXPIRY_ID =  myAlarm.convertToID(di.getFutureDate(expiry)) + 50000;
 
                     if (counterID[EXPIRY_ID] == 0 || counterID[PRE_EXPIRY_ID] == 0) {
                         //set alarm with cases
                         if (expiry > 4) {
-                            setAlarm(view, expiry - 3, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(i));     // sends notification 3 days before expiry
-                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY, quantities.get(i));
+                            myAlarm.setAlarm(myContext, view, expiry - 3, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(i));     // sends notification 3 days before expiry
+                            myAlarm.setAlarm(myContext, view, expiry, EXPIRY_ID, EXPIRY, quantities.get(i));
                         } else if (expiry <= 3 && expiry > 1) {
-                            setAlarm(view, 1, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(i));              // sends notification the next day
-                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY, quantities.get(i));
+                            myAlarm.setAlarm(myContext, view, 1, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(i));              // sends notification the next day
+                            myAlarm.setAlarm(myContext, view, expiry, EXPIRY_ID, EXPIRY, quantities.get(i));
                         } else {
-                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY, quantities.get(i));         // only send notification on the day of expiry
+                            myAlarm.setAlarm(myContext, view, expiry, EXPIRY_ID, EXPIRY, quantities.get(i));         // only send notification on the day of expiry
                         }
                         counterID[EXPIRY_ID] += quantities.get(i);
                         counterID[PRE_EXPIRY_ID]+= quantities.get(i);
                         android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
                     } else {
                         counterID[EXPIRY_ID]+= quantities.get(i);
-                        counterID[PRE_EXPIRY_ID]+= quantities.get(i);
+                        counterID[PRE_EXPIRY_ID]+= quantities.get(i);;
                         android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
 
                     }
@@ -309,5 +307,27 @@ public class ScanResults extends Alert {
     private static final int EXPIRY = 0;        // expired
     private static final int PRE_EXPIRY = 1;    // soon to expire
     public static int[] counterID = new int[100000];
+
+
+    /*public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType, int amount) {
+        android.util.Log.i("Notification ID ", " Set ID: "+notifID);
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.add(Calendar.SECOND, 10);
+        //calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.add(Calendar.DAY_OF_YEAR, daysTillExpire);
+
+        android.util.Log.i("AFTER ",": " +calendar);
+
+        // Issues a new notification to be sent
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        intent.putExtra("NOTIF_TYPE", alarmType);
+        intent.putExtra("ID", notifID);
+        intent.putExtra("AMOUNT", amount);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }*/
 
 }
