@@ -1,7 +1,7 @@
 package com.cpen321.fridgemanager;
 
+import android.annotation.TargetApi;
 import android.content.Context;
-import android.provider.ContactsContract;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
 
@@ -21,8 +21,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
@@ -239,6 +241,53 @@ public class DatabaseInteractionTest{
         // Test
         assertEquals("Fail: When removing from empty", exp_root1, (JSONObject) method.invoke(di, "", "Foods", element));
         assertEquals("Fail: When removing", exp_root2, ((JSONObject) method.invoke(di, root_before, "Foods", element)).toString());
+    }
+
+    @Test
+    public void getSortedExpiry_test() throws  Exception {
+        // Reflection
+        Method method = DatabaseInteraction.class.getDeclaredMethod("getSortedExpiry", String.class, int.class);
+        method.setAccessible(true);
+
+        // Input Test Case
+        long millisPerDay = (24 * 60 * 60 * 1000);
+        Calendar actDate = Calendar.getInstance();
+
+        Calendar spinachDate = Calendar.getInstance();
+        spinachDate.setTimeInMillis(actDate.getTimeInMillis()+ millisPerDay * 1);
+
+        Calendar peaDate = Calendar.getInstance();
+        peaDate.setTimeInMillis(actDate.getTimeInMillis()+ millisPerDay * 2);
+
+        Calendar zucchiniDate = Calendar.getInstance();
+        zucchiniDate.setTimeInMillis(actDate.getTimeInMillis()+ millisPerDay * 3);
+
+        Calendar codDate = Calendar.getInstance();
+        codDate.setTimeInMillis(actDate.getTimeInMillis()+ millisPerDay * 4);
+
+        Calendar porkDate = Calendar.getInstance();
+        porkDate.setTimeInMillis(actDate.getTimeInMillis()+ millisPerDay * 5);
+
+        String spinach = "{\"name\":\"Spinach\",\"bought\":\"20-11-2016\",\"expiry\":\"" + spinachDate.get(Calendar.DAY_OF_MONTH) + "-" + (spinachDate.get(Calendar.MONTH)+1) + "-" + spinachDate.get(Calendar.YEAR) + "\",\"quantity\":1,\"original_qty\":1,\"unit\":0,\"location\":\"Fridge\"}";
+        String pea = "{\"name\":\"pea\",\"bought\":\"30-11-2016\",\"expiry\":\"" + peaDate.get(Calendar.DAY_OF_MONTH) + "-" + (peaDate.get(Calendar.MONTH)+1) + "-" + peaDate.get(Calendar.YEAR) + "\",\"quantity\":1,\"original_qty\":1,\"unit\":0,\"location\":\"Fresh\"}";
+        String zucchini = "{\"name\":\"Zucchini\",\"bought\":\"30-11-2016\",\"expiry\":\"" + zucchiniDate.get(Calendar.DAY_OF_MONTH) + "-" + (zucchiniDate.get(Calendar.MONTH)+1) + "-" + zucchiniDate.get(Calendar.YEAR) + "\",\"quantity\":1,\"original_qty\":1,\"unit\":0,\"location\":\"Fridge\"}";
+        String cod = "{\"name\":\"Cod\",\"bought\":\"30-11-2016\",\"expiry\":\"" + codDate.get(Calendar.DAY_OF_MONTH) + "-" + (codDate.get(Calendar.MONTH)+1) + "-" + codDate.get(Calendar.YEAR) + "\",\"quantity\":1,\"original_qty\":1,\"unit\":0,\"location\":\"Fridge\"}";
+        String pork ="{\"name\":\"Pork\",\"bought\":\"30-11-2016\",\"expiry\":\"" + porkDate.get(Calendar.DAY_OF_MONTH) + "-" + (porkDate.get(Calendar.MONTH)+1) + "-" + porkDate.get(Calendar.YEAR) + "\",\"quantity\":1,\"original_qty\":1,\"unit\":0,\"location\":\"Fridge\"}";
+        String root_before = "{\"Fridge\":[" + zucchini + "," + spinach + "," + pork + "," + cod + "],\"Fresh\":[" + pea + "],\"Pantry\":[],\"Freezer\":[]}";
+
+        //Expected Value
+        JSONArray expectedSort = new JSONArray();
+        expectedSort.put(new JSONObject(spinach));
+        expectedSort.put(new JSONObject(pea));
+        expectedSort.put(new JSONObject(zucchini));
+        expectedSort.put(new JSONObject(cod));
+
+
+        //Test
+        int daysToExpire = 4;
+        JSONArray sortedFood = (JSONArray) method.invoke(di, root_before, daysToExpire);
+        assertEquals(expectedSort.toString(), sortedFood.toString());
+
     }
 
 }

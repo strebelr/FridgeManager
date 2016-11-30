@@ -10,9 +10,6 @@ import android.view.View;
 import java.util.Calendar;
 //This class is currently unused
 public class Alert extends AppCompatActivity {
-    /*public Alert() {
-
-    }*/
 
     public void cancelAlarm(int notifID) {
 
@@ -33,10 +30,10 @@ public class Alert extends AppCompatActivity {
     public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType) {
         android.util.Log.i("Notification ID ", " Set ID: "+notifID);
 
-        Calendar calendar = Calendar.getInstance();     // possible redundancy here
+        Calendar calendar = Calendar.getInstance();
 
         calendar.add(Calendar.SECOND, 10);
-        //calendar.set(Calendar.HOUR_OF_DAY, 18);
+        //calendar.set(Calendar.HOUR_OF_DAY, 12);
         calendar.add(Calendar.DAY_OF_YEAR, daysTillExpire);
 
         android.util.Log.i("AFTER ",": " +calendar);
@@ -44,13 +41,14 @@ public class Alert extends AppCompatActivity {
         // Issues a new notification to be sent
         Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
         intent.putExtra("NOTIF_TYPE", alarmType);
+        intent.putExtra("ID", notifID);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
     public static String concatenate(String name, String quantity, String bought, String expiry) {
-        String cat = name + quantity; //+ bought + expiry;
+        String cat = expiry;    // decides encoding
         return cat;
     }
 
@@ -62,4 +60,5 @@ public class Alert extends AppCompatActivity {
         }
         return ID;
     }
+
 }

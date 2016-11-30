@@ -1,6 +1,9 @@
 package com.cpen321.fridgemanager.Activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,7 +12,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
 import com.cpen321.fridgemanager.Fragment.AddFoodToFoodStockMain;
@@ -35,11 +46,16 @@ public class MainMenu extends AppCompatActivity {
             R.drawable.ic_plus
     };
 
+    // Fragments
     private FoodStock foodstock;
     private FoodToExpire foodtoexpire;
     private AddFoodToFoodStockMain addFoodToFoodStockMain;
 
-    DatabaseInteraction di;
+    // Settings Value
+    private int decrement_percent = 20;
+    private int expiry_warning = 3;
+
+    DatabaseInteraction di; // Database Interaction Initialization
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +84,7 @@ public class MainMenu extends AppCompatActivity {
         di.setUp();
 
         /* Uncomment to use Instruction page */
-        /*SharedPreferences settings = getSharedPreferences("prefs",0);
+        SharedPreferences settings = getSharedPreferences("prefs",0);
         boolean firstRun = settings.getBoolean("firstRun",false);
         if(firstRun == false)//if running for first time
         {
@@ -78,8 +94,33 @@ public class MainMenu extends AppCompatActivity {
             Intent i = new Intent(this,Instruction.class);//Activity to be launched For the First time
             startActivity(i);
             finish();
-        }*/
+        }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // TODO Auto-generated method stub
+
+        MenuInflater menuINF = getMenuInflater();
+        menuINF.inflate(R.menu.menu_toolbar, menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_daysToExpire:
+                    menu_daysToExpiry();
+                break;
+            case R.id.menu_decrease:
+                    menu_decrease();
+                break;
+            case R.id.menu_help:
+                    menu_showInstruction();
+        }
+        return true;
     }
 
     @Override
@@ -141,7 +182,118 @@ public class MainMenu extends AppCompatActivity {
             di.fixStack();
             foodstock.refresh();
             foodtoexpire.refresh();
+            Toast toast = Toast.makeText(getApplicationContext(), "Undo Success!", Toast.LENGTH_SHORT);
+            toast.show();
         }
+        else {
+            Toast toast = Toast.makeText(getApplicationContext(), "No more to undo", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    public void menu_decrease() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setCancelable(true);
+        builder.setTitle("Select Food Decrement Percentage");
+
+        final CharSequence[] items = { "10%", "20%", "25%", "50%" };
+
+        builder.setSingleChoiceItems(items, -1,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        switch(item)
+                        {
+                            case 0:
+                                decrement_percent = 10;
+                                break;
+                            case 1:
+                                decrement_percent = 20;
+                                break;
+                            case 2:
+                                decrement_percent = 25;
+                                break;
+                            case 3:
+                                decrement_percent = 50;
+                                break;
+                        }
+                    }
+                });
+
+        builder.setPositiveButton(
+                "Confirm",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                        expiry_warning = di.getExpiry();
+                        write_settings();
+                    }
+                });
+        builder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
+    }
+
+    private void menu_daysToExpiry() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setCancelable(true);
+        builder.setTitle("Enter Days to Show in Food to Expire");
+
+        final NumberPicker numberPicker = new NumberPicker(getApplicationContext());
+        numberPicker.setMaxValue(31);
+        numberPicker.setMinValue(1);
+
+        builder.setPositiveButton(
+                "Confirm",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        expiry_warning = Integer.parseInt(String.valueOf(numberPicker.getValue()));
+                        decrement_percent = di.getDecrementPercent();
+                        dialog.dismiss();
+                        write_settings();
+                    }
+                });
+        builder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+
+
+        alert.setView(numberPicker, 75, 30, 75, 10);
+        alert.setCanceledOnTouchOutside(false);
+
+        alert.show();
+    }
+
+    private void menu_showInstruction() {
+        Intent i = new Intent(this,Instruction.class);//Activity to be launched For the First time
+        startActivity(i);
+    }
+
+    private void write_settings() {
+        String conf = "";
+        if(expiry_warning < 10) {
+            conf = decrement_percent + "0" + expiry_warning;
+        }
+        else {
+            conf = "" + decrement_percent + expiry_warning;
+        }
+        di.writeConfig(conf);
+        foodtoexpire.refresh();
     }
 
 }

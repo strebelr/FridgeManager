@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,6 +33,7 @@ public class DatabaseInteraction {
     private final static int LIBRARY_DEST = 1;
     private final static int ASSETS_DEST = 2;
     private final static int UNDO_DEST = 3;
+    private final static int CONF_DEST = 4;
 
     // Defined variables to select unit encoded in integers
     public final static int UNIT = 0;
@@ -39,9 +41,6 @@ public class DatabaseInteraction {
     public final static int KG = 2;
     public final static int L = 3;
     public final static int CUP = 4;
-
-    // Decrement Percentage
-    private final static double DECREMENT_P = 0.20;
 
     // Remove or Decrement Select
     private final static String DEC_SEL = "dec";
@@ -52,6 +51,7 @@ public class DatabaseInteraction {
     private final static String library = "library.json";
     private final static String undo_stack = "undo_stack.json";
     private final static String default_lib = "default_library.json"; // Default library in assets
+    private final static String config = "config.txt"; // Settings file
 
     /*
       Default constructor
@@ -69,6 +69,7 @@ public class DatabaseInteraction {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
             write(outputStreamWriter, makeRoot().toString());
         } catch (FileNotFoundException e) {}
+        writeConfig("2500");
     }
 
     /*
@@ -236,7 +237,7 @@ public class DatabaseInteraction {
                 boolean remove = true; // Keeps track of if item has been removed already
                 for(int i = 0; i < jsonArray.length(); i++) {
                     if(!(toAdd.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
-                            !(toAdd.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
+                            !(toAdd.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) ||
                             !(toAdd.optString("expiry").toString().equals(jsonArray.getJSONObject(i).optString("expiry").toString())) ||
                             !remove) { // If item doesn't match
                             newArray.put(jsonArray.get(i)); // Add item to new array
@@ -307,7 +308,7 @@ public class DatabaseInteraction {
             return Double.parseDouble(food.optString("quantity").toString()) == 1;
         }
         else {
-            return Double.parseDouble(food.optString("quantity").toString()) == DECREMENT_P * Double.parseDouble(food.optString("original_qty").toString());
+            return Double.parseDouble(food.optString("quantity").toString()) <= new BigDecimal(getDecrementString()).multiply(new BigDecimal(food.optString("original_qty").toString())).doubleValue();
         }
     }
 
@@ -344,7 +345,7 @@ public class DatabaseInteraction {
                 boolean remove = true; // Keeps track of if item has been removed already
                 for(int i = 0; i < jsonArray.length(); i++) {
                     if(!(element.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
-                            !(element.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
+                            !(element.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) ||
                             !(element.optString("quantity").toString().equals(jsonArray.getJSONObject(i).optString("quantity").toString())) ||
                             !remove) { // If item doesn't match
                         newArray.put(jsonArray.get(i)); // Add item to new array
@@ -354,14 +355,12 @@ public class DatabaseInteraction {
                         stack = new JSONObject();
                         decrement.put("name", jsonArray.getJSONObject(i).optString("name").toString());
                         stack.put("name", jsonArray.getJSONObject(i).optString("name").toString());
-                        decrement.put("bought", jsonArray.getJSONObject(i).optString("bought").toString());
-                        stack.put("bought", jsonArray.getJSONObject(i).optString("bought").toString());
                         decrement.put("expiry", jsonArray.getJSONObject(i).optString("expiry").toString());
                         stack.put("expiry", jsonArray.getJSONObject(i).optString("expiry").toString());
                         if (Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()) == UNIT)
                             new_qty = Integer.parseInt(jsonArray.getJSONObject(i).optString("quantity").toString()) - 1;
                         else
-                            new_qty = Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()) - DECREMENT_P * Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString());
+                            new_qty = new BigDecimal(jsonArray.getJSONObject(i).optString("quantity").toString()).subtract(new BigDecimal(getDecrementString()).multiply(new BigDecimal(jsonArray.getJSONObject(i).optString("original_qty").toString()))).doubleValue();
                         decrement.put("quantity", new_qty);
                         stack.put("quantity", Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()));
                         decrement.put("original_qty", Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()));
@@ -430,7 +429,7 @@ public class DatabaseInteraction {
                 boolean remove = true; // Keeps track of if item has been removed already
                 for(int i = 0; i < jsonArray.length(); i++) {
                     if(!(element.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
-                            !(element.optString("bought").toString().equals(jsonArray.getJSONObject(i).optString("bought").toString())) ||
+                            !(element.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) ||
                             !(element.optString("quantity").toString().equals(jsonArray.getJSONObject(i).optString("quantity").toString())) ||
                             !remove) { // If item doesn't match
                         newArray.put(jsonArray.get(i)); // Add item to new array
@@ -466,13 +465,46 @@ public class DatabaseInteraction {
      */
     public void writeToStorage(String name, double quantity, int unit, String location, int expiry) {
         // Create the element
-        JSONObject element = create(name, quantity, unit, expiry, location);
+        JSONObject element = create(name, quantity, quantity, unit, expiry, location);
 
         // Get the root JSON String from File
         String jsonRoot = readFile(STORAGE_DEST);
 
-        try{ // Output the new JSON Root Object to File
+        try {
+            // Make a JSON Object from root String
+            JSONObject jsonRootObject = new JSONObject(jsonRoot);
+            // Get the JSON Array containing "Foods"
+            JSONArray jsonArray = jsonRootObject.optJSONArray(location);
+
+            // Remove duplicate
+            for (int i = 0; i < jsonArray.length(); i++) {
+                if ((element.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString()))  &&
+                (element.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) &&
+                (element.optString("expiry").toString().equals(jsonArray.getJSONObject(i).optString("expiry").toString())) )
+                {
+                    element = create(name, new BigDecimal(element.optString("quantity").toString()).add(new BigDecimal(jsonArray.getJSONObject(i).optString("quantity").toString())).doubleValue(),
+                            new BigDecimal(element.optString("original_qty").toString()).add(new BigDecimal(jsonArray.getJSONObject(i).optString("original_qty").toString())).doubleValue(),
+                            unit, expiry, location);
+                    removeFood(jsonArray.getJSONObject(i), location);
+                    jsonRoot = readFile(STORAGE_DEST);
+                    break;
+                }
+            }
+        } catch (JSONException e) {}
+
+        try {
+            // Output the new JSON Root Object to File
             write(new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE)), add_to_root(element, jsonRoot, location));
+        } catch (FileNotFoundException e) {}
+    }
+
+    /*
+      Overwrite the config file with new variables.
+      @param settings keys to overwrite
+     */
+    public void writeConfig(String conf) {
+        try {
+            write(new OutputStreamWriter(context.openFileOutput(config, Context.MODE_PRIVATE)), conf);
         } catch (FileNotFoundException e) {}
     }
 
@@ -488,17 +520,16 @@ public class DatabaseInteraction {
       @param expiry days until it expires
       @returns JSONObject with given attributes
      */
-    private JSONObject create(String name, double quantity, int unit, int expiry, String location) {
+    private JSONObject create(String name, double quantity, double original_qty, int unit, int expiry, String location) {
         // Create a new JSON Object
         JSONObject element = new JSONObject();
         String date = getCurrentDate();
         String expiry_date = getFutureDate(expiry);
         try {
             element.put("name", name);
-            element.put("bought", date);
             element.put("expiry", expiry_date);
             element.put("quantity", quantity);
-            element.put("original_qty", quantity);
+            element.put("original_qty", original_qty);
             element.put("unit", unit);
             element.put("location", location);
         } catch (JSONException e) {}
@@ -580,14 +611,14 @@ public class DatabaseInteraction {
 
     public JSONArray getSortedExpiryArray() throws JSONException, ParseException {
         String root = readFile(STORAGE_DEST);
-        return getSortedExpiry(root);
+        return getSortedExpiry(root, getExpiry());
     }
 
     /*
       @param root of the database
       @returns JSONArray containing all food items which are close to expiry sorted by expiry date
      */
-    private JSONArray getSortedExpiry(String root) throws JSONException, ParseException {
+    private JSONArray getSortedExpiry(String root, int expiry) throws JSONException, ParseException {
 
         JSONArray fridge = extractArray(root, "Fridge");
         JSONArray freezer = extractArray(root, "Freezer");
@@ -600,7 +631,7 @@ public class DatabaseInteraction {
 
         for (int i = 0; i < closeToExpiry.length(); i++) {
             JSONObject food = closeToExpiry.getJSONObject(i);
-            if (foodToExpire(food))
+            if (foodToExpire(food, expiry))
                 sortedList.add(new ExpDateJSON(daysToExpire(food), food ));
         }
         Collections.sort(sortedList);
@@ -618,12 +649,12 @@ public class DatabaseInteraction {
       @param JSONObject which should be compared
       @returns 0 for not close to expiry, 1 for close to expiry
      */
-    public boolean foodToExpire(JSONObject food) throws ParseException {
-        int DaysToExpiryDate = 3;
+    public boolean foodToExpire(JSONObject food, int expiry) throws ParseException {
+        int DaysToExpiryDate = expiry;
         
         int dayDiff = daysToExpire(food);
         
-        return ( (dayDiff - DaysToExpiryDate) <= 0 );
+        return ( (dayDiff - DaysToExpiryDate) < 0 );
     }
 
         /*
@@ -642,9 +673,9 @@ public class DatabaseInteraction {
 
         long today = actDate.getTimeInMillis();
         long expiry = expDate.getTimeInMillis();
-        int millisPerDay = (24 * 60 * 60 * 1000);
-        
-        return (int) (expiry - today) / millisPerDay;
+        long millisPerDay = (24 * 60 * 60 * 1000);
+        long daydiff = (expiry - today) / millisPerDay;
+        return (int)daydiff;
     }
 
     /*
@@ -728,6 +759,13 @@ public class DatabaseInteraction {
             } catch (IOException e) {
             }
         }
+        else if (destination == CONF_DEST) {
+            try {
+                isr = new InputStreamReader(context.openFileInput(config));
+                return read(isr);
+            } catch (IOException e) {
+            }
+        }
 
         return "";
     }
@@ -754,6 +792,34 @@ public class DatabaseInteraction {
         } catch (IOException e) {}
 
         return root;
+    }
+
+    /*
+      Read decrement decimal variable in String.
+     */
+    private String getDecrementString() {
+        String config = readFile(CONF_DEST);
+        config = config.substring(0,2);
+        config = "0." + config;
+        return config;
+    }
+
+    /*
+      Read decrement percentage variable in int.
+    */
+    public int getDecrementPercent() {
+        String config = readFile(CONF_DEST);
+        config = config.substring(0,2);
+        return Integer.parseInt(config);
+    }
+
+    /*
+      Read food to expire variable.
+    */
+    public int getExpiry() {
+        String config = readFile(CONF_DEST);
+        config = config.substring(2,4);
+        return Integer.parseInt(config);
     }
 
     /*

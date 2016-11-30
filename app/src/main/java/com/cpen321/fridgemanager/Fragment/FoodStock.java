@@ -1,8 +1,10 @@
 package com.cpen321.fridgemanager.Fragment;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cpen321.fridgemanager.Activity.ScanResults;
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
@@ -36,8 +39,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static android.content.Context.ALARM_SERVICE;
-import static com.cpen321.fridgemanager.Activity.ScanResults.ID;
 
 
 public class FoodStock extends Fragment{
@@ -80,7 +81,6 @@ public class FoodStock extends Fragment{
 
         di = new DatabaseInteraction(getContext());
 
-        //alert = new Alert();
         refresh();
 
         // Inflate the layout for this fragment
@@ -237,6 +237,7 @@ public class FoodStock extends Fragment{
                     public void onClick(View v) {
                         int index = v.getId();
                         int new_index;
+                        String expiry = "";
                         String location;
                         if (index < fridge.length()) {
                             new_index = index;
@@ -257,16 +258,60 @@ public class FoodStock extends Fragment{
 
                         try {
                             if (location == "Fridge") {
+                                String name = fridge.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(fridge.getJSONObject(new_index), location);
+                                if(check == 1) {
+                                    expiry = fridge.getJSONObject(new_index).optString("expiry");
+                                    cancelAlarm(expiry);
+                                    Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                                else {
+                                    Toast toast = Toast.makeText(getContext(), name + " decremented.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
                                 refresh();
                             } else if (location == "Fresh") {
+                                String name = fresh.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(fresh.getJSONObject(new_index), location);
+                                if(check == 1) {
+                                    expiry = fresh.getJSONObject(new_index).optString("expiry");
+                                    cancelAlarm(expiry);
+                                    Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                                else {
+                                    Toast toast = Toast.makeText(getContext(), name + " decremented.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
                                 refresh();
                             } else if (location == "Pantry") {
+                                String name = pantry.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(pantry.getJSONObject(new_index), location);
+                                if(check == 1) {
+                                    expiry = pantry.getJSONObject(new_index).optString("expiry");
+                                    cancelAlarm(expiry);
+                                    Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                                else {
+                                    Toast toast = Toast.makeText(getContext(), name + " decremented.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
                                 refresh();
                             } else if (location == "Freezer") {
+                                String name = freezer.getJSONObject(new_index).optString("name");
                                 check = di.decrementFood(freezer.getJSONObject(new_index), location);
+                                if(check == 1) {
+                                    expiry = freezer.getJSONObject(new_index).optString("expiry");
+                                    cancelAlarm(expiry);
+                                    Toast toast = Toast.makeText(getContext(), name + " removed.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                                else {
+                                    Toast toast = Toast.makeText(getContext(), name + " decremented.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
                                 refresh();
                             }
                         } catch (JSONException e) {
@@ -286,6 +331,7 @@ public class FoodStock extends Fragment{
                         int index = v.getId();
                         int new_index;
                         String location;
+                        String expiry = "";
                         if (index < fridge.length()) {
                             new_index = index;
                             location = "Fridge";
@@ -302,39 +348,39 @@ public class FoodStock extends Fragment{
 
                         try {
                             if (location == "Fridge") {
+                                Toast toast = Toast.makeText(getContext(), fridge.getJSONObject(new_index).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                                toast.show();
                                 di.removeFood(fridge.getJSONObject(new_index), location);
+                                expiry = fridge.getJSONObject(new_index).optString("expiry");
                                 refresh();
                             } else if (location == "Fresh") {
+                                Toast toast = Toast.makeText(getContext(), fresh.getJSONObject(new_index).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                                toast.show();
                                 di.removeFood(fresh.getJSONObject(new_index), location);
+                                expiry = fresh.getJSONObject(new_index).optString("expiry");
                                 refresh();
                             } else if (location == "Pantry") {
+                                Toast toast = Toast.makeText(getContext(), pantry.getJSONObject(new_index).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                                toast.show();
                                 di.removeFood(pantry.getJSONObject(new_index), location);
+                                expiry = pantry.getJSONObject(new_index).optString("expiry");
                                 refresh();
                             } else if (location == "Freezer") {
+                                Toast toast = Toast.makeText(getContext(), freezer.getJSONObject(new_index).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                                toast.show();
                                 di.removeFood(freezer.getJSONObject(new_index), location);
+                                expiry = freezer.getJSONObject(new_index).optString("expiry");
                                 refresh();
                             }
-                        } catch (JSONException e) {
-                        }
+                        } catch (JSONException e) {}
 
                         // Cancel notification
-                        String catted = Alert.concatenate(food.optString("name").toString(), food.optString("quantity").toString(), "", "");
-                        int ID = Alert.convertToID(catted);
-                        //alert.cancelAlarm(ID);
-
-                        Intent myIntent = new Intent(getActivity(), AlertReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                        // cancel the alarm
-                        alarmManager.cancel(pendingIntent);
-                        // delete the PendingIntent
-                        pendingIntent.cancel();
-                        android.util.Log.i("Notification ID", " Cancelled ID: "+ID);
-
+                        cancelAlarm(expiry);
 
                     }
 
                 });
+
                 trs.get(i + index).addView(btn_del);
 
                 // Create food text
@@ -346,11 +392,22 @@ public class FoodStock extends Fragment{
                 trLayoutParams.weight = 1;
                 food_name.setLayoutParams(trLayoutParams);
 
-                if (di.foodToExpire(food)) {
+                if (di.foodToExpire(food, di.getExpiry())) {
                     food_name.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
                 }
                 trs.get(i + index).addView(food_name, 0);
 
+                food_name.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        // TODO Auto-generated method stub
+                        //call edit button here
+                        promptExpiryWarning();
+
+                        food_name.setText("test");
+                        return true;
+                    }
+                });
                 // Switch to expiry date
                 food_name.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -417,6 +474,84 @@ public class FoodStock extends Fragment{
         }
 
     }
+
+    AddFoodToFoodStockDatePicker newFragment;
+
+    private void editExpiryDate(){
+        showDatePickerDialog();
+    }
+
+    public void showDatePickerDialog() {
+        newFragment = new AddFoodToFoodStockDatePicker();
+        newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+    }
+
+    private void promptExpiryWarning() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setCancelable(true);
+        builder.setTitle("Do you want to edit the expiry date of this food?");
+
+        builder.setPositiveButton(
+                "Edit",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                        editExpiryDate();
+                    }
+                });
+        builder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+
+        alert.setCanceledOnTouchOutside(false);
+
+        alert.show();
+    }
+
+    private void cancelAlarm(String expiry) {
+        int EXPIRY_ID = Alert.convertToID(expiry);
+        int PRE_EXPIRY_ID = Alert.convertToID(expiry) + 50000;
+        //android.util.Log.i("Notification ID", " IDs are set: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
+
+
+        //playing around here
+        if(ScanResults.counterID[EXPIRY_ID] == 1 || ScanResults.counterID[PRE_EXPIRY_ID] == 1) {
+            Intent myIntent = new Intent(getActivity(), AlertReceiver.class);
+            PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getActivity(), EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getActivity(), PRE_EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager1 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            AlarmManager alarmManager2 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            // cancel the alarms
+            alarmManager1.cancel(pendingIntent1);
+            alarmManager2.cancel(pendingIntent2);
+            // delete the PendingIntents
+            pendingIntent1.cancel();
+            pendingIntent2.cancel();
+
+            ScanResults.counterID[EXPIRY_ID]--;
+            ScanResults.counterID[PRE_EXPIRY_ID]--;
+
+            android.util.Log.i("Notification ID", " Cancelled ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
+            android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
+
+        } else {
+            if (ScanResults.counterID[EXPIRY_ID] > 0 || ScanResults.counterID[PRE_EXPIRY_ID] > 0) {
+                ScanResults.counterID[EXPIRY_ID]--;
+                ScanResults.counterID[PRE_EXPIRY_ID]--;
+                android.util.Log.i("Notification ID", " Decrease from counter ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
+            }
+
+            android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
+        }
+    }
+
 
 }
 

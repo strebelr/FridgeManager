@@ -113,6 +113,8 @@ public class OcrCaptureActivity extends AppCompatActivity {
             texts = getIntent().getStringArrayListExtra("texts");
         }
 
+
+
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<OcrGraphic>) findViewById(R.id.graphicOverlay);
 
@@ -132,23 +134,10 @@ public class OcrCaptureActivity extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        Snackbar.make(mGraphicOverlay, "Pinch/Stretch to zoom, make key words as large as possible",
+        Snackbar.make(mGraphicOverlay, "Tap to Scan After Seeing Text Overlays. Pinch to Zoom.",
                 Snackbar.LENGTH_LONG)
                 .show();
 
-        TextToSpeech.OnInitListener listener =
-                new TextToSpeech.OnInitListener() {
-                    @Override
-                    public void onInit(final int status) {
-                        if (status == TextToSpeech.SUCCESS) {
-                            Log.d("TTS", "Text to speech engine started successfully.");
-                            tts.setLanguage(Locale.US);
-                        } else {
-                            Log.d("TTS", "Error starting the text to speech engine.");
-                        }
-                    }
-                };
-        tts = new TextToSpeech(this.getApplicationContext(), listener);
     }
 
     /**
@@ -292,7 +281,7 @@ public class OcrCaptureActivity extends AppCompatActivity {
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // We have permission, so create the camerasource
-            boolean autoFocus = getIntent().getBooleanExtra(AutoFocus,false);
+            boolean autoFocus = getIntent().getBooleanExtra(AutoFocus,true);
             boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
             createCameraSource(autoFocus, useFlash);
             return;
@@ -373,6 +362,9 @@ public class OcrCaptureActivity extends AppCompatActivity {
                 //Log.d(TAG, "line "+i+" is :" + lines.get(i).getValue().replaceAll("[^a-zA-Z\r\n\\s]", ""));
             }
         }
+
+        Toast toast = Toast.makeText(getApplicationContext(), "Scan Complete", Toast.LENGTH_SHORT);
+        toast.show();
 
         // starts scanResult activity
         Intent intent = new Intent(this, ScanResults.class);

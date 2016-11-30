@@ -1,8 +1,10 @@
 package com.cpen321.fridgemanager.Activity;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
 import com.cpen321.fridgemanager.Notification.Alert;
@@ -30,6 +33,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -207,38 +211,103 @@ public class ScanResults extends Alert {
     }
 
     public void AddFood(View view){
-        for(int i = 0; i < names.size(); i++) {
-            if(names.get(i) != null) {          // If food not removed
-                int expiry = expiries.get(i);   // Numbers of days until the expiry date.
-                // TODO: CALL ALARM FROM HERE
 
-                String catted = concatenate(names.get(i), String.valueOf(quantities.get(i)), di.getCurrentDate(), di.getFutureDate(expiry));
-                ID = convertToID(catted);
+        // Count number of food added
+        int count = 0;
 
-                if(expiry > 4) {
-                    setAlarm(view, expiry - 3, ID + 1, PRE_EXPIRY);     // sends notification 3 days before expiry
-                    setAlarm(view, expiry, ID, EXPIRY);
-                } else if (expiry <= 3 && expiry > 1) {
-                    setAlarm(view, 1, ID + 1, PRE_EXPIRY);              // sends notification the next day
-                    setAlarm(view, expiry, ID, EXPIRY);
-                } else {
-                    setAlarm(view, expiry, ID, EXPIRY);         // only send notification on the day of expiry
-                }
-
-                if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
-                    ti.addFoodToStorage(names.get(i), quantities.get(i), units.get(i), locations.get(i), expiry);
-                } else {
-                    ti.addFoodToStorage(names.get(i), Double.parseDouble(amounts.get(i).getText().toString()), units.get(i), locations.get(i), expiry);
+        // Checks if there is empty quantity
+        boolean alert = false; // Assume all quantities entered
+        String message = "Invalid amount for item: "; // message to alert
+        for(int i = 0; i < amounts.size(); i++ ){
+            if(amounts.get(i) != null) {
+                if (amounts.get(i).getText().toString().isEmpty() && quantities.get(i).equals(0)) {
+                    alert = true; // Empty quantity found
+                    message = message + names.get(i);
+                    break;
                 }
             }
         }
-        mainMenu();
+
+        if(alert) { // If empty quantity exists
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setMessage(message + "\nRe-enter to try again.");
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton(
+                    "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+        }
+
+        else { // If all quantities are valid, add food
+
+            for (int i = 0; i < names.size(); i++) {
+                if (names.get(i) != null) {          // If food not removed
+                    int expiry = expiries.get(i);   // Numbers of days until the expiry date.
+                    // TODO: CALL ALARM FROM HERE
+
+                    String catted = concatenate(names.get(i), String.valueOf(quantities.get(i)), di.getCurrentDate(), di.getFutureDate(expiry));
+                    EXPIRY_ID = convertToID(catted);
+                    PRE_EXPIRY_ID = convertToID(catted) + 50000;
+
+                    if (counterID[EXPIRY_ID] == 0 || counterID[PRE_EXPIRY_ID] == 0) {
+                        //set alarm with cases
+                        if (expiry > 4) {
+                            setAlarm(view, expiry - 3, PRE_EXPIRY_ID, PRE_EXPIRY);     // sends notification 3 days before expiry
+                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY);
+                        } else if (expiry <= 3 && expiry > 1) {
+                            setAlarm(view, 1, PRE_EXPIRY_ID, PRE_EXPIRY);              // sends notification the next day
+                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY);
+                        } else {
+                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY);         // only send notification on the day of expiry
+                        }
+                        counterID[EXPIRY_ID]++;
+                        counterID[PRE_EXPIRY_ID]++;
+                        android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
+                    } else {
+                        counterID[EXPIRY_ID]++;
+                        counterID[PRE_EXPIRY_ID]++;
+                        android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
+
+                    }
+
+
+                    if (amounts.get(i).getText().toString() == null || amounts.get(i).getText().toString().isEmpty()) { // If amount not entered
+                        ti.addFoodToStorage(names.get(i), quantities.get(i), units.get(i), locations.get(i), expiry);
+                    } else {
+                        ti.addFoodToStorage(names.get(i), Double.parseDouble(amounts.get(i).getText().toString()), units.get(i), locations.get(i), expiry);
+                    }
+                    count++;
+                }
+            }
+
+            CharSequence text; // Success toast
+            if (count == 0) {
+                text = "No food added: Returning to Main Menu";
+            }
+            else {
+                text = "Success: " + count + " foods are added!";
+            }
+
+            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+            toast.show();
+
+            mainMenu();
+        }
     }
 
     /********* Variables used for Alarm **********/
 
-    public static int ID; // random number to generate unique ID
+    public static int EXPIRY_ID; // random number to generate unique ID
+    public static int PRE_EXPIRY_ID;
     private static final int EXPIRY = 0;        // expired
     private static final int PRE_EXPIRY = 1;    // soon to expire
+    public static int[] counterID = new int[100000];
 
 }

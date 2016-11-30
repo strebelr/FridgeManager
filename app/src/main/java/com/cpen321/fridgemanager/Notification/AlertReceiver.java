@@ -1,34 +1,40 @@
 package com.cpen321.fridgemanager.Notification;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 
 import com.cpen321.fridgemanager.Activity.MainMenu;
 import com.cpen321.fridgemanager.Activity.ScanResults;
 import com.cpen321.fridgemanager.R;
 
 public class AlertReceiver extends BroadcastReceiver {
-    int uniqueID = ScanResults.ID;
-
     @Override
     public void onReceive(Context context, Intent intent) {
         int msgType = intent.getIntExtra("NOTIF_TYPE", 0);
+        int uniqueID = intent.getIntExtra("ID", 0);
 
-        if(msgType == 0)
-            createNotification(context, "Fridge Manager","Your food has expired","Alert", uniqueID);
-        else
-            createNotification(context, "Fridge Manager","Your food is expiring soon!","Alert", uniqueID);
+        String msgExpire = "Your food has expired!"; //foodName + " has expired";
+        String msgSoonExpire = "Your food is expiring!"; //foodName + " is expiring soon!";
+
+        if (msgType == 0) {
+            createNotification(context, "Fridge Manager", msgExpire, "Alert", uniqueID);
+        }
+        else {
+            createNotification(context, "Fridge Manager", msgSoonExpire, "Alert", uniqueID);
+        }
     }
 
     public void createNotification(Context context, String msg, String msgText, String msgAlert, int notifID) {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        //Intent repeating_intent = new Intent(context, Alert_Activity.class);
         Intent repeating_intent = new Intent(context, MainMenu.class);
         repeating_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -36,24 +42,16 @@ public class AlertReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.ic_fridge_filled)
+                .setSmallIcon(R.drawable.ic_fridge_empty)
                 .setContentTitle(msg)
                 .setContentText(msgText)
                 .setTicker(msgAlert)
+                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000}) // Vibration
+                .setLights(0xFFFF00, 100, 50) // LED
                 .setAutoCancel(true);
 
-        //Vibration
-        builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000 });
-
-        //LED
-        builder.setLights( 0xFFFF00, 100, 50);
-
         notificationManager.notify(notifID, builder.build());
-        android.util.Log.i("Notification ID", " Sent ID: "+notifID);
-
-
     }
-
 
 
 }
