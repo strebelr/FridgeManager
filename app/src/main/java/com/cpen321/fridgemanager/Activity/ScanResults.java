@@ -122,7 +122,10 @@ public class ScanResults extends AppCompatActivity {
             amounts.get(i).setMaxLines(1);
             if (quantities.get(i) != 0)
                 amounts.get(i).setHint(quantities.get(i) + "");
-            amounts.get(i).setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            if (units.get(i) != DatabaseInteraction.UNIT)
+                amounts.get(i).setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            else
+                amounts.get(i).setInputType(InputType.TYPE_CLASS_NUMBER);
             float measure = amounts.get(i).getPaint().measureText("9999"); // Set width
             amounts.get(i).setWidth(amounts.get(i).getPaddingLeft() + amounts.get(i).getPaddingRight() + (int) measure);
             trs.get(i).addView(amounts.get(i));
@@ -226,7 +229,7 @@ public class ScanResults extends AppCompatActivity {
             }
         }
 
-        if(alert) { // If empty quantity exists
+        if(alert) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setMessage(message + "\nRe-enter to try again.");
             builder1.setCancelable(true);

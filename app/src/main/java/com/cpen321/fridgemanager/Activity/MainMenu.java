@@ -51,8 +51,7 @@ public class MainMenu extends AppCompatActivity {
     private FoodToExpire foodtoexpire;
 
     // Settings Value
-    private int decrement_percent = 20;
-    private int expiry_warning = 3;
+    private String decrement_percent;
 
     DatabaseInteraction di; // Database Interaction Initialization
 
@@ -87,8 +86,10 @@ public class MainMenu extends AppCompatActivity {
         boolean firstRun = settings.getBoolean("firstRun",false);
         if(firstRun == false)//if running for first time
         {
-            SharedPreferences.Editor editor=settings.edit();
+            SharedPreferences.Editor editor= settings.edit();
             editor.putBoolean("firstRun",true);
+            editor.putString("decrement", "0.25");
+            editor.putInt("expiryWarning", 3);
             editor.commit();
             Intent i = new Intent(this,Instruction.class);//Activity to be launched For the First time
             startActivity(i);
@@ -204,16 +205,16 @@ public class MainMenu extends AppCompatActivity {
                         switch(item)
                         {
                             case 0:
-                                decrement_percent = 10;
+                                decrement_percent = "0.1";
                                 break;
                             case 1:
-                                decrement_percent = 20;
+                                decrement_percent = "0.2";
                                 break;
                             case 2:
-                                decrement_percent = 25;
+                                decrement_percent = "0.25";
                                 break;
                             case 3:
-                                decrement_percent = 50;
+                                decrement_percent = "0.5";
                                 break;
                         }
                     }
@@ -224,8 +225,11 @@ public class MainMenu extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
-                        expiry_warning = di.getExpiry();
-                        write_settings();
+                        SharedPreferences settings = getSharedPreferences("prefs",0);
+                        SharedPreferences.Editor editor= settings.edit();
+                        editor.putString("decrement", decrement_percent);
+                        editor.commit();
+                        refresh();
                     }
                 });
         builder.setNegativeButton(
@@ -255,10 +259,12 @@ public class MainMenu extends AppCompatActivity {
                 "Confirm",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        expiry_warning = Integer.parseInt(String.valueOf(numberPicker.getValue()));
-                        decrement_percent = di.getDecrementPercent();
                         dialog.dismiss();
-                        write_settings();
+                        SharedPreferences settings = getSharedPreferences("prefs",0);
+                        SharedPreferences.Editor editor= settings.edit();
+                        editor.putInt("expiryWarning", Integer.parseInt(String.valueOf(numberPicker.getValue())));
+                        editor.commit();
+                        refresh();
                     }
                 });
         builder.setNegativeButton(
@@ -283,15 +289,8 @@ public class MainMenu extends AppCompatActivity {
         startActivity(i);
     }
 
-    private void write_settings() {
-        String conf = "";
-        if(expiry_warning < 10) {
-            conf = decrement_percent + "0" + expiry_warning;
-        }
-        else {
-            conf = "" + decrement_percent + expiry_warning;
-        }
-        di.writeConfig(conf);
+    public void refresh() {
+        foodstock.refresh();
         foodtoexpire.refresh();
     }
 

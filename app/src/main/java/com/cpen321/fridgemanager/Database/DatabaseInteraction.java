@@ -1,5 +1,6 @@
 package com.cpen321.fridgemanager.Database;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Pair;
 
 import org.json.JSONArray;
@@ -39,7 +40,6 @@ public class DatabaseInteraction {
     private final static int LIBRARY_DEST = 1;
     private final static int ASSETS_DEST = 2;
     private final static int UNDO_DEST = 3;
-    private final static int CONF_DEST = 4;
 
     // Defined variables to select unit encoded in integers
     public final static int UNIT = 0;
@@ -57,13 +57,15 @@ public class DatabaseInteraction {
     private final static String library = "library.json";
     private final static String undo_stack = "undo_stack.json";
     private final static String default_lib = "default_library.json"; // Default library in assets
-    private final static String config = "config.txt"; // Settings file
+
+    private SharedPreferences settings;
 
     /*
       Default constructor
      */
     public DatabaseInteraction(Context context) {
         this.context = context;
+        this.settings = context.getSharedPreferences("prefs",0);
     }
 
     /*
@@ -75,7 +77,6 @@ public class DatabaseInteraction {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
             write(outputStreamWriter, makeRoot().toString());
         } catch (FileNotFoundException e) {}
-        writeConfig("2500");
     }
 
     /*
@@ -314,7 +315,7 @@ public class DatabaseInteraction {
             return Double.parseDouble(food.optString("quantity").toString()) == 1;
         }
         else {
-            return Double.parseDouble(food.optString("quantity").toString()) <= new BigDecimal(getDecrementString()).multiply(new BigDecimal(food.optString("original_qty").toString())).doubleValue();
+            return Double.parseDouble(food.optString("quantity").toString()) <= new BigDecimal(settings.getString("decrement","0.25")).multiply(new BigDecimal(food.optString("original_qty").toString())).doubleValue();
         }
     }
 
@@ -352,7 +353,7 @@ public class DatabaseInteraction {
                 for(int i = 0; i < jsonArray.length(); i++) {
                     if(!(element.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
                             !(element.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) ||
-                            !(element.optString("quantity").toString().equals(jsonArray.getJSONObject(i).optString("quantity").toString())) ||
+                            !(element.optString("expiry").toString().equals(jsonArray.getJSONObject(i).optString("expiry").toString())) ||
                             !remove) { // If item doesn't match
                         newArray.put(jsonArray.get(i)); // Add item to new array
                     }
@@ -366,16 +367,19 @@ public class DatabaseInteraction {
                         if (Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()) == UNIT)
                             new_qty = Integer.parseInt(jsonArray.getJSONObject(i).optString("quantity").toString()) - 1;
                         else
-                            new_qty = new BigDecimal(jsonArray.getJSONObject(i).optString("quantity").toString()).subtract(new BigDecimal(getDecrementString()).multiply(new BigDecimal(jsonArray.getJSONObject(i).optString("original_qty").toString()))).doubleValue();
+                            new_qty = new BigDecimal(jsonArray.getJSONObject(i).optString("quantity").toString()).subtract(new BigDecimal(settings.getString("decrement","0.25")).multiply(new BigDecimal(jsonArray.getJSONObject(i).optString("original_qty").toString()))).doubleValue();
                         decrement.put("quantity", new_qty);
                         stack.put("quantity", Double.parseDouble(jsonArray.getJSONObject(i).optString("quantity").toString()));
                         decrement.put("original_qty", Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()));
                         stack.put("original_qty", Double.parseDouble(jsonArray.getJSONObject(i).optString("original_qty").toString()));
                         decrement.put("unit", Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()));
                         stack.put("unit", Integer.parseInt(jsonArray.getJSONObject(i).optString("unit").toString()));
+                        decrement.put("location", jsonArray.getJSONObject(i).optString("location").toString());
+                        stack.put("location", jsonArray.getJSONObject(i).optString("location").toString());
                         newArray.put(decrement);
                         addStack(stack, DEC_SEL, array);
                         remove = false;
+
                     }
                 }
 
@@ -436,7 +440,7 @@ public class DatabaseInteraction {
                 for(int i = 0; i < jsonArray.length(); i++) {
                     if(!(element.optString("name").toString().equals(jsonArray.getJSONObject(i).optString("name").toString())) ||
                             !(element.optString("unit").toString().equals(jsonArray.getJSONObject(i).optString("unit").toString())) ||
-                            !(element.optString("quantity").toString().equals(jsonArray.getJSONObject(i).optString("quantity").toString())) ||
+                            !(element.optString("expiry").toString().equals(jsonArray.getJSONObject(i).optString("expiry").toString())) ||
                             !remove) { // If item doesn't match
                         newArray.put(jsonArray.get(i)); // Add item to new array
                     }
@@ -501,16 +505,6 @@ public class DatabaseInteraction {
         try {
             // Output the new JSON Root Object to File
             write(new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE)), add_to_root(element, jsonRoot, location));
-        } catch (FileNotFoundException e) {}
-    }
-
-    /*
-      Overwrite the config file with new variables.
-      @param settings keys to overwrite
-     */
-    public void writeConfig(String conf) {
-        try {
-            write(new OutputStreamWriter(context.openFileOutput(config, Context.MODE_PRIVATE)), conf);
         } catch (FileNotFoundException e) {}
     }
 
@@ -617,7 +611,7 @@ public class DatabaseInteraction {
 
     public JSONArray getSortedExpiryArray() throws JSONException, ParseException {
         String root = readFile(STORAGE_DEST);
-        return getSortedExpiry(root, getExpiry());
+        return getSortedExpiry(root, settings.getInt("expiryWarning",3));
     }
 
     /*
@@ -769,13 +763,6 @@ public class DatabaseInteraction {
             } catch (IOException e) {
             }
         }
-        else if (destination == CONF_DEST) {
-            try {
-                isr = new InputStreamReader(context.openFileInput(config));
-                return read(isr);
-            } catch (IOException e) {
-            }
-        }
 
         return "";
     }
@@ -802,34 +789,6 @@ public class DatabaseInteraction {
         } catch (IOException e) {}
 
         return root;
-    }
-
-    /*
-      Read decrement decimal variable in String.
-     */
-    public String getDecrementString() {
-        String config = readFile(CONF_DEST);
-        config = config.substring(0,2);
-        config = "0." + config;
-        return config;
-    }
-
-    /*
-      Read decrement percentage variable in int.
-    */
-    public int getDecrementPercent() {
-        String config = readFile(CONF_DEST);
-        config = config.substring(0,2);
-        return Integer.parseInt(config);
-    }
-
-    /*
-      Read food to expire variable.
-    */
-    public int getExpiry() {
-        String config = readFile(CONF_DEST);
-        config = config.substring(2,4);
-        return Integer.parseInt(config);
     }
 
     /*

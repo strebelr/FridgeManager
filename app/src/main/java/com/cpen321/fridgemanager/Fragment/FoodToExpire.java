@@ -213,11 +213,11 @@ public class FoodToExpire extends Fragment{
                         String amountS = "";
                         String expiry = "";
                         try {
-                            Toast toast = Toast.makeText(getContext(), ((JSONObject) toExpire.get(index)).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(getContext(), toExpire.getJSONObject(index).optString("name") + " removed.", Toast.LENGTH_SHORT);
                             toast.show();
-                            di.removeFood((JSONObject) toExpire.get(index), ((JSONObject) toExpire.get(index)).optString("location").toString());
-                            expiry = ((JSONObject) toExpire.get(index)).optString("expiry");
-                            amountS = ((JSONObject) toExpire.get(index)).optString("quantity");
+                            di.removeFood(toExpire.getJSONObject(index), toExpire.getJSONObject(index).optString("location").toString());
+                            expiry = toExpire.getJSONObject(index).optString("expiry");
+                            amountS = toExpire.getJSONObject(index).optString("quantity");
                             amount = Integer.parseInt(amountS);
                             refresh();
                         } catch(JSONException e) {}
