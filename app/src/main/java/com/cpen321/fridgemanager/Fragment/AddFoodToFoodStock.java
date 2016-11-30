@@ -183,21 +183,21 @@ public class AddFoodToFoodStock extends Fragment {
         if(counterID[EXPIRY_ID] == 0 || counterID[PRE_EXPIRY_ID] == 0) {
             //set alarm with cases
             if(difference > 4) {
-                setAlarm(view, difference - 3, PRE_EXPIRY_ID, PRE_EXPIRY);     // sends notification 3 days before expiry
-                setAlarm(view, difference, EXPIRY_ID, EXPIRY);
+                setAlarm(view, difference - 3, PRE_EXPIRY_ID, PRE_EXPIRY, (int)amount);     // sends notification 3 days before expiry
+                setAlarm(view, difference, EXPIRY_ID, EXPIRY, (int)amount);
             } else if (difference <= 3 && difference > 1) {
-                setAlarm(view, 1, PRE_EXPIRY_ID, PRE_EXPIRY);              // sends notification the next day
-                setAlarm(view, difference, EXPIRY_ID, EXPIRY);
+                setAlarm(view, 1, PRE_EXPIRY_ID, PRE_EXPIRY, (int)amount);              // sends notification the next day
+                setAlarm(view, difference, EXPIRY_ID, EXPIRY, (int)amount);
             } else {
-                setAlarm(view, difference, EXPIRY_ID, EXPIRY);         // only send notification on the day of expiry
+                setAlarm(view, difference, EXPIRY_ID, EXPIRY, (int)amount);         // only send notification on the day of expiry
             }
-            counterID[EXPIRY_ID]++;
-            counterID[PRE_EXPIRY_ID]++;
+            counterID[EXPIRY_ID]+= (int)amount;
+            counterID[PRE_EXPIRY_ID]+= (int)amount;
             android.util.Log.i("Notification ID", " ID Remaining: "+counterID[EXPIRY_ID] +" and "+counterID[PRE_EXPIRY_ID]);
         }
         else {
-            counterID[EXPIRY_ID]++;
-            counterID[PRE_EXPIRY_ID]++;
+            counterID[EXPIRY_ID]+= (int)amount;
+            counterID[PRE_EXPIRY_ID]+= (int)amount;
             android.util.Log.i("Notification ID", " ID Remaining: "+counterID[EXPIRY_ID] +" and "+counterID[PRE_EXPIRY_ID]);
 
         }
@@ -215,7 +215,7 @@ public class AddFoodToFoodStock extends Fragment {
     private static final int EXPIRY = 0;        // expired
     private static final int PRE_EXPIRY = 1;    // soon to expire
 
-    public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType) {
+    public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType, int amount) {
         android.util.Log.i("Notification ID ", " Set ID: "+notifID);
 
         Calendar calendar = Calendar.getInstance();
@@ -230,6 +230,7 @@ public class AddFoodToFoodStock extends Fragment {
         Intent intent = new Intent(getActivity(), AlertReceiver.class);
         intent.putExtra("NOTIF_TYPE", alarmType);
         intent.putExtra("ID", notifID);
+        intent.putExtra("AMOUNT", amount);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);

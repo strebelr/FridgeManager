@@ -207,16 +207,20 @@ public class FoodToExpire extends Fragment{
                     @Override
                     public void onClick(View v) {
                         int index = v.getId();
+                        int amount = 0;
+                        String amountS = "";
                         String expiry = "";
                         try {
                             Toast toast = Toast.makeText(getContext(), ((JSONObject) toExpire.get(index)).optString("name") + " removed.", Toast.LENGTH_SHORT);
                             toast.show();
                             di.removeFood((JSONObject) toExpire.get(index), ((JSONObject) toExpire.get(index)).optString("location").toString());
                             expiry = ((JSONObject) toExpire.get(index)).optString("expiry");
+                            amountS = ((JSONObject) toExpire.get(index)).optString("quantity");
+                            amount = Integer.parseInt(amountS);
                             refresh();
                         } catch(JSONException e) {}
 
-                        cancelAlarm(expiry);
+                        cancelAlarm(expiry, amount);
 
                     }
                 });
@@ -308,14 +312,14 @@ public class FoodToExpire extends Fragment{
         newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
     }
 
-    private void cancelAlarm(String expiry) {
+    private void cancelAlarm(String expiry, int amount) {
         int EXPIRY_ID = Alert.convertToID(expiry);
         int PRE_EXPIRY_ID = Alert.convertToID(expiry) + 50000;
         //android.util.Log.i("Notification ID", " IDs are set: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
 
 
         //playing around here
-        if(ScanResults.counterID[EXPIRY_ID] == 1 || ScanResults.counterID[PRE_EXPIRY_ID] == 1) {
+        if(ScanResults.counterID[EXPIRY_ID] == amount || ScanResults.counterID[PRE_EXPIRY_ID] == amount) {
             Intent myIntent = new Intent(getActivity(), AlertReceiver.class);
             PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getActivity(), EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getActivity(), PRE_EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -328,16 +332,16 @@ public class FoodToExpire extends Fragment{
             pendingIntent1.cancel();
             pendingIntent2.cancel();
 
-            ScanResults.counterID[EXPIRY_ID]--;
-            ScanResults.counterID[PRE_EXPIRY_ID]--;
+            ScanResults.counterID[EXPIRY_ID]-= amount;
+            ScanResults.counterID[PRE_EXPIRY_ID]-= amount;
 
             android.util.Log.i("Notification ID", " Cancelled ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
             android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
 
         } else {
             if (ScanResults.counterID[EXPIRY_ID] > 0 || ScanResults.counterID[PRE_EXPIRY_ID] > 0) {
-                ScanResults.counterID[EXPIRY_ID]--;
-                ScanResults.counterID[PRE_EXPIRY_ID]--;
+                ScanResults.counterID[EXPIRY_ID]-= amount;
+                ScanResults.counterID[PRE_EXPIRY_ID]-= amount;
                 android.util.Log.i("Notification ID", " Decrease from counter ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
             }
 

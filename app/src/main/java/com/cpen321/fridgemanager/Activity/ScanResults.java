@@ -259,20 +259,20 @@ public class ScanResults extends Alert {
                     if (counterID[EXPIRY_ID] == 0 || counterID[PRE_EXPIRY_ID] == 0) {
                         //set alarm with cases
                         if (expiry > 4) {
-                            setAlarm(view, expiry - 3, PRE_EXPIRY_ID, PRE_EXPIRY);     // sends notification 3 days before expiry
-                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY);
+                            setAlarm(view, expiry - 3, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(i));     // sends notification 3 days before expiry
+                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY, quantities.get(i));
                         } else if (expiry <= 3 && expiry > 1) {
-                            setAlarm(view, 1, PRE_EXPIRY_ID, PRE_EXPIRY);              // sends notification the next day
-                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY);
+                            setAlarm(view, 1, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(i));              // sends notification the next day
+                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY, quantities.get(i));
                         } else {
-                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY);         // only send notification on the day of expiry
+                            setAlarm(view, expiry, EXPIRY_ID, EXPIRY, quantities.get(i));         // only send notification on the day of expiry
                         }
-                        counterID[EXPIRY_ID]++;
-                        counterID[PRE_EXPIRY_ID]++;
+                        counterID[EXPIRY_ID] += quantities.get(i);
+                        counterID[PRE_EXPIRY_ID]+= quantities.get(i);
                         android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
                     } else {
-                        counterID[EXPIRY_ID]++;
-                        counterID[PRE_EXPIRY_ID]++;
+                        counterID[EXPIRY_ID]+= quantities.get(i);
+                        counterID[PRE_EXPIRY_ID]+= quantities.get(i);
                         android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
 
                     }

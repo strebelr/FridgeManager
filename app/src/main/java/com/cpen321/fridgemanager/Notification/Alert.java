@@ -27,7 +27,7 @@ public class Alert extends AppCompatActivity {
     }
 
     // TODO:  MSG. WHAT HAPPENS IF JANUARY 31 AND DAY IS ADDED
-    public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType) {
+    public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType, int amount) {
         android.util.Log.i("Notification ID ", " Set ID: "+notifID);
 
         Calendar calendar = Calendar.getInstance();
@@ -42,6 +42,7 @@ public class Alert extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
         intent.putExtra("NOTIF_TYPE", alarmType);
         intent.putExtra("ID", notifID);
+        intent.putExtra("AMOUNT", amount);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
