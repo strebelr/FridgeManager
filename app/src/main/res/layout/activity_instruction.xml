@@ -147,7 +147,7 @@
         android:id="@+id/expireIcon"/>
 
     <TextView
-        android:text="Displays all food items that will expire within X days. You can adjust X under “time to alert” tab in the “drop down menu”. The food can be deleted using “Delete Button” after it is consumed."
+        android:text="Displays all food items that will expire within X days. You can adjust X under “Time to Alert”. The food can be deleted using “Delete Button” after it is consumed."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
@@ -190,7 +190,7 @@
         android:id="@+id/manualIcon"/>
 
     <TextView
-        android:text="You can manually add food with its name, amount, expire date, and location to be stored. The added food will be displayed on “Fridge” page."
+        android:text="You can manually add food with its name, amount, expire date, and location to be stored. The added food will be displayed on food stock page."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
