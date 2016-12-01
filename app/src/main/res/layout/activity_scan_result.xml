@@ -37,7 +37,7 @@
         android:text="@string/add_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button2"
+        android:id="@+id/buttonAddAll"
         android:onClick="AddFood"
         android:layout_marginLeft="14dp"
         android:layout_marginStart="14dp"

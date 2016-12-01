@@ -41,14 +41,27 @@ public class UI_test {
     @Test
     public void navigate() {
 
+        // test 1: clicking on the camera floating button, click on the top layout
+        // check if these actions lead to scan result page
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.topLayout)).perform(click());
         Activity activity = getActivityInstance();
         boolean b = (activity instanceof ScanResults);
         assertTrue(b);
+
         // do more
+
+        // test 2: on the scan result page, click "ADD ALL" button
+        // check if these actions lead to food stock page
+        if (b == true) {
+            onView(withId(R.id.buttonAddAll)).perform(click());
+            Activity activity2 = getActivityInstance();
+            boolean check2 = (activity2 instanceof MainMenu);
+            assertTrue(check2);
+        }
     }
 
+    // getting the next activity according to the action performed
     public Activity getActivityInstance() {
         final Activity[] activity = new Activity[1];
         InstrumentationRegistry.getInstrumentation().runOnMainSync(new Runnable( ) {
