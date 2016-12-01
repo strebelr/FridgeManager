@@ -64,6 +64,18 @@ public class DatabaseInteractionTest{
     }
 
     @Test
+    public void make_root_test() throws Exception {
+        // Reflection
+        Method method = DatabaseInteraction.class.getDeclaredMethod("makeRoot");
+        method.setAccessible(true);
+
+        String test_string = "{\"Pantry\":[],\"Freezer\":[],\"Fresh\":[],\"Fridge\":[]}"; // String to try to read
+
+        // Assert returned string equals input stream
+        assertEquals("Fail", test_string, ((JSONObject) method.invoke(di)).toString());
+    }
+
+    @Test
     public void write_test() throws Exception {
         // Reflection
         Method method = DatabaseInteraction.class.getDeclaredMethod("write", OutputStreamWriter.class, String.class);
@@ -85,33 +97,35 @@ public class DatabaseInteractionTest{
     @Test
     public void create_test() throws Exception {
         // Reflection
-        Method method = DatabaseInteraction.class.getDeclaredMethod("create", String.class, double.class, int.class, int.class);
+        Method method = DatabaseInteraction.class.getDeclaredMethod("create", String.class, double.class, double.class, int.class, int.class, String.class);
         method.setAccessible(true);
 
         // Expected Variables
         String name = "Pork";
         double quantity = 150.5;
+        double original_qty = 200;
         int unit = DatabaseInteraction.GRAM;
         int expiry = 10;
+        String location = "Fridge";
+
 
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
         Calendar c = Calendar.getInstance();
-        // Expected Bought Date
-        String expected_bought = df.format(c.getTime());
         c.add(Calendar.DATE, expiry);
         // Expected Expiry Date
         String expected_expiry = df.format(c.getTime());
 
         // Invoke
-        JSONObject food = (JSONObject) method.invoke(di, name, quantity, unit, expiry);
+        JSONObject food = (JSONObject) method.invoke(di, name, quantity, original_qty, unit, expiry, location);
 
         // Test
         assertEquals("Fail: name not equal", name, food.optString("name"));
         assertEquals("Fail: quantity not equal", quantity, Double.parseDouble(food.optString("quantity")), 0);
+        assertEquals("Fail: original quantity not equal", original_qty, Double.parseDouble(food.optString("original_qty")), 0);
         assertEquals("Fail: unit not equal", unit, Integer.parseInt(food.optString("unit")));
-        assertEquals("Fail: bought day not equal", expected_bought, food.optString("bought"));
         assertEquals("Fail: expiry date not equal", expected_expiry, food.optString("expiry"));
+        assertEquals("Fail: location not equal", location, food.optString("location"));
     }
 
     @Test
