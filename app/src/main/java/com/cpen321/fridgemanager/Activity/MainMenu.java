@@ -15,10 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.text.InputType;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
@@ -97,6 +94,7 @@ public class MainMenu extends AppCompatActivity {
     private void initialize() {
         foodstock = new FoodStock();
         foodtoexpire = new FoodToExpire();
+        addFoodToFoodStockMain = new AddFoodToFoodStockMain();
         setContentView(R.layout.activity_main_menu);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
