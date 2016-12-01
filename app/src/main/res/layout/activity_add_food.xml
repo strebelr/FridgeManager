@@ -15,6 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
+
         <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
@@ -23,12 +24,6 @@
         android:orientation="vertical"
         android:weightSum="1">
 
-            <TableLayout
-                android:layout_marginTop="40dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center">
-            <TableRow>
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -45,9 +40,7 @@
                     />
 
             </LinearLayout>
-            </TableRow>
 
-                <TableRow>
             <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -59,25 +52,24 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Food Item"
-                android:gravity="right"
-                android:padding="10dip"
                 android:textColor="@android:color/black"
+                android:layout_weight="3"
                 android:textColorHighlight="@android:color/primary_text_dark"
                 android:textSize="25dp" />
 
 
             <AutoCompleteTextView
                 android:id="@+id/addFoodName"
-
+                android:layout_width="246dp"
+                android:layout_height="41dp"
                 android:background="@drawable/field_input_border"
                 android:inputType="text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dip"
-                 />
+                android:textSize="25dp"
+                android:paddingLeft="30px"
+                android:paddingRight="30px"
+                android:layout_weight="2.92" />
 
         </LinearLayout>
-                </TableRow>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -254,7 +246,6 @@
             ... />
 
         </LinearLayout>
-            </TableLayout>
     </LinearLayout>
     </ScrollView>
 </RelativeLayout>

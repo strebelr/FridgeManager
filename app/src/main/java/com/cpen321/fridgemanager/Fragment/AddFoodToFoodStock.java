@@ -66,7 +66,7 @@ public class AddFoodToFoodStock extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                Bundle savedInstanceState ){
         this.view = inflater.inflate(R.layout.activity_add_food, container, false);
-        
+
 
         Button btnAddFoodToFoodStock = (Button) view.findViewById(R.id.button_add_to_food_stock);
         btnAddFoodToFoodStock.setOnClickListener(new View.OnClickListener() {
