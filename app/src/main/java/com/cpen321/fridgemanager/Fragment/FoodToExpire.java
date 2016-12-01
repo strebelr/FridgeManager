@@ -257,7 +257,8 @@ public class FoodToExpire extends Fragment{
                         //call edit button here
                         promptExpiryWarning();
 
-                        food_name.setText("test");
+                        food_name.setText(DatePicker.newExpiry);
+                        android.util.Log.i("Expiry ", " New Expiry: "+DatePicker.newExpiry);
                         return true;
                     }
                 });
@@ -313,7 +314,7 @@ public class FoodToExpire extends Fragment{
         alert.show();
     }
 
-    AddFoodToFoodStockDatePicker newFragment;
+    DatePicker newFragment;
 
     private void editExpiryDate(){
         showDatePickerDialog();
@@ -321,7 +322,7 @@ public class FoodToExpire extends Fragment{
 
 
     public void showDatePickerDialog() {
-        newFragment = new AddFoodToFoodStockDatePicker();
+        newFragment = new DatePicker();
         newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
     }
 

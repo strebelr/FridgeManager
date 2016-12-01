@@ -447,7 +447,7 @@ public class FoodStock extends Fragment{
                         //call edit button here
                         promptExpiryWarning();
 
-                        food_name.setText("test");
+                        food_name.setText(DatePicker.newExpiry);
                         return true;
                     }
                 });
@@ -518,14 +518,14 @@ public class FoodStock extends Fragment{
 
     }
 
-    AddFoodToFoodStockDatePicker newFragment;
+    DatePicker newFragment;
 
     private void editExpiryDate(){
         showDatePickerDialog();
     }
 
     public void showDatePickerDialog() {
-        newFragment = new AddFoodToFoodStockDatePicker();
+        newFragment = new DatePicker();
         newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
     }
 
