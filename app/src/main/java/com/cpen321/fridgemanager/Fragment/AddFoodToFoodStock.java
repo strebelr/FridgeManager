@@ -65,6 +65,9 @@ public class AddFoodToFoodStock extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                Bundle savedInstanceState ){
         this.view = inflater.inflate(R.layout.activity_add_food, container, false);
+
+        hideFields(view);
+
         Button btnAddFoodToFoodStock = (Button) view.findViewById(R.id.button_add_to_food_stock);
         btnAddFoodToFoodStock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +107,33 @@ public class AddFoodToFoodStock extends Fragment {
         myAlarm = new Alarm();
 
         return view;
+    }
+
+    private void hideFields(View view) {
+        Spinner addTo = (Spinner) view.findViewById(R.id.spinner1_for_library);
+        String addToValue = addTo.getSelectedItem().toString();
+        if(addToValue.equals("Food Stock"))
+        {
+            final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
+            foodAbbr.setEnabled(false);
+
+        }
+        else if(addToValue.equals("Library")) {
+
+            final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
+            amountEditText.setEnabled(false);
+            Spinner amountSpinner = (Spinner) view.findViewById(R.id.amountspinner);
+            amountSpinner.setEnabled(false);
+
+
+        }
+        else if(addToValue.equals("Both")) {
+
+            Spinner amountSpinner = (Spinner) view.findViewById(R.id.amountspinner);
+            amountSpinner.setEnabled(false);
+
+        }
+
     }
 
     @Override
@@ -194,6 +224,9 @@ public class AddFoodToFoodStock extends Fragment {
             android.util.Log.i("Notification ID", " ID Remaining: "+counterID[EXPIRY_ID] +" and "+counterID[PRE_EXPIRY_ID]);
 
         }
+
+
+
 
 
         viewPager.setCurrentItem(0);

@@ -57,5 +57,11 @@
         <item>Pantry</item>
         <item>Freezer</item>
     </string-array>
+    <string-array name="addtolocations">
+        <item>Add To</item>
+        <item>Food Stock</item>
+        <item>Library</item>
+        <item>Both</item>
+    </string-array>
     <string name="add_food">Add Food</string>
 </resources>

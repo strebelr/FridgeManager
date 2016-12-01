@@ -20,7 +20,7 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
-import com.cpen321.fridgemanager.Fragment.AddFoodToFoodStockMain;
+import com.cpen321.fridgemanager.Fragment.AddFoodToFoodStock;
 import com.cpen321.fridgemanager.Fragment.FoodStock;
 import com.cpen321.fridgemanager.Fragment.FoodToExpire;
 import com.cpen321.fridgemanager.OcrReader.OcrCaptureActivity;
@@ -46,7 +46,7 @@ public class MainMenu extends AppCompatActivity {
     // Fragments
     private FoodStock foodstock;
     private FoodToExpire foodtoexpire;
-    private AddFoodToFoodStockMain addFoodToFoodStockMain;
+    private AddFoodToFoodStock addFoodToFoodStock;
 
     // Settings Value
     private String decrement_percent;
@@ -94,7 +94,7 @@ public class MainMenu extends AppCompatActivity {
     private void initialize() {
         foodstock = new FoodStock();
         foodtoexpire = new FoodToExpire();
-        addFoodToFoodStockMain = new AddFoodToFoodStockMain();
+        addFoodToFoodStock = new AddFoodToFoodStock();
         setContentView(R.layout.activity_main_menu);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -150,7 +150,7 @@ public class MainMenu extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(foodstock, "Stock");
         adapter.addFrag(foodtoexpire, "Alert");
-        adapter.addFrag(addFoodToFoodStockMain, "Add Food");
+        adapter.addFrag(addFoodToFoodStock, "Add Food");
         viewPager.setAdapter(adapter);
     }
 

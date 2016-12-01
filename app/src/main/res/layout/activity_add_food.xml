@@ -15,7 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-    <LinearLayout
+        <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -23,7 +23,24 @@
         android:orientation="vertical"
         android:weightSum="1">
 
-        <LinearLayout
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="20px">
+
+                <Spinner
+                    android:id="@+id/spinner1_for_library"
+                    android:layout_marginRight="40px"
+                    android:layout_marginLeft="40px"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:entries="@array/addtolocations"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -41,17 +58,47 @@
 
 
             <AutoCompleteTextView
-            android:id="@+id/addFoodName"
-            android:layout_width="246dp"
-            android:layout_height="41dp"
-            android:background="@drawable/field_input_border"
-            android:inputType="text"
-            android:textSize="25dp"
+                android:id="@+id/addFoodName"
+                android:layout_width="246dp"
+                android:layout_height="41dp"
+                android:background="@drawable/field_input_border"
+                android:inputType="text"
+                android:textSize="25dp"
                 android:paddingLeft="30px"
-            android:paddingRight="30px"
+                android:paddingRight="30px"
                 android:layout_weight="2.92" />
 
         </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="20px">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Food Abbreviation"
+                    android:textColor="@android:color/black"
+                    android:layout_weight="3"
+                    android:textColorHighlight="@android:color/primary_text_dark"
+                    android:textSize="25dp" />
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/addFoodAbbr"
+                    android:layout_width="246dp"
+                    android:layout_height="41dp"
+                    android:background="@drawable/field_input_border"
+                    android:inputType="text"
+                    android:textSize="25dp"
+                    android:paddingLeft="30px"
+                    android:paddingRight="30px"
+                    android:layout_weight="2.92" />
+
+            </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -104,7 +151,6 @@
             android:orientation="horizontal"
             android:paddingTop="20px">
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -150,7 +196,6 @@
                     android:text="Pick Date" />
             </LinearLayout>
 
-
         </LinearLayout>
 
         <LinearLayout
@@ -171,7 +216,6 @@
             android:textColor="@android:color/black"
             android:textColorHighlight="@android:color/primary_text_dark"
             android:textSize="25dp" />
-
 
         <Spinner
             android:id="@+id/spinner1_for_location"
