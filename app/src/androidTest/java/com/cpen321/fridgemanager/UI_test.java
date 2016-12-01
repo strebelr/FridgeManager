@@ -39,15 +39,20 @@ public class UI_test {
             new ActivityTestRule<>(MainMenu.class);
 
     @Test
-    public void navigate() {
+    public void navigateTo_ScanResults() throws Exception{
 
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.topLayout)).perform(click());
         Activity activity = getActivityInstance();
         boolean b = (activity instanceof ScanResults);
         assertTrue(b);
-        // do more
+
+        onView(withId(R.id.button_add_to_food_stock)).perform(click());
+        activity = getActivityInstance();
+        boolean c = (activity instanceof MainMenu);
+        assertTrue(c);
     }
+    
 
     public Activity getActivityInstance() {
         final Activity[] activity = new Activity[1];
