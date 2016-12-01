@@ -11,7 +11,7 @@
 
 
     <TextView
-        android:text="  Welcome to Fridge Manager! This is an app that helps you manage your food more easily!
+        android:text=" Welcome to Fridge Manager! This is an app that helps you manage your food more easily!
     The current version consists of three main components: Fridge, Food to Expire, and Manual Entry.
 "
         android:layout_width="match_parent"

@@ -1,12 +1,12 @@
 package com.cpen321.fridgemanager.Fragment;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.FragmentActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,26 +18,18 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cpen321.fridgemanager.Activity.MainMenu;
-import com.cpen321.fridgemanager.Activity.ScanResults;
-import com.cpen321.fridgemanager.Algorithm.TextRecognitionInteraction;
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
-import com.cpen321.fridgemanager.Notification.Alert;
-import com.cpen321.fridgemanager.Notification.AlertReceiver;
+import com.cpen321.fridgemanager.Notification.Alarm;
 import com.cpen321.fridgemanager.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-
-import static com.cpen321.fridgemanager.R.id.mTlayout;
 
 
 public class FoodToExpire extends Fragment{
@@ -52,6 +44,12 @@ public class FoodToExpire extends Fragment{
     TableLayout mTlayout;
     private JSONArray toExpire;
     TableRow titleToExpire;
+    private FragmentActivity myContext;
+
+    private Alarm myAlarm;
+
+    private TextView holdTextE;
+
 
     public FoodToExpire() {
         // Required empty public constructor
@@ -71,11 +69,23 @@ public class FoodToExpire extends Fragment{
 
         mTlayout = (TableLayout) view.findViewById(R.id.TableToExpire);
 
-        di = new DatabaseInteraction(getContext());
+        holdTextE = (TextView)view.findViewById(R.id.holdTextE);
+        holdTextE.setText("");
 
+        di = new DatabaseInteraction(getContext());
+        myAlarm = new Alarm();
         refresh();
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity){
+            myContext=(FragmentActivity) context;
+        }
+
     }
 
     @Override
@@ -120,6 +130,11 @@ public class FoodToExpire extends Fragment{
             createTitle(titleToExpire,foodToExpire, R.string.toExpire, toExpire.length());
             createTable();
 
+            if(toExpire.length() == 0)
+                holdTextE.setText("");
+            else
+                holdTextE.setText("Hold down food item to change its expiry date");
+
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -143,7 +158,7 @@ public class FoodToExpire extends Fragment{
                 final TextView food_name = new TextView(getActivity());
                 TextView unit_name = new TextView(getActivity());
                 TextView amount = new TextView(getActivity());
-                TextView expiry = new TextView(getActivity());
+                final TextView expiry = new TextView(getActivity());
 
                 // Create unit text
                 switch (Integer.parseInt(food.optString("unit").toString())) {
@@ -179,7 +194,6 @@ public class FoodToExpire extends Fragment{
                 expiry.setPadding(0,0,padding_right,0);
                 trs.get(i).addView(expiry);
 
-
                 // Create amount text view
                 amount.setId(i);
                 amount.setText(food.optString("quantity").toString());
@@ -205,16 +219,21 @@ public class FoodToExpire extends Fragment{
                     @Override
                     public void onClick(View v) {
                         int index = v.getId();
+                        int amount = 0;
+                        String amountS = "";
                         String expiry = "";
                         try {
-                            Toast toast = Toast.makeText(getContext(), ((JSONObject) toExpire.get(index)).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(getContext(), toExpire.getJSONObject(index).optString("name") + " removed.", Toast.LENGTH_SHORT);
                             toast.show();
-                            di.removeFood((JSONObject) toExpire.get(index), ((JSONObject) toExpire.get(index)).optString("location").toString());
-                            expiry = ((JSONObject) toExpire.get(index)).optString("expiry");
+                            di.removeFood(toExpire.getJSONObject(index), toExpire.getJSONObject(index).optString("location").toString());
+                            expiry = toExpire.getJSONObject(index).optString("expiry");
+                            amountS = toExpire.getJSONObject(index).optString("quantity");
+                            amount = Integer.parseInt(amountS);
                             refresh();
                         } catch(JSONException e) {}
 
-                        cancelAlarm(expiry);
+                        myAlarm.cancelAlarm(myContext, expiry, amount);
+                        //cancelAlarm(expiry, amount);
 
                     }
                 });
@@ -229,6 +248,20 @@ public class FoodToExpire extends Fragment{
                 trLayoutParams.weight = 1;
                 food_name.setLayoutParams(trLayoutParams);
                 trs.get(i).addView(food_name, 0);
+
+                // Allow user to edit expiry date from holding the expiry date
+                food_name.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        // TODO Auto-generated method stub
+                        //call edit button here
+                        promptExpiryWarning();
+
+                        food_name.setText("test");
+                        return true;
+                    }
+                });
+
 
             } catch (JSONException e) {
             }
@@ -251,15 +284,56 @@ public class FoodToExpire extends Fragment{
 
     }
 
-    private void cancelAlarm(String expiry) {
+    private void promptExpiryWarning() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setCancelable(true);
+        builder.setTitle("Do you want to edit the expiry date of this food?");
+
+        builder.setPositiveButton(
+                "Edit",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                        editExpiryDate();
+                    }
+                });
+        builder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+
+        alert.setCanceledOnTouchOutside(false);
+
+        alert.show();
+    }
+
+    AddFoodToFoodStockDatePicker newFragment;
+
+    private void editExpiryDate(){
+        showDatePickerDialog();
+    }
+
+
+    public void showDatePickerDialog() {
+        newFragment = new AddFoodToFoodStockDatePicker();
+        newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+    }
+
+    /*private void cancelAlarm(String expiry, int amount) {
         int EXPIRY_ID = Alert.convertToID(expiry);
         int PRE_EXPIRY_ID = Alert.convertToID(expiry) + 50000;
         //android.util.Log.i("Notification ID", " IDs are set: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
 
 
         //playing around here
-        if(ScanResults.counterID[EXPIRY_ID] == 1 || ScanResults.counterID[PRE_EXPIRY_ID] == 1) {
-            Intent myIntent = new Intent(getActivity(), AlertReceiver.class);
+        if(ScanResults.counterID[EXPIRY_ID] == amount || ScanResults.counterID[PRE_EXPIRY_ID] == amount) {
+            Intent myIntent = new Intent(getActivity(), AlarmReceiver.class);
             PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getActivity(), EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getActivity(), PRE_EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager1 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -271,20 +345,20 @@ public class FoodToExpire extends Fragment{
             pendingIntent1.cancel();
             pendingIntent2.cancel();
 
-            ScanResults.counterID[EXPIRY_ID]--;
-            ScanResults.counterID[PRE_EXPIRY_ID]--;
+            ScanResults.counterID[EXPIRY_ID]-= amount;
+            ScanResults.counterID[PRE_EXPIRY_ID]-= amount;
 
             android.util.Log.i("Notification ID", " Cancelled ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
             android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
 
         } else {
             if (ScanResults.counterID[EXPIRY_ID] > 0 || ScanResults.counterID[PRE_EXPIRY_ID] > 0) {
-                ScanResults.counterID[EXPIRY_ID]--;
-                ScanResults.counterID[PRE_EXPIRY_ID]--;
+                ScanResults.counterID[EXPIRY_ID]-= amount;
+                ScanResults.counterID[PRE_EXPIRY_ID]-= amount;
                 android.util.Log.i("Notification ID", " Decrease from counter ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
             }
 
             android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
         }
-    }
+    }*/
 }

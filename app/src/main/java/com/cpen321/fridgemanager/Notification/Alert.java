@@ -13,7 +13,7 @@ public class Alert extends AppCompatActivity {
 
     public void cancelAlarm(int notifID) {
 
-        Intent myIntent = new Intent(this, AlertReceiver.class);
+        Intent myIntent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notifID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 
@@ -27,21 +27,22 @@ public class Alert extends AppCompatActivity {
     }
 
     // TODO:  MSG. WHAT HAPPENS IF JANUARY 31 AND DAY IS ADDED
-    public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType) {
+    public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType, int amount) {
         android.util.Log.i("Notification ID ", " Set ID: "+notifID);
 
         Calendar calendar = Calendar.getInstance();
 
         calendar.add(Calendar.SECOND, 10);
-        //calendar.set(Calendar.HOUR_OF_DAY, 18);
+        //calendar.set(Calendar.HOUR_OF_DAY, 12);
         calendar.add(Calendar.DAY_OF_YEAR, daysTillExpire);
 
         android.util.Log.i("AFTER ",": " +calendar);
 
         // Issues a new notification to be sent
-        Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
         intent.putExtra("NOTIF_TYPE", alarmType);
         intent.putExtra("ID", notifID);
+        intent.putExtra("AMOUNT", amount);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
