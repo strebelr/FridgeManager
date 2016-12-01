@@ -32,14 +32,14 @@
         android:id="@+id/cameraIcon"/>
 
     <TextView
-        android:text="      Scan your grocery receipt and all the food items will be automatically added to “Fridge”.
+        android:text="Scan your grocery receipt and all the food items will be automatically added to “Fridge”.
         "
         android:layout_below="@+id/intro"
         android:layout_toRightOf="@+id/cameraIcon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
-        android:paddingRight="16dp"
+        android:paddingRight="10dp"
         android:paddingBottom="10dp"
         android:id="@+id/cameraIconText"/>
 
@@ -53,21 +53,21 @@
         android:id="@+id/undoIcon"/>
 
     <TextView
-        android:text="      Undo a delete or decrement action you took. You can undo up to 10 actions.
+        android:text="Undo a delete or decrement action you took. You can undo up to 10 actions.
         "
         android:layout_below="@+id/cameraIconText"
         android:layout_toRightOf="@+id/cameraIcon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
-        android:paddingRight="16dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
         android:id="@+id/undoIconText"/>
 
     <ImageView
         android:layout_below="@+id/undoIconText"
         android:layout_alignParentLeft="true"
         android:paddingLeft="6dp"
-        android:paddingBottom="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_menu"
@@ -82,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
-        android:paddingRight="16dp"
+        android:paddingRight="10dp"
         android:paddingBottom="10dp"
         android:id="@+id/menuIconText"/>
 
@@ -96,15 +96,28 @@
         android:layout_below="@+id/menuIconText"
         android:id="@+id/fridge"/>
 
-    <TextView
-        android:text="Displays all food items with amount and expiry date."
+    <ImageView
+        android:layout_below="@+id/fridge"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="6dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:layout_below="@+id/fridge"
-        android:id="@+id/fridgeText1"/>
+        app:srcCompat="@drawable/ic_food_stock"
+        android:id="@+id/fridgeIcon"/>
 
     <TextView
+        android:text="Displays all food items with amount and expiry date. Amount can be decreased using “Decrement Button”."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="6dp"
+        android:paddingRight="10dp"
+
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/fridge"
+        android:layout_toRightOf="@+id/fridgeIcon"
+        android:id="@+id/fridgeText1"/>
+
+ <!--   <TextView
         android:text="Amount can be decreased using “Decrement Button”."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -112,6 +125,7 @@
         android:paddingBottom="10dp"
         android:layout_below="@+id/fridgeText1"
         android:id="@+id/fridgeText2"/>
+-->
 
     <TextView
         android:text="Food to Expire"
@@ -120,19 +134,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:paddingLeft="16dp"
-        android:layout_below="@+id/fridgeText2"
+        android:layout_below="@+id/fridgeText1"
         android:id="@+id/expire"/>
 
-    <TextView
-        android:text="Displays all food items that will expire within X days."
+    <ImageView
+        android:layout_below="@+id/expire"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="6dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:layout_below="@+id/expire"
-        android:id="@+id/expireText1"/>
+        app:srcCompat="@drawable/ic_food_to_expire"
+        android:id="@+id/expireIcon"/>
 
     <TextView
+        android:text="Displays all food items that will expire within X days. You can adjust X under “time to alert” tab in the “drop down menu”. The food can be deleted using “Delete Button” after it is consumed."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="6dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/expire"
+        android:layout_toRightOf="@+id/expireIcon"
+        android:id="@+id/expireText1"/>
+
+<!--    <TextView
         android:text="You can adjust X under “time to alert” tab in the “drop down menu”. The food can be deleted using “Delete Button” after it is consumed."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -140,6 +165,9 @@
         android:paddingBottom="10dp"
         android:layout_below="@+id/expireText1"
         android:id="@+id/expireText2"/>
+-->
+
+
 
     <TextView
         android:text="Manual Entry"
@@ -149,16 +177,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
-        android:layout_below="@+id/expireText2"
+        android:layout_below="@+id/expireText1"
         android:id="@+id/manual"/>
+
+    <ImageView
+        android:layout_below="@+id/manual"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="6dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_plus"
+        android:id="@+id/manualIcon"/>
 
     <TextView
         android:text="You can manually add food with its name, amount, expire date, and location to be stored. The added food will be displayed on “Fridge” page."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingBottom="10dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="30dp"
         android:layout_below="@+id/manual"
+        android:layout_toRightOf="@id/manualIcon"
         android:id="@+id/manualText1"/>
 
  <!--   <TextView
