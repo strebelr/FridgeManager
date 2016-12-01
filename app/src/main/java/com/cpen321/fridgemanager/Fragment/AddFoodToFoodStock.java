@@ -205,9 +205,6 @@ public class AddFoodToFoodStock extends Fragment {
             difference = (int) TimeUnit.DAYS.convert(expiry.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS) + 1;
         }
 
-        DatabaseInteraction di = new DatabaseInteraction(view.getContext());
-        di.writeToStorage(name, amount, int_unit, location, difference);
-
         //Set alarms
         //String catted = myAlarm.concatenate(name, String.valueOf(amount), di.getCurrentDate(), di.getFutureDate(difference));
         EXPIRY_ID = myAlarm.convertToID(di.getFutureDate(difference));
@@ -240,6 +237,8 @@ public class AddFoodToFoodStock extends Fragment {
 
         if(addToValue.equals("Food Stock"))
         {
+            DatabaseInteraction di = new DatabaseInteraction(view.getContext());
+            di.writeToStorage(name, amount, int_unit, location, difference);
             //Write to database interaction.
         }
         else if(addToValue.equals("Library")) {
@@ -247,7 +246,7 @@ public class AddFoodToFoodStock extends Fragment {
             final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
             String foodAbbrValue = foodAbbr.getText().toString();
             //Check if the food item in the library with the same name contains the
-            //abbreviation that is entered. Then add to the library.
+            //abbreviation that is entered. Then add to the library. Amount is disabled.
         }
         else if(addToValue.equals("Both")) {
             //Add to library if does not exist.
