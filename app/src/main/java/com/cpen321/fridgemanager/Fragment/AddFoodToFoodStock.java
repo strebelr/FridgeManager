@@ -81,7 +81,7 @@ public class AddFoodToFoodStock extends Fragment {
 
             public void onItemSelected(AdapterView<?> arg0, View v, int position, long id)
             {
-                hideFields(v);
+                hideFields(view);
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -125,21 +125,24 @@ public class AddFoodToFoodStock extends Fragment {
     private void hideFields(View view) {
         Spinner addTo = (Spinner) view.findViewById(R.id.spinner1_for_library);
         String addToValue = addTo.getSelectedItem().toString();
+
+        final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
+        final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
+        Spinner amountSpinner = (Spinner) view.findViewById(R.id.amountspinner);
+
         if(addToValue.equals("Food Stock"))
         {
-            final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
             foodAbbr.setEnabled(false);
+            amountEditText.setEnabled(true);
+            amountSpinner.setEnabled(true);
+
         }
         else if(addToValue.equals("Library")) {
-            final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
             amountEditText.setEnabled(false);
-            Spinner amountSpinner = (Spinner) view.findViewById(R.id.amountspinner);
             amountSpinner.setEnabled(false);
+            foodAbbr.setEnabled(true);
         }
-        else if(addToValue.equals("Both")) {
-            Spinner amountSpinner = (Spinner) view.findViewById(R.id.amountspinner);
-            amountSpinner.setEnabled(false);
-        }
+
 
     }
 
