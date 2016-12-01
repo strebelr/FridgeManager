@@ -49,7 +49,7 @@ public class UI_test {
         boolean b = (activity instanceof ScanResults);
         assertTrue(b);
 
-        onView(withId(R.id.button_add_to_food_stock)).perform(click());
+        onView(withId(R.id.buttonAddAll)).perform(click());
         activity = getActivityInstance();
         boolean c = (activity instanceof MainMenu);
         assertTrue(c);
