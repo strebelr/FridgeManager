@@ -16,13 +16,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/FridgeManagerTheme">
-        <activity android:name=".Activity.MainMenu">
+        <activity android:name=".Activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Activity.MainMenu" />
+
         <activity android:name=".OcrReader.OcrCaptureActivity"
             android:label="@string/button_scanReceipt" />
 
@@ -32,7 +35,7 @@
             ></activity>
 
         /* Alarms */
-        <receiver android:name=".Notification.AlertReceiver"/>
+        <receiver android:name=".Notification.AlarmReceiver"/>
 
         /* Instruction */
         <activity android:name=".Activity.Instruction"/>

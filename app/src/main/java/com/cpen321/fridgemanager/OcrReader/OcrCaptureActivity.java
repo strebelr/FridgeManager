@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -138,6 +139,39 @@ public class OcrCaptureActivity extends AppCompatActivity {
                 Snackbar.LENGTH_LONG)
                 .show();
 
+        SharedPreferences settings = getSharedPreferences("prefs",0);
+        boolean firstCamera = settings.getBoolean("firstCamera",false);
+        if (firstCamera == false) {
+            SharedPreferences.Editor editor= settings.edit();
+            editor.putBoolean("firstCamera",true);
+            editor.commit();
+
+            showFirstTimeDialog();
+        }
+
+    }
+
+    /*
+      Shows first time dialog to explain usage.
+     */
+    private void showFirstTimeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setCancelable(true);
+        builder.setTitle("Scan Your Food");
+        builder.setMessage(getString(R.string.ocr_explanation));
+
+        builder.setPositiveButton(
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
     }
 
     /**

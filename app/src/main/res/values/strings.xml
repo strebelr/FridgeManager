@@ -29,6 +29,20 @@
     <string name="try_again">Reset</string>
     <string name="take_more">Take More</string>
     <string name="daysToExpire">Time to Alert</string>
+    <string name="title_expiry">"Enter Days to Show in Food to Expire"</string>
+    <string name="title_decrement">"Select Food Decrement Percentage"</string>
+    <string name="ocr_explanation">"Text Overlays will appear over readable letters.
+        \n\nTap after seeing the overlay to scan your food items.
+        \n\nPinch to zoom in."</string>
+    <string name="scanresults_explanation">This screen shows the results from your scan.
+        \n\nClick delete button to stop adding.
+        \n\nEnter quantities for each fields.
+        \n\nClick cancel to drop your scan.
+        \n\nIf there are more foods to add, click "Take More".
+        \n\nIf all fields are entered click "Add All" to add.</string>
+    <string name="add_nofood">"No food added: Returning to Main Menu"</string>
+    <string name="alert_initial">"Invalid amount for item: "</string>
+    <string name="alert_reenter">"\nRe-enter to try again."</string>
     <string name="decrease">Amount Consumed</string>
     <string-array name="amount">
         <item>units</item>

@@ -1,46 +1,35 @@
 package com.cpen321.fridgemanager.Fragment;
 
-import android.app.AlarmManager;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.FragmentActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.NumberPicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cpen321.fridgemanager.Activity.MainMenu;
-import com.cpen321.fridgemanager.Activity.ScanResults;
-import com.cpen321.fridgemanager.Algorithm.TextRecognitionInteraction;
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
-import com.cpen321.fridgemanager.Notification.Alert;
-import com.cpen321.fridgemanager.Notification.AlertReceiver;
+import com.cpen321.fridgemanager.Notification.Alarm;
 import com.cpen321.fridgemanager.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-
-import static com.cpen321.fridgemanager.R.id.mTlayout;
 
 
 public class FoodToExpire extends Fragment{
@@ -55,6 +44,10 @@ public class FoodToExpire extends Fragment{
     TableLayout mTlayout;
     private JSONArray toExpire;
     TableRow titleToExpire;
+    private FragmentActivity myContext;
+
+    private Alarm myAlarm;
+
 
     public FoodToExpire() {
         // Required empty public constructor
@@ -75,10 +68,19 @@ public class FoodToExpire extends Fragment{
         mTlayout = (TableLayout) view.findViewById(R.id.TableToExpire);
 
         di = new DatabaseInteraction(getContext());
-
+        myAlarm = new Alarm();
         refresh();
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity){
+            myContext=(FragmentActivity) context;
+        }
+
     }
 
     @Override
@@ -207,16 +209,21 @@ public class FoodToExpire extends Fragment{
                     @Override
                     public void onClick(View v) {
                         int index = v.getId();
+                        int amount = 0;
+                        String amountS = "";
                         String expiry = "";
                         try {
-                            Toast toast = Toast.makeText(getContext(), ((JSONObject) toExpire.get(index)).optString("name") + " removed.", Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(getContext(), toExpire.getJSONObject(index).optString("name") + " removed.", Toast.LENGTH_SHORT);
                             toast.show();
-                            di.removeFood((JSONObject) toExpire.get(index), ((JSONObject) toExpire.get(index)).optString("location").toString());
-                            expiry = ((JSONObject) toExpire.get(index)).optString("expiry");
+                            di.removeFood(toExpire.getJSONObject(index), toExpire.getJSONObject(index).optString("location").toString());
+                            expiry = toExpire.getJSONObject(index).optString("expiry");
+                            amountS = toExpire.getJSONObject(index).optString("quantity");
+                            amount = Integer.parseInt(amountS);
                             refresh();
                         } catch(JSONException e) {}
 
-                        cancelAlarm(expiry);
+                        myAlarm.cancelAlarm(myContext, expiry, amount);
+                        //cancelAlarm(expiry, amount);
 
                     }
                 });
@@ -308,15 +315,15 @@ public class FoodToExpire extends Fragment{
         newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
     }
 
-    private void cancelAlarm(String expiry) {
+    /*private void cancelAlarm(String expiry, int amount) {
         int EXPIRY_ID = Alert.convertToID(expiry);
         int PRE_EXPIRY_ID = Alert.convertToID(expiry) + 50000;
         //android.util.Log.i("Notification ID", " IDs are set: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
 
 
         //playing around here
-        if(ScanResults.counterID[EXPIRY_ID] == 1 || ScanResults.counterID[PRE_EXPIRY_ID] == 1) {
-            Intent myIntent = new Intent(getActivity(), AlertReceiver.class);
+        if(ScanResults.counterID[EXPIRY_ID] == amount || ScanResults.counterID[PRE_EXPIRY_ID] == amount) {
+            Intent myIntent = new Intent(getActivity(), AlarmReceiver.class);
             PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getActivity(), EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getActivity(), PRE_EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager1 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -328,20 +335,20 @@ public class FoodToExpire extends Fragment{
             pendingIntent1.cancel();
             pendingIntent2.cancel();
 
-            ScanResults.counterID[EXPIRY_ID]--;
-            ScanResults.counterID[PRE_EXPIRY_ID]--;
+            ScanResults.counterID[EXPIRY_ID]-= amount;
+            ScanResults.counterID[PRE_EXPIRY_ID]-= amount;
 
             android.util.Log.i("Notification ID", " Cancelled ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
             android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
 
         } else {
             if (ScanResults.counterID[EXPIRY_ID] > 0 || ScanResults.counterID[PRE_EXPIRY_ID] > 0) {
-                ScanResults.counterID[EXPIRY_ID]--;
-                ScanResults.counterID[PRE_EXPIRY_ID]--;
+                ScanResults.counterID[EXPIRY_ID]-= amount;
+                ScanResults.counterID[PRE_EXPIRY_ID]-= amount;
                 android.util.Log.i("Notification ID", " Decrease from counter ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
             }
 
             android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
         }
-    }
+    }*/
 }
