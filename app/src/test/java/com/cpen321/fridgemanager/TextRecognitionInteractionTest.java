@@ -30,7 +30,11 @@ public class TextRecognitionInteractionTest {
 
     @Before
     public void setUp() throws Exception {
-        array = new JSONArray("[{\"name\":\"Apple\",\"expiry\":\"5\"},{\"name\":\"Orange\",\"expiry\":\"5\"}]");
+
+        array = new JSONArray("[{\"name\":\"Apple\",\"abb\":[\"Apple\",\"Apples\"],\"expiry\":\"5\"},{\"name\":\"Orange\",\"abb\":[\"Orange\",\"Oranges\"],\"expiry\":\"5\"}," +
+                "{\"name\":\"Tomato\",\"abb\":[\"Tov\",\"Tomato\",\"Tomatoes\"],\"expiry\":\"5\",\"unit\":\"0\", \"location\":\"Fridge\"}," +
+                "{\"name\":\"Mushroom\",\"abb\":[\"Mshroom\",\"Mushrooms\"],\"expiry\":\"5\",\"unit\":\"1\", \"location\":\"Fridge\"},]");
+
         ti = new TextRecognitionInteraction(mMockContext, array);
     }
 
@@ -38,6 +42,7 @@ public class TextRecognitionInteractionTest {
     public void tearDown() throws Exception {
         ti = null;
     }
+
 
     @Test
     public void isFood_test() throws Exception {
@@ -61,9 +66,7 @@ public class TextRecognitionInteractionTest {
         assertEquals("Fail: Test 5", "Orange", ti.isFood(test5).optString("name").toString());
         assertEquals("Fail: Test 6", "Orange", ti.isFood(test6).optString("name").toString());
         assertEquals("Fail: Test 7", "Orange", ti.isFood(test7).optString("name").toString());
-        assertEquals("Fail: Test 8", "Spanich", ti.isFood(test8).optString("name").toString());
-        assertEquals("Fail: Test 9", "Spanich", ti.isFood(test9).optString("name").toString());
-        assertEquals("Fail: Test 10", "Spanich", ti.isFood(test10).optString("name").toString());
+
     }
 
     // Abbreviation tests

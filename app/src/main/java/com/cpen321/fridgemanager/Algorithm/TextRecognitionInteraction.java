@@ -39,7 +39,6 @@ public class TextRecognitionInteraction {
       Constructor that assigns library to provided JSONArray. Useful for testing.
      */
     public TextRecognitionInteraction(Context context, JSONArray array) {
-        di = new DatabaseInteraction(context);
         library = array;
     }
 

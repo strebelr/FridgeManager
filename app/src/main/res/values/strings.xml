@@ -32,14 +32,15 @@
     <string name="title_expiry">"Enter Days to Show in Food to Expire"</string>
     <string name="title_decrement">"Select Food Decrement Percentage"</string>
     <string name="ocr_explanation">"Text Overlays will appear over readable letters.
-        \n\nTap after seeing the overlay to scan your food items.
-        \n\nPinch to zoom in."</string>
+        \n\nTry to capture the food items as accurate as you can.
+        \nTap after seeing the overlay to scan your food items.
+        \n\nYou can pinch to zoom in."</string>
     <string name="scanresults_explanation">This screen shows the results from your scan.
-        \n\nClick delete button to stop adding.
+        \n\nClick delete button to remove the food item.
         \n\nEnter quantities for each fields.
         \n\nClick cancel to drop your scan.
-        \n\nIf there are more foods to add, click "Take More".
-        \n\nIf all fields are entered click "Add All" to add.</string>
+        \n\nIf there are more foods to scan, click "Take More".
+        \n\nOnce all fields are entered and ready to be added, click "Add All".</string>
     <string name="add_nofood">"No food added: Returning to Main Menu"</string>
     <string name="alert_initial">"Invalid amount for item: "</string>
     <string name="alert_reenter">"\nRe-enter to try again."</string>

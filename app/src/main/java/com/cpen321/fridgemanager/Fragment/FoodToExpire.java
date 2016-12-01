@@ -48,6 +48,8 @@ public class FoodToExpire extends Fragment{
 
     private Alarm myAlarm;
 
+    private TextView holdTextE;
+
 
     public FoodToExpire() {
         // Required empty public constructor
@@ -66,6 +68,9 @@ public class FoodToExpire extends Fragment{
         View view = inflater.inflate(R.layout.fragment_food_to_expire, container, false);
 
         mTlayout = (TableLayout) view.findViewById(R.id.TableToExpire);
+
+        holdTextE = (TextView)view.findViewById(R.id.holdTextE);
+        holdTextE.setText("");
 
         di = new DatabaseInteraction(getContext());
         myAlarm = new Alarm();
@@ -124,6 +129,11 @@ public class FoodToExpire extends Fragment{
             toExpire = di.getSortedExpiryArray();
             createTitle(titleToExpire,foodToExpire, R.string.toExpire, toExpire.length());
             createTable();
+
+            if(toExpire.length() == 0)
+                holdTextE.setText("");
+            else
+                holdTextE.setText("Hold down food item to change its expiry date");
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -247,7 +257,8 @@ public class FoodToExpire extends Fragment{
                         //call edit button here
                         promptExpiryWarning();
 
-                        food_name.setText("test");
+                        food_name.setText(DatePicker.newExpiry);
+                        android.util.Log.i("Expiry ", " New Expiry: "+DatePicker.newExpiry);
                         return true;
                     }
                 });
@@ -303,7 +314,7 @@ public class FoodToExpire extends Fragment{
         alert.show();
     }
 
-    AddFoodToFoodStockDatePicker newFragment;
+    DatePicker newFragment;
 
     private void editExpiryDate(){
         showDatePickerDialog();
@@ -311,7 +322,7 @@ public class FoodToExpire extends Fragment{
 
 
     public void showDatePickerDialog() {
-        newFragment = new AddFoodToFoodStockDatePicker();
+        newFragment = new DatePicker();
         newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
     }
 

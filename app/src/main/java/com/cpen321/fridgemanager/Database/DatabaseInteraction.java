@@ -110,7 +110,7 @@ public class DatabaseInteraction {
     }
 
     /*
-      TODO: Update Undo Stack JSON.
+      Update Undo Stack JSON.
      */
     private JSONObject stack(String root, JSONObject food, String sel, String location) {
         JSONObject rootObject;
@@ -216,7 +216,7 @@ public class DatabaseInteraction {
     }
 
     /*
-      TODO: Undo previous delete. Pop from JSON Stack and return root.
+      Undo previous delete. Pop from JSON Stack and return root.
      */
     private JSONObject undo(String rootUndo, String rootStorage) {
         try {
@@ -320,7 +320,6 @@ public class DatabaseInteraction {
     }
 
     /*
-      TODO: Decrement food from a given root.
       @param root object in string
       @param array to specific
       @param object to decrement from
@@ -406,6 +405,8 @@ public class DatabaseInteraction {
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
                 write(outputStreamWriter, remove(root, location, food).toString());
         } catch (FileNotFoundException e) {}
+
+        addStack(food, REM_SEL, location);
     }
 
     /*
@@ -417,7 +418,6 @@ public class DatabaseInteraction {
      */
     private JSONObject remove(String root, String array, JSONObject element) {
         try {
-            addStack(element, REM_SEL, array);
             // If root object exists
             if (root != "") {
                 // Make a JSON Object from root String
@@ -697,15 +697,6 @@ public class DatabaseInteraction {
             }
         }
         return result;
-    }
-
-    public int findObject(JSONArray array, JSONObject obj) throws JSONException {
-        for (int i = 0; i < array.length(); i++){
-            if (array.getJSONObject(i).optString("name") == obj.optString("name")) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     /*
