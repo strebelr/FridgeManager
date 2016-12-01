@@ -39,7 +39,7 @@ public class UI_test {
             new ActivityTestRule<>(MainMenu.class);
 
     @Test
-    public void navigate() {
+    public void navigateTo_ScanResults() throws Exception{
 
         // test 1: clicking on the camera floating button, click on the top layout
         // check if these actions lead to scan result page
@@ -49,17 +49,12 @@ public class UI_test {
         boolean b = (activity instanceof ScanResults);
         assertTrue(b);
 
-        // do more
-
-        // test 2: on the scan result page, click "ADD ALL" button
-        // check if these actions lead to food stock page
-        if (b == true) {
-            onView(withId(R.id.buttonAddAll)).perform(click());
-            Activity activity2 = getActivityInstance();
-            boolean check2 = (activity2 instanceof MainMenu);
-            assertTrue(check2);
-        }
+        onView(withId(R.id.button_add_to_food_stock)).perform(click());
+        activity = getActivityInstance();
+        boolean c = (activity instanceof MainMenu);
+        assertTrue(c);
     }
+
 
     // getting the next activity according to the action performed
     public Activity getActivityInstance() {
