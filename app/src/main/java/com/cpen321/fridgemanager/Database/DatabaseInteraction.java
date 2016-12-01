@@ -699,15 +699,6 @@ public class DatabaseInteraction {
         return result;
     }
 
-    public int findObject(JSONArray array, JSONObject obj) throws JSONException {
-        for (int i = 0; i < array.length(); i++){
-            if (array.getJSONObject(i).optString("name") == obj.optString("name")) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     /*
       Returns a JSONArray with attribute, provided a root object.
       @param root object in string
