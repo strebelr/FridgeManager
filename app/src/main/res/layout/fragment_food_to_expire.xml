@@ -30,7 +30,8 @@
                 android:layout_height="150dp"
                 android:gravity="center"
                 android:text=" "
-                android:layout_below="@id/mTlayoutF"/>
+                android:id="@+id/holdTextE"
+                android:layout_below="@id/TableToExpire"/>
 
         </RelativeLayout>
 

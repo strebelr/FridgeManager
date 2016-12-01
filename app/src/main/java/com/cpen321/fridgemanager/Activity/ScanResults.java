@@ -56,10 +56,11 @@ public class ScanResults extends AppCompatActivity {
     // Application Context
     private Context mContext;
 
-    /********* Variables used for Alarm **********/
+    // Alarm object to perform Alarm interactions
     private Alarm mAlarm;
 
-    public static int EXPIRY_ID; // random number to generate unique ID
+    //TODO: may move this to Alarm file
+    public static int EXPIRY_ID;
     public static int PRE_EXPIRY_ID;
     private static final int EXPIRY = 0;        // expired
     private static final int PRE_EXPIRY = 1;    // soon to expire

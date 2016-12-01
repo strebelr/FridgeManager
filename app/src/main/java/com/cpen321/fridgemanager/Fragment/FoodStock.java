@@ -58,11 +58,10 @@ public class FoodStock extends Fragment{
 
     private SharedPreferences settings;
 
-    //Alert alert;
+    private TextView holdTextS;
 
     public FoodStock() {
         // Required empty public constructor
-
     }
 
     @Override
@@ -74,6 +73,8 @@ public class FoodStock extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_food_stock, container, false);
+        holdTextS = (TextView)view.findViewById(R.id.holdTextS);
+        holdTextS.setText("");
 
         mTlayout = (TableLayout) view.findViewById(R.id.mTlayoutF);
 
@@ -103,8 +104,6 @@ public class FoodStock extends Fragment{
             if(getActivity() != null) {
                 refresh();
             }
-        }else{
-
         }
     }
 
@@ -139,6 +138,7 @@ public class FoodStock extends Fragment{
         TextView titleFreshText = new TextView(getActivity());
         TextView titlePantryText = new TextView(getActivity());
         TextView titleFreezerText = new TextView(getActivity());
+
         try {
             trs.clear();
             fridge = di.getArray("Fridge");
@@ -153,6 +153,12 @@ public class FoodStock extends Fragment{
             freezer = di.getArray("Freezer");
             createTitle(titleFreezer,titleFreezerText, R.string.foodStock_Freezer, freezer.length());
             createTable(3);
+
+            if(fridge.length() == 0 && fresh.length() == 0 && pantry.length() == 0 && freezer.length() == 0)
+                holdTextS.setText("");
+            else
+                holdTextS.setText("Hold down food item to change its expiry date");
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

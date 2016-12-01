@@ -48,6 +48,8 @@ public class FoodToExpire extends Fragment{
 
     private Alarm myAlarm;
 
+    private TextView holdTextE;
+
 
     public FoodToExpire() {
         // Required empty public constructor
@@ -66,6 +68,9 @@ public class FoodToExpire extends Fragment{
         View view = inflater.inflate(R.layout.fragment_food_to_expire, container, false);
 
         mTlayout = (TableLayout) view.findViewById(R.id.TableToExpire);
+
+        holdTextE = (TextView)view.findViewById(R.id.holdTextE);
+        holdTextE.setText("");
 
         di = new DatabaseInteraction(getContext());
         myAlarm = new Alarm();
@@ -124,6 +129,11 @@ public class FoodToExpire extends Fragment{
             toExpire = di.getSortedExpiryArray();
             createTitle(titleToExpire,foodToExpire, R.string.toExpire, toExpire.length());
             createTable();
+
+            if(toExpire.length() == 0)
+                holdTextE.setText("");
+            else
+                holdTextE.setText("Hold down food item to change its expiry date");
 
         } catch (ParseException e) {
             e.printStackTrace();
