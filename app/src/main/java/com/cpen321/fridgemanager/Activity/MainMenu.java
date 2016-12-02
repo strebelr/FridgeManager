@@ -63,7 +63,6 @@ public class MainMenu extends AppCompatActivity {
 
         // Create a new database interaction object
         di = new DatabaseInteraction(getApplicationContext());
-        di.setUp();
 
         // Checks to run first time instruction page
         checkFirstRun();
@@ -76,13 +75,15 @@ public class MainMenu extends AppCompatActivity {
     private void checkFirstRun(){
         SharedPreferences settings = getSharedPreferences("prefs",0);
         boolean firstRun = settings.getBoolean("firstRun",false);
-        if(firstRun == false)//if running for first time
+        if(firstRun == false) //if running for first time
         {
             SharedPreferences.Editor editor= settings.edit();
             editor.putBoolean("firstRun",true);
             editor.putString("decrement", "0.25");
             editor.putInt("expiryWarning", 3);
             editor.commit();
+            di.setUp();
+            di.importLibrary();
             Intent i = new Intent(this,Instruction.class);//Activity to be launched For the First time
             startActivity(i);
             finish();

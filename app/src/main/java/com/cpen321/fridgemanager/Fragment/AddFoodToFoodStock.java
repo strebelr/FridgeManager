@@ -121,22 +121,27 @@ public class AddFoodToFoodStock extends Fragment {
 
         final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
         final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
-        Spinner amountSpinner = (Spinner) view.findViewById(R.id.amountspinner);
 
         if(addToValue.equals("Food Stock"))
         {
             foodAbbr.setEnabled(false);
-            foodAbbr.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+            foodAbbr.setText("XXXX");
             amountEditText.setEnabled(true);
-            amountEditText.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-            amountSpinner.setEnabled(true);
+            amountEditText.setText("");
         }
         else if(addToValue.equals("Library")) {
-            amountEditText.setEnabled(false);
-            amountEditText.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
-            amountSpinner.setEnabled(false);
             foodAbbr.setEnabled(true);
-            foodAbbr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            foodAbbr.setText("");
+            amountEditText.setEnabled(false);
+            amountEditText.setText("XXXX");
+        }
+        else {
+            foodAbbr.setEnabled(true);
+            if (foodAbbr.getText().toString().equals("XXXX"))
+                foodAbbr.setText("");
+            amountEditText.setEnabled(true);
+            if (amountEditText.getText().toString().equals("XXXX"))
+                amountEditText.setText("");
         }
     }
 
@@ -186,7 +191,7 @@ public class AddFoodToFoodStock extends Fragment {
         String[] strings;
         Calendar expiry = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
-        
+
         // TODO: CHECK VALID EXPIRY
         int difference = 0;
         if (expiryDate.length() != 0) {
@@ -218,9 +223,15 @@ public class AddFoodToFoodStock extends Fragment {
             alert = true;
         }
 
-        if(amount == 0 && !alert) {
+
+        if(amount <= 0 && !alert && !(addToValue.equals("Library"))) {
             // Pop warning
-            popDialog("Error", "Amount needs to be entered");
+            popDialog("Error", "A valid amount (non-zero) must be entered");
+            alert = true;
+        }
+
+        if(expiryDate.equals("") && !alert) {
+            popDialog("Error", "An expiry date must be entered");
             alert = true;
         }
 
@@ -234,7 +245,6 @@ public class AddFoodToFoodStock extends Fragment {
 
                 // Set alarms
                 myAlarm.prepAlarm(myContext, view, myAlarm, di, difference, amount);
-
             } else if (addToValue.equals("Library")) {
                 // Check if the food item in the library with the same name contains the
                 // abbreviation that is entered. Then add to the library. Amount is disabled.
@@ -247,7 +257,7 @@ public class AddFoodToFoodStock extends Fragment {
                         popDialog("Error", "Abbreviation needs to be entered");
                     } else {
                         // If all fields are entered
-                        // TODO: ADD TO LIBRARY
+                        di.addToLibrary(name, abbr, difference, int_unit, location);
                         viewPager.setCurrentItem(0);
                     }
                 } else {
@@ -257,12 +267,26 @@ public class AddFoodToFoodStock extends Fragment {
 
             } else if (addToValue.equals("Both")) {
                 // Add to library if does not exist.
-                di.writeToStorage(name, amount, int_unit, location, difference);
-                // TODO: ADD TO LIBRARY
-                viewPager.setCurrentItem(0);
 
-                // Set alarms
-                myAlarm.prepAlarm(myContext, view, myAlarm, di, difference, amount);
+                final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
+                String abbr = foodAbbr.getText().toString();
+
+                if (abbr != null) {
+                    if (abbr.length() == 0) {
+                        // Pop warning
+                        popDialog("Error", "Abbreviation needs to be entered");
+                    } else {
+                        // If all fields are entered
+                        di.writeToStorage(name, amount, int_unit, location, difference);
+                        di.addToLibrary(name, abbr, difference, int_unit, location);
+                        viewPager.setCurrentItem(0);
+                        // Set alarms
+                        myAlarm.prepAlarm(myContext, view, myAlarm, di, difference, amount);
+                    }
+                } else {
+                    // Pop warning
+                    popDialog("Error", "Abbreviation needs to be entered");
+                }
 
             } else {
                 // Pop Warning

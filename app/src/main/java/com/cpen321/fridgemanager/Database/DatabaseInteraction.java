@@ -1,6 +1,8 @@
 package com.cpen321.fridgemanager.Database;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,7 +67,6 @@ public class DatabaseInteraction {
       Sets up the storage json. Runs only once after installation.
      */
     public void setUp() {
-        if (readFile(LIBRARY_DEST) != "") return;
         try { // Output the new JSON Root Object to File
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(storage, Context.MODE_PRIVATE));
             write(outputStreamWriter, makeRoot().toString());
@@ -259,21 +260,83 @@ public class DatabaseInteraction {
     /*
       Add new food or abbreviation to the library.
      */
-    public void addToLibrary() {
+    public void addToLibrary(String name, String abb, int expiry, int unit, String location) {
         String root = readFile(LIBRARY_DEST);
         if (root == "") return;
         try {  // Output the new JSON Root Object to File
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(library, Context.MODE_PRIVATE));
-            write(outputStreamWriter, addDefinition(root).toString());
+            write(outputStreamWriter, addDefinition(root, name, abb, expiry, unit, location).toString());
         } catch (FileNotFoundException e) {}
     }
 
     /*
       TODO: Add new word to library.
      */
-    private JSONObject addDefinition(String root) {
+    private JSONObject addDefinition(String root, String name, String abbr, int expiry, int unit, String location) {
+        try {
+            JSONObject library = new JSONObject(root);
+            JSONArray food_info = library.optJSONArray("Foods");
+            JSONObject food;
+            for (int i = 0; i < food_info.length(); i++ ) {
+                food = food_info.getJSONObject(i);
+
+                JSONArray abbr_list = food.optJSONArray("abb");
+                boolean abbr_exists = false;
+                for (int j = 0; j < abbr_list.length(); j++) {
+                    if ((abbr_list.getString(j).toLowerCase()).equals(abbr.toLowerCase())) {
+                        abbr_exists = true;
+                        break;
+                    }
+                }
+
+                if ((food.optString("name").toLowerCase()).equals(name.toLowerCase())
+                        && Integer.parseInt(food.optString("expiry")) == expiry
+                        && Integer.parseInt(food.optString("unit")) == unit
+                        && food.optString("location").equals(location)) {
+
+                    // Case 1: If food type exists in database
+
+                    if (abbr_exists) {
+                        // Case 1.1: Do nothing
+                        return library;
+                    }
+                    else {
+                        // Case 1.2: Add Abbreviation
+                        abbr_list.put(abbr);
+                        return library;
+                    }
+                }
+                else if ((food.optString("name").toLowerCase()).equals(name.toLowerCase())) {
+                    // Case 2: If food type exists but information differ, overwrite
+                    if (!abbr_exists) {
+                        abbr_list.put(abbr);
+                    }
+                    food.put("expiry", expiry);
+                    food.put("unit", unit);
+                    food.put("location", location);
+                    return library;
+                }
+            }
+
+            // Case 3: Food does not exist
+            JSONObject newFood = new JSONObject();
+            JSONArray newAbbr = new JSONArray();
+            newFood.put("name", name);
+            newAbbr.put(abbr);
+            newFood.put("abb", newAbbr);
+            newFood.put("expiry", expiry);
+            newFood.put("unit", unit);
+            newFood.put("location", location);
+            food_info.put(newFood);
+
+            return library;
+
+        } catch (JSONException e) {}
         return null;
     }
+
+
+
 
     /*
       Decrement food. If given in plain units, decrement by 1. Else, decrement by 25% of original amount.
