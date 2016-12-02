@@ -39,16 +39,24 @@ public class UI_test {
             new ActivityTestRule<>(MainMenu.class);
 
     @Test
-    public void navigate() {
+    public void navigateTo_ScanResults() throws Exception{
 
+        // test 1: clicking on the camera floating button, click on the top layout
+        // check if these actions lead to scan result page
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.topLayout)).perform(click());
         Activity activity = getActivityInstance();
         boolean b = (activity instanceof ScanResults);
         assertTrue(b);
-        // do more
+
+        onView(withId(R.id.buttonAddAll)).perform(click());
+        activity = getActivityInstance();
+        boolean c = (activity instanceof MainMenu);
+        assertTrue(c);
     }
 
+
+    // getting the next activity according to the action performed
     public Activity getActivityInstance() {
         final Activity[] activity = new Activity[1];
         InstrumentationRegistry.getInstrumentation().runOnMainSync(new Runnable( ) {

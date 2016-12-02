@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -277,7 +278,7 @@ public class MainMenu extends AppCompatActivity {
         builder.setCancelable(true);
         builder.setTitle(getString(R.string.title_expiry));
 
-        final NumberPicker numberPicker = new NumberPicker(getApplicationContext());
+        final NumberPicker numberPicker = new NumberPicker(new ContextThemeWrapper(getApplicationContext(), R.style.numpicker_custom));
         numberPicker.setMaxValue(31);
         numberPicker.setMinValue(1);
 
