@@ -15,7 +15,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-
         <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"

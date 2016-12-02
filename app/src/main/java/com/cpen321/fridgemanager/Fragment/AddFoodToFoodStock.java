@@ -2,6 +2,8 @@ package com.cpen321.fridgemanager.Fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -133,14 +135,19 @@ public class AddFoodToFoodStock extends Fragment {
         if(addToValue.equals("Food Stock"))
         {
             foodAbbr.setEnabled(false);
+            foodAbbr.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
             amountEditText.setEnabled(true);
+            amountEditText.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
             amountSpinner.setEnabled(true);
 
         }
         else if(addToValue.equals("Library")) {
             amountEditText.setEnabled(false);
+            amountEditText.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
             amountSpinner.setEnabled(false);
             foodAbbr.setEnabled(true);
+            foodAbbr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
         }
 
 
@@ -205,6 +212,8 @@ public class AddFoodToFoodStock extends Fragment {
             difference = (int) TimeUnit.DAYS.convert(expiry.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS) + 1;
         }
 
+        DatabaseInteraction di = new DatabaseInteraction(view.getContext());
+
         //Set alarms
         //String catted = myAlarm.concatenate(name, String.valueOf(amount), di.getCurrentDate(), di.getFutureDate(difference));
         EXPIRY_ID = myAlarm.convertToID(di.getFutureDate(difference));
@@ -237,7 +246,7 @@ public class AddFoodToFoodStock extends Fragment {
 
         if(addToValue.equals("Food Stock"))
         {
-            DatabaseInteraction di = new DatabaseInteraction(view.getContext());
+
             di.writeToStorage(name, amount, int_unit, location, difference);
             //Write to database interaction.
         }
