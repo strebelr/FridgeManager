@@ -78,7 +78,7 @@ public class DatePicker extends DialogFragment implements DatePickerDialog.OnDat
         newExpiry = (view.getYear() + "-" + month + "-" + view.getDayOfMonth());
         android.util.Log.i("Expiry ", " New Expiry: "+newExpiry);
 
-        int daysTillExpiry =  (int) TimeUnit.DAYS.convert(expiry.getTime().getTime() - c.getTime().getTime(), TimeUnit.MILLISECONDS) + 1;
+        int daysTillExpiry =  (int) TimeUnit.DAYS.convert(expiry.getTime().getTime() - c.getTime().getTime(), TimeUnit.MILLISECONDS);
 
         EXPIRY_ID = a.convertToID(di.getFutureDate(daysTillExpiry));
         PRE_EXPIRY_ID = a.convertToID(di.getFutureDate(daysTillExpiry)) + 50000;
