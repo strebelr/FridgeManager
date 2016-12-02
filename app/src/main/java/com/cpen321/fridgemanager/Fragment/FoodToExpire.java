@@ -236,7 +236,6 @@ public class FoodToExpire extends Fragment{
                         } catch(JSONException e) {}
 
                         myAlarm.cancelAlarm(myContext, expiry, amount);
-                        //cancelAlarm(expiry, amount);
 
                     }
                 });

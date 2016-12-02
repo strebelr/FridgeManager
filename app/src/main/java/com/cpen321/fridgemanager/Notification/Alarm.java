@@ -6,11 +6,19 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import com.cpen321.fridgemanager.Activity.ScanResults;
+import com.cpen321.fridgemanager.Database.DatabaseInteraction;
+
 import java.util.Calendar;
 import static android.content.Context.ALARM_SERVICE;
 
+
 public class Alarm extends Fragment {
+
+    public static int EXPIRY_ID;
+    public static int PRE_EXPIRY_ID;
+    private static final int EXPIRY = 0;        // expired
+    private static final int PRE_EXPIRY = 1;    // soon to expire
+    public static double[] counterID = new double[400000];
 
     /*
       Sets up the alarm
@@ -54,7 +62,7 @@ public class Alarm extends Fragment {
         //android.util.Log.i("Notification ID", " IDs are set: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
 
         // checks if remaining ID is smaller than the amount being deleted
-        if (ScanResults.counterID[EXPIRY_ID] <= amount || ScanResults.counterID[PRE_EXPIRY_ID] <= amount) {
+        if (counterID[EXPIRY_ID] <= amount || counterID[PRE_EXPIRY_ID] <= amount) {
             Intent myIntent = new Intent(context, AlarmReceiver.class);
 
             // EXPIRY
@@ -70,21 +78,57 @@ public class Alarm extends Fragment {
             pendingIntent2.cancel();
 
             // resets number of ID on same day back to 0
-            ScanResults.counterID[EXPIRY_ID] = 0.0;
-            ScanResults.counterID[PRE_EXPIRY_ID] = 0.0;
+            counterID[EXPIRY_ID] = 0.0;
+            counterID[PRE_EXPIRY_ID] = 0.0;
 
             android.util.Log.i("Notification ID", " Cancelled ID: " + EXPIRY_ID + " and " + PRE_EXPIRY_ID);
-            android.util.Log.i("Notification ID", " ID Remaining: " + ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
+            android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
 
         // delete the given quantity/amount if there are IDs still remaining
         } else {
-            if (ScanResults.counterID[EXPIRY_ID] > 0.0 || ScanResults.counterID[PRE_EXPIRY_ID] > 0.0) {
-                ScanResults.counterID[EXPIRY_ID] -= amount;
-                ScanResults.counterID[PRE_EXPIRY_ID] -= amount;
+            if (counterID[EXPIRY_ID] > 0.0 || counterID[PRE_EXPIRY_ID] > 0.0) {
+                counterID[EXPIRY_ID] -= amount;
+                counterID[PRE_EXPIRY_ID] -= amount;
                 android.util.Log.i("Notification ID", " Decrease from counter ID: " + EXPIRY_ID + " and " + PRE_EXPIRY_ID);
             }
 
-            android.util.Log.i("Notification ID", " ID Remaining: " + ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
+            android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
+        }
+    }
+
+    /*
+      Decides which days the alarm will be set on and the message given
+      @param mContext
+      @param view
+      @param a
+      @param di
+      @param expiry
+      @param amount
+    */
+    public void prepAlarm(Context mContext, View view, Alarm a, DatabaseInteraction di, int expiry, double amount) {
+        EXPIRY_ID =  a.convertToID(di.getFutureDate(expiry));
+        PRE_EXPIRY_ID =  a.convertToID(di.getFutureDate(expiry)) + 50000;
+
+        if (counterID[EXPIRY_ID] == 0 || counterID[PRE_EXPIRY_ID] == 0) {
+
+            //sets alarm with cases
+            if (expiry > 4) {
+                a.setAlarm(mContext, view, expiry - 3, PRE_EXPIRY_ID, PRE_EXPIRY, amount);  // sends notification 3 days before expiry
+                a.setAlarm(mContext, view, expiry, EXPIRY_ID, EXPIRY, amount);
+            } else if (expiry <= 3 && expiry > 1) {
+                a.setAlarm(mContext, view, 1, PRE_EXPIRY_ID, PRE_EXPIRY, amount);           // sends notification the next day
+                a.setAlarm(mContext, view, expiry, EXPIRY_ID, EXPIRY, amount);
+            } else {
+                a.setAlarm(mContext, view, expiry, EXPIRY_ID, EXPIRY, amount);              // only sends notification on the day of expiry
+            }
+            counterID[EXPIRY_ID] += amount;
+            counterID[PRE_EXPIRY_ID]+= amount;
+            android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
+        } else {
+
+            counterID[EXPIRY_ID]+= amount;
+            counterID[PRE_EXPIRY_ID]+= amount;
+            android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
         }
     }
 

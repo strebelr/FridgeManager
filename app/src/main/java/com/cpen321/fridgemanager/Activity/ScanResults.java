@@ -59,13 +59,6 @@ public class ScanResults extends AppCompatActivity {
     // Alarm object to perform Alarm interactions
     private Alarm mAlarm;
 
-    //TODO: may move this to Alarm file
-    public static int EXPIRY_ID;
-    public static int PRE_EXPIRY_ID;
-    private static final int EXPIRY = 0;        // expired
-    private static final int PRE_EXPIRY = 1;    // soon to expire
-    public static double[] counterID = new double[400000];
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -361,7 +354,8 @@ public class ScanResults extends AppCompatActivity {
                 if (names.get(index) != null) {          // If food not removed
                     // Alarm
                     int expiry = expirys.get(index);   // Numbers of days until the expiry date.
-                    prepAlarm(expiry, view, index);
+                    int amount = quantities.get(index);
+                    mAlarm.prepAlarm(mContext, view, mAlarm, di, expiry, amount);
                     // Add food
                     writeDatabase(index, expiry);
                     // Increment food counter
@@ -372,39 +366,6 @@ public class ScanResults extends AppCompatActivity {
             showSuccessToast(count);
             // Force back to main menu
             mainMenu();
-        }
-    }
-
-    /*
-      Decides which days the alarm will be set on and the message given
-      @param expiry
-      @param view
-      @param index
-    */
-    private void prepAlarm(int expiry, View view, int index) {
-        EXPIRY_ID =  mAlarm.convertToID(di.getFutureDate(expiry));
-        PRE_EXPIRY_ID =  mAlarm.convertToID(di.getFutureDate(expiry)) + 50000;
-
-        if (counterID[EXPIRY_ID] == 0 || counterID[PRE_EXPIRY_ID] == 0) {
-
-            //sets alarm with cases
-            if (expiry > 4) {
-                mAlarm.setAlarm(mContext, view, expiry - 3, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(index));  // sends notification 3 days before expiry
-                mAlarm.setAlarm(mContext, view, expiry, EXPIRY_ID, EXPIRY, quantities.get(index));
-            } else if (expiry <= 3 && expiry > 1) {
-                mAlarm.setAlarm(mContext, view, 1, PRE_EXPIRY_ID, PRE_EXPIRY, quantities.get(index));           // sends notification the next day
-                mAlarm.setAlarm(mContext, view, expiry, EXPIRY_ID, EXPIRY, quantities.get(index));
-            } else {
-                mAlarm.setAlarm(mContext, view, expiry, EXPIRY_ID, EXPIRY, quantities.get(index));              // only sends notification on the day of expiry
-            }
-            counterID[EXPIRY_ID] += quantities.get(index);
-            counterID[PRE_EXPIRY_ID]+= quantities.get(index);
-            android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
-        } else {
-
-            counterID[EXPIRY_ID]+= quantities.get(index);
-            counterID[PRE_EXPIRY_ID]+= quantities.get(index);;
-            android.util.Log.i("Notification ID", " ID Remaining: " + counterID[EXPIRY_ID] + " and " + counterID[PRE_EXPIRY_ID]);
         }
     }
 
