@@ -1,10 +1,7 @@
 package com.cpen321.fridgemanager.Algorithm;
 
 import android.content.Context;
-import android.util.Log;
-
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +35,7 @@ public class TextRecognitionInteraction {
     /*
       Constructor that assigns library to provided JSONArray. Useful for testing.
      */
-    public TextRecognitionInteraction(Context context, JSONArray array) {
+    public TextRecognitionInteraction(JSONArray array) {
         library = array;
     }
 
