@@ -19,8 +19,7 @@
         android:id="@+id/intro"
         android:paddingTop="20dp"
         android:paddingBottom="10dp"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_centerHorizontal="true"/>
 
     <ImageView
         android:layout_below="@+id/intro"
@@ -32,7 +31,7 @@
         android:id="@+id/cameraIcon"/>
 
     <TextView
-        android:text="Scan your grocery receipt and all the food items will be automatically added to “Fridge”.
+        android:text="Scan your grocery receipt and all the food items will be automatically added to food stock.
         "
         android:layout_below="@+id/intro"
         android:layout_toRightOf="@+id/cameraIcon"

@@ -2,6 +2,8 @@ package com.cpen321.fridgemanager.Fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -65,11 +68,26 @@ public class AddFoodToFoodStock extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                Bundle savedInstanceState ){
         this.view = inflater.inflate(R.layout.activity_add_food, container, false);
+
+
         Button btnAddFoodToFoodStock = (Button) view.findViewById(R.id.button_add_to_food_stock);
         btnAddFoodToFoodStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendFeedback();
+            }
+        });
+
+        Spinner addTo = (Spinner) view.findViewById(R.id.spinner1_for_library);
+        addTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+
+            public void onItemSelected(AdapterView<?> arg0, View v, int position, long id)
+            {
+                hideFields(view);
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+
             }
         });
 
@@ -104,6 +122,35 @@ public class AddFoodToFoodStock extends Fragment {
         myAlarm = new Alarm();
 
         return view;
+    }
+
+    private void hideFields(View view) {
+        Spinner addTo = (Spinner) view.findViewById(R.id.spinner1_for_library);
+        String addToValue = addTo.getSelectedItem().toString();
+
+        final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
+        final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
+        Spinner amountSpinner = (Spinner) view.findViewById(R.id.amountspinner);
+
+        if(addToValue.equals("Food Stock"))
+        {
+            foodAbbr.setEnabled(false);
+            foodAbbr.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+            amountEditText.setEnabled(true);
+            amountEditText.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            amountSpinner.setEnabled(true);
+
+        }
+        else if(addToValue.equals("Library")) {
+            amountEditText.setEnabled(false);
+            amountEditText.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+            amountSpinner.setEnabled(false);
+            foodAbbr.setEnabled(true);
+            foodAbbr.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
+        }
+
+
     }
 
     @Override
@@ -166,7 +213,6 @@ public class AddFoodToFoodStock extends Fragment {
         }
 
         DatabaseInteraction di = new DatabaseInteraction(view.getContext());
-        di.writeToStorage(name, amount, int_unit, location, difference);
 
         //Set alarms
         //String catted = myAlarm.concatenate(name, String.valueOf(amount), di.getCurrentDate(), di.getFutureDate(difference));
@@ -194,6 +240,27 @@ public class AddFoodToFoodStock extends Fragment {
             android.util.Log.i("Notification ID", " ID Remaining: "+counterID[EXPIRY_ID] +" and "+counterID[PRE_EXPIRY_ID]);
 
         }
+
+        Spinner addTo = (Spinner) view.findViewById(R.id.spinner1_for_library);
+        String addToValue = addTo.getSelectedItem().toString();
+
+        if(addToValue.equals("Food Stock"))
+        {
+
+            di.writeToStorage(name, amount, int_unit, location, difference);
+            //Write to database interaction.
+        }
+        else if(addToValue.equals("Library")) {
+            //
+            final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
+            String foodAbbrValue = foodAbbr.getText().toString();
+            //Check if the food item in the library with the same name contains the
+            //abbreviation that is entered. Then add to the library. Amount is disabled.
+        }
+        else if(addToValue.equals("Both")) {
+            //Add to library if does not exist.
+        }
+
 
 
         viewPager.setCurrentItem(0);

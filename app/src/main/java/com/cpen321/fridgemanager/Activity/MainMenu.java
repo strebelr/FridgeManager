@@ -11,14 +11,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.text.InputType;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
@@ -49,6 +47,7 @@ public class MainMenu extends AppCompatActivity {
     // Fragments
     private FoodStock foodstock;
     private FoodToExpire foodtoexpire;
+    private AddFoodToFoodStock addFoodToFoodStock;
 
     // Settings Value
     private String decrement_percent;
@@ -96,6 +95,7 @@ public class MainMenu extends AppCompatActivity {
     private void initialize() {
         foodstock = new FoodStock();
         foodtoexpire = new FoodToExpire();
+        addFoodToFoodStock = new AddFoodToFoodStock();
         setContentView(R.layout.activity_main_menu);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -151,7 +151,7 @@ public class MainMenu extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(foodstock, "Stock");
         adapter.addFrag(foodtoexpire, "Alert");
-        adapter.addFrag(new AddFoodToFoodStock(), "Add Food");
+        adapter.addFrag(addFoodToFoodStock, "Add Food");
         viewPager.setAdapter(adapter);
     }
 
@@ -278,7 +278,7 @@ public class MainMenu extends AppCompatActivity {
         builder.setCancelable(true);
         builder.setTitle(getString(R.string.title_expiry));
 
-        final NumberPicker numberPicker = new NumberPicker(getApplicationContext());
+        final NumberPicker numberPicker = new NumberPicker(new ContextThemeWrapper(getApplicationContext(), R.style.numpicker_custom));
         numberPicker.setMaxValue(31);
         numberPicker.setMinValue(1);
 
