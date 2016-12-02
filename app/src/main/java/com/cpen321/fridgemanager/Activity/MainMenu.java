@@ -150,7 +150,7 @@ public class MainMenu extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(foodstock, "Stock");
-        adapter.addFrag(foodtoexpire, "Alert");
+        adapter.addFrag(foodtoexpire, "Expire");
         adapter.addFrag(addFoodToFoodStock, "Add Food");
         viewPager.setAdapter(adapter);
     }

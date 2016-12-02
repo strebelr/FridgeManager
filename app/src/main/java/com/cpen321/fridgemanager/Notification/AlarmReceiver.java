@@ -26,10 +26,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         String msgSoonExpire = "Your food is about to expire!";
 
         if (msgType == 0) {
-            createNotification(context, "Fridge Manager", msgExpire, "Alert", uniqueID);
+            createNotification(context, "Fridge Manager", msgExpire, "Alarm", uniqueID);
         }
         else {
-            createNotification(context, "Fridge Manager", msgSoonExpire, "Alert", uniqueID);
+            createNotification(context, "Fridge Manager", msgSoonExpire, "Alarm", uniqueID);
         }
     }
 

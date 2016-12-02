@@ -35,8 +35,8 @@ public class Alarm extends Fragment {
         Calendar calendar = Calendar.getInstance();
 
         calendar.add(Calendar.SECOND, 10);
-        //calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.add(Calendar.DAY_OF_YEAR, daysTillExpire);
+        //calendar.set(Calendar.HOUR_OF_DAY, 12);   // change according to time of day to send notification
+        calendar.add(Calendar.DAY_OF_MONTH, daysTillExpire);
 
         android.util.Log.i("AFTER ",": " +calendar);
 
