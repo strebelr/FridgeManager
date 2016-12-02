@@ -49,6 +49,9 @@ public class FoodToExpire extends Fragment{
     private Alarm myAlarm;
 
     private TextView holdTextE;
+    private String nExpiry = "";
+
+    private int indexG = 0;
 
 
     public FoodToExpire() {
@@ -254,11 +257,10 @@ public class FoodToExpire extends Fragment{
                     @Override
                     public boolean onLongClick(View v) {
                         // TODO Auto-generated method stub
+                        indexG = v.getId();
                         //call edit button here
                         promptExpiryWarning();
 
-                        food_name.setText(DatePicker.newExpiry);
-                        android.util.Log.i("Expiry ", " New Expiry: "+DatePicker.newExpiry);
                         return true;
                     }
                 });
@@ -312,6 +314,7 @@ public class FoodToExpire extends Fragment{
         alert.setCanceledOnTouchOutside(false);
 
         alert.show();
+
     }
 
     DatePicker newFragment;
@@ -324,42 +327,10 @@ public class FoodToExpire extends Fragment{
     public void showDatePickerDialog() {
         newFragment = new DatePicker();
         newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+        nExpiry = newFragment.getExpiry();
+
+        try {
+                newFragment.setJSONObject(toExpire.getJSONObject(indexG));
+        } catch (JSONException e) {}
     }
-
-    /*private void cancelAlarm(String expiry, int amount) {
-        int EXPIRY_ID = Alert.convertToID(expiry);
-        int PRE_EXPIRY_ID = Alert.convertToID(expiry) + 50000;
-        //android.util.Log.i("Notification ID", " IDs are set: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
-
-
-        //playing around here
-        if(ScanResults.counterID[EXPIRY_ID] == amount || ScanResults.counterID[PRE_EXPIRY_ID] == amount) {
-            Intent myIntent = new Intent(getActivity(), AlarmReceiver.class);
-            PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getActivity(), EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getActivity(), PRE_EXPIRY_ID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager1 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-            AlarmManager alarmManager2 = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-            // cancel the alarms
-            alarmManager1.cancel(pendingIntent1);
-            alarmManager2.cancel(pendingIntent2);
-            // delete the PendingIntents
-            pendingIntent1.cancel();
-            pendingIntent2.cancel();
-
-            ScanResults.counterID[EXPIRY_ID]-= amount;
-            ScanResults.counterID[PRE_EXPIRY_ID]-= amount;
-
-            android.util.Log.i("Notification ID", " Cancelled ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
-            android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
-
-        } else {
-            if (ScanResults.counterID[EXPIRY_ID] > 0 || ScanResults.counterID[PRE_EXPIRY_ID] > 0) {
-                ScanResults.counterID[EXPIRY_ID]-= amount;
-                ScanResults.counterID[PRE_EXPIRY_ID]-= amount;
-                android.util.Log.i("Notification ID", " Decrease from counter ID: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
-            }
-
-            android.util.Log.i("Notification ID", " ID Remaining: "+ScanResults.counterID[EXPIRY_ID] + " and " + ScanResults.counterID[PRE_EXPIRY_ID]);
-        }
-    }*/
 }

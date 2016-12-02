@@ -208,25 +208,4 @@ public class AddFoodToFoodStock extends Fragment {
     private static final int EXPIRY = 0;        // expired
     private static final int PRE_EXPIRY = 1;    // soon to expire
 
-    /*public void setAlarm(View view, int daysTillExpire, int notifID, int alarmType, int amount) {
-        android.util.Log.i("Notification ID ", " Set ID: "+notifID);
-
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.add(Calendar.SECOND, 10);
-        //calendar.set(Calendar.HOUR_OF_DAY, 18);
-        calendar.add(Calendar.DAY_OF_YEAR, daysTillExpire);
-
-        android.util.Log.i("AFTER ",": " +calendar);
-
-        // Issues a new notification to be sent
-        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
-        intent.putExtra("NOTIF_TYPE", alarmType);
-        intent.putExtra("ID", notifID);
-        intent.putExtra("AMOUNT", amount);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), notifID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-    }*/
-
 }
