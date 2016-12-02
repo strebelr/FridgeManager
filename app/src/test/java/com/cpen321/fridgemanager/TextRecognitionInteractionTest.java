@@ -21,8 +21,6 @@ import static org.junit.Assert.assertTrue;
  * TextRecognitionInteractionTest. Mocks Context with Mockitto dependency.
  */
 public class TextRecognitionInteractionTest {
-    @Mock
-    Context mMockContext;
 
     // DatabaseInteraction used for test
     TextRecognitionInteraction ti;
@@ -35,7 +33,7 @@ public class TextRecognitionInteractionTest {
                 "{\"name\":\"Tomato\",\"abb\":[\"Tov\",\"Tomato\",\"Tomatoes\"],\"expiry\":\"5\",\"unit\":\"0\", \"location\":\"Fridge\"}," +
                 "{\"name\":\"Mushroom\",\"abb\":[\"Mshroom\",\"Mushrooms\"],\"expiry\":\"5\",\"unit\":\"1\", \"location\":\"Fridge\"},]");
 
-        ti = new TextRecognitionInteraction(mMockContext, array);
+        ti = new TextRecognitionInteraction(array);
     }
 
     @After
