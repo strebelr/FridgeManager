@@ -73,9 +73,8 @@
         android:id="@+id/menuIcon"/>
 
     <TextView
-        android:text="“Time to Alert”: Adjust the number of days (X) so that “Food to Expire” page displays all the food that will expire within X days.
-“Amount Consumed”: You can adjust the percentage of food being decreased each time.
-        "
+        android:text="“Time to Alert”: Adjusts X number of days so that “Food to Expire” page displays all the foods expiring within X days. \n
+“Amount Consumed”: Adjusts the percentage of food being decremented each time."
         android:layout_below="@+id/undoIconText"
         android:layout_toRightOf="@+id/cameraIcon"
         android:layout_width="match_parent"
@@ -86,7 +85,7 @@
         android:id="@+id/menuIconText"/>
 
     <TextView
-        android:text="Fridge"
+        android:text="Food Stock"
         android:textStyle="bold"
         android:textSize="@dimen/activity_horizontal_margin"
         android:layout_width="wrap_content"
@@ -146,7 +145,7 @@
         android:id="@+id/expireIcon"/>
 
     <TextView
-        android:text="Displays all food items that will expire within X days. You can adjust X under “Time to Alert”. The food can be deleted using “Delete Button” after it is consumed."
+        android:text="Displays all food items that will expire within X amount of days. You can adjust X under “Time to Alert”. The food can be deleted by pressing “Delete Button” after it is consumed."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
@@ -189,7 +188,7 @@
         android:id="@+id/manualIcon"/>
 
     <TextView
-        android:text="You can manually add food with its name, amount, expire date, and location to be stored. The added food will be displayed on food stock page."
+        android:text="You can manually add food with its name, amount, expiry date, and location to be stored. The added food will be displayed on food stock page."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
