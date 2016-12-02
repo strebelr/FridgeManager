@@ -58,7 +58,7 @@ public class Alarm extends Fragment {
     */
     public void cancelAlarm(Context context, String expiry, double amount) {
         int EXPIRY_ID = convertToID(expiry);
-        int PRE_EXPIRY_ID = convertToID(expiry) + 50000;
+        int PRE_EXPIRY_ID = convertToID(expiry) + 1;
         //android.util.Log.i("Notification ID", " IDs are set: "+EXPIRY_ID + " and " + PRE_EXPIRY_ID);
 
         // checks if remaining ID is smaller than the amount being deleted
@@ -107,7 +107,7 @@ public class Alarm extends Fragment {
     */
     public void prepAlarm(Context mContext, View view, Alarm a, DatabaseInteraction di, int expiry, double amount) {
         EXPIRY_ID =  a.convertToID(di.getFutureDate(expiry));
-        PRE_EXPIRY_ID =  a.convertToID(di.getFutureDate(expiry)) + 50000;
+        PRE_EXPIRY_ID =  a.convertToID(di.getFutureDate(expiry)) + 1;
 
         if (counterID[EXPIRY_ID] == 0 || counterID[PRE_EXPIRY_ID] == 0) {
 

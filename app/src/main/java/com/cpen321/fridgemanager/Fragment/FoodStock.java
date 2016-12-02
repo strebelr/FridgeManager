@@ -449,9 +449,6 @@ public class FoodStock extends Fragment{
                         // TODO Auto-generated method stub
                         indexG = v.getId();
 
-
-
-                        //call edit button here
                         promptExpiryWarning();
 
                         food_name.setText(nExpiry);

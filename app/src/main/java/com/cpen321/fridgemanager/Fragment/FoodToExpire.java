@@ -257,7 +257,7 @@ public class FoodToExpire extends Fragment{
                     public boolean onLongClick(View v) {
                         // TODO Auto-generated method stub
                         indexG = v.getId();
-                        //call edit button here
+
                         promptExpiryWarning();
 
                         return true;
