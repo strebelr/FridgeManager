@@ -26,10 +26,6 @@ public class TextRecognitionInteraction {
     public TextRecognitionInteraction(Context context) {
         di = new DatabaseInteraction(context);
         library = di.getArray("Library");
-        if(library == null) {
-            di.importLibrary();
-            library = di.getArray("Library");
-        }
     }
 
     /*
