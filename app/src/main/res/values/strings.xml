@@ -50,11 +50,11 @@
     <string name="alert_reenter">"\nRe-enter to try again."</string>
     <string name="decrease">Amount Consumed</string>
     <string-array name="amount">
-        <item>units</item>
-        <item>grams</item>
-        <item>kilograms</item>
-        <item>liters</item>
-        <item>cups</item>
+        <item>Units</item>
+        <item>Grams</item>
+        <item>Kilograms</item>
+        <item>Liters</item>
+        <item>Cups</item>
     </string-array>
     <string-array name="locations">
         <item>Fridge</item>
@@ -69,5 +69,5 @@
         <item>Both</item>
     </string-array>
     <string name="add_food">Add Food</string>
-    <string name="add_food_frag">Adding Food Manually</string>
+    <string name="add_food_frag">Manual Add Food</string>
 </resources>
