@@ -43,6 +43,9 @@ public class DatabaseInteraction {
     public final static int L = 3;
     public final static int CUP = 4;
 
+    // Define default expiry date
+    public final static int DEFAULT_EXPIRY = 7;
+
     // Remove or Decrement Select
     private final static String DEC_SEL = "dec";
     private final static String REM_SEL = "rem";

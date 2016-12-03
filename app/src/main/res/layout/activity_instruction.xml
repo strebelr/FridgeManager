@@ -188,7 +188,7 @@
         android:id="@+id/manualIcon"/>
 
     <TextView
-        android:text="You can manually add food with its name, amount, expiry date, and location to be stored. The added food will be displayed on food stock page."
+        android:text="You can manually add food with its name, amount, expiry date, and location to be stored. The added food will be displayed on food stock page. You can also manually add food to the library, so that those information can be used for future automatic entries through scanning."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
