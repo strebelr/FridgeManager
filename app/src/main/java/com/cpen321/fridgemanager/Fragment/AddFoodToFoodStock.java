@@ -14,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -32,13 +33,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AddFoodToFoodStock extends Fragment {
 
-    AutoCompleteTextView text;
     private FragmentActivity myContext;
     private ViewPager viewPager;
     private View view;
@@ -70,6 +71,9 @@ public class AddFoodToFoodStock extends Fragment {
         initializeAutoComplete();
         initializeExpiryButton();
         initializeResetButton();
+        initializeSpinners();
+
+        setWidth();
 
         SharedPreferences settings = getActivity().getSharedPreferences("prefs",0);
         boolean firstCamera = settings.getBoolean("firstScan",false);
@@ -82,6 +86,33 @@ public class AddFoodToFoodStock extends Fragment {
         }
 
         return view;
+    }
+
+    private void initializeSpinners() {
+        Spinner amountSpinner = (Spinner) view.findViewById(R.id.amountspinner);
+
+        String[] amounts = getContext().getResources().getStringArray(R.array.amount);
+        ArrayAdapter<String> adap1 = new ArrayAdapter<String>(getContext(), R.layout.spinner_layout, amounts );
+        amountSpinner.setAdapter(adap1);
+        adap1.setDropDownViewResource(R.layout.spinner_content);
+
+        Spinner locationSpinner = (Spinner) view.findViewById(R.id.spinner1_for_location);
+
+        String[] locations = getContext().getResources().getStringArray(R.array.locations);
+        ArrayAdapter<String> adap2 = new ArrayAdapter<String>(getContext(), R.layout.spinner_layout, locations );
+        adap2.setDropDownViewResource(R.layout.spinner_content);
+        locationSpinner.setAdapter(adap2);
+    }
+
+    private void setWidth() {
+        AutoCompleteTextView text = (AutoCompleteTextView) view.findViewById(R.id.addFoodName);
+        final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
+        final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
+
+        float measure = text.getPaint().measureText("XXXXXXXXXX"); // Set width
+        text.setWidth(text.getPaddingLeft() + text.getPaddingRight() + (int) measure);
+        foodAbbr.setWidth(foodAbbr.getPaddingLeft() + foodAbbr.getPaddingRight() + (int) measure);
+        amountEditText.setWidth(amountEditText.getPaddingLeft() + amountEditText.getPaddingRight() + (int) measure);
     }
 
     private void initializeAddButton() {
@@ -128,7 +159,8 @@ public class AddFoodToFoodStock extends Fragment {
     }
 
     private void initializeAutoComplete() {
-        text = (AutoCompleteTextView) view.findViewById(R.id.addFoodName);
+        AutoCompleteTextView text = (AutoCompleteTextView) view.findViewById(R.id.addFoodName);
+
         List<String>  list = new ArrayList<>();
         JSONArray jsonArray = di.getArray("Library");
         if (jsonArray != null) {
@@ -149,11 +181,13 @@ public class AddFoodToFoodStock extends Fragment {
         Spinner addTo = (Spinner) view.findViewById(R.id.spinner1_for_library);
         String addToValue = addTo.getSelectedItem().toString();
 
+        final EditText foodItem =  (EditText) view.findViewById(R.id.addFoodName);
         final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
         final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
 
         if(addToValue.equals("Food Stock"))
         {
+            foodItem.setImeOptions(EditorInfo.IME_ACTION_DONE);
             foodAbbr.setEnabled(false);
             foodAbbr.setText("XXXX");
             amountEditText.setEnabled(true);
@@ -161,17 +195,35 @@ public class AddFoodToFoodStock extends Fragment {
                 amountEditText.setText("");
         }
         else if(addToValue.equals("Library")) {
+            foodItem.setImeOptions(EditorInfo.IME_ACTION_NEXT);
             foodAbbr.setEnabled(true);
-            if (foodAbbr.getText().toString().equals("XXXX"))
+            if (foodAbbr.getText().toString().equals("XXXX") || foodAbbr.getText().toString().equals("")) {
                 foodAbbr.setText("");
+                foodAbbr.setHint("Optional");
+            }
+            foodAbbr.setImeOptions(EditorInfo.IME_ACTION_DONE);
             amountEditText.setEnabled(false);
             amountEditText.setText("XXXX");
         }
+        else if(addToValue.equals("Both")) {
+            foodItem.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+            foodAbbr.setEnabled(true);
+            if (foodAbbr.getText().toString().equals("XXXX") || foodAbbr.getText().toString().equals("")) {
+                foodAbbr.setText("");
+                foodAbbr.setHint("Optional");
+            }
+            foodAbbr.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+            amountEditText.setEnabled(true);
+            if (amountEditText.getText().toString().equals("XXXX"))
+                amountEditText.setText("");
+        }
         else {
+            foodItem.setImeOptions(EditorInfo.IME_ACTION_NEXT);
             foodAbbr.setEnabled(true);
             if (foodAbbr.getText().toString().equals("XXXX"))
                 foodAbbr.setText("");
             amountEditText.setEnabled(true);
+            foodAbbr.setImeOptions(EditorInfo.IME_ACTION_NEXT);
             if (amountEditText.getText().toString().equals("XXXX"))
                 amountEditText.setText("");
         }
@@ -309,22 +361,12 @@ public class AddFoodToFoodStock extends Fragment {
                 final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
                 String abbr = foodAbbr.getText().toString();
 
-                if (abbr != null) {
-                    if (abbr.length() == 0) {
-                        // Pop warning
-                        popDialog("Error", "Abbreviation needs to be entered");
-                    } else {
-                        // If all fields are entered
-                        di.addToLibrary(name, abbr, difference, int_unit, location);
-                        viewPager.setCurrentItem(0);
+                // If all fields are entered
+                di.addToLibrary(name, abbr, difference, int_unit, location);
+                viewPager.setCurrentItem(0);
 
-                        Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to library.", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                } else {
-                    // Pop warning
-                    popDialog("Error", "Abbreviation needs to be entered");
-                }
+                Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to library.", Toast.LENGTH_SHORT);
+                toast.show();
 
             } else if (addToValue.equals("Both")) {
                 // Add to library if does not exist.
@@ -332,25 +374,15 @@ public class AddFoodToFoodStock extends Fragment {
                 final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
                 String abbr = foodAbbr.getText().toString();
 
-                if (abbr != null) {
-                    if (abbr.length() == 0) {
-                        // Pop warning
-                        popDialog("Error", "Abbreviation needs to be entered");
-                    } else {
-                        // If all fields are entered
-                        di.writeToStorage(name, amount, int_unit, location, difference);
-                        di.addToLibrary(name, abbr, difference, int_unit, location);
-                        viewPager.setCurrentItem(0);
-                        // Set alarms
-                        myAlarm.prepAlarm(myContext, view, myAlarm, di, difference, amount);
+                // If all fields are entered
+                di.writeToStorage(name, amount, int_unit, location, difference);
+                di.addToLibrary(name, abbr, difference, int_unit, location);
+                viewPager.setCurrentItem(0);
+                // Set alarms
+                myAlarm.prepAlarm(myContext, view, myAlarm, di, difference, amount);
 
-                        Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to food stock and library.", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                } else {
-                    // Pop warning
-                    popDialog("Error", "Abbreviation needs to be entered");
-                }
+                Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to food stock and library.", Toast.LENGTH_SHORT);
+                toast.show();
 
             } else {
                 // Pop Warning

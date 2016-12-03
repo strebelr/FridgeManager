@@ -75,6 +75,7 @@
                     <AutoCompleteTextView
                         android:id="@+id/addFoodName"
                         android:background="@drawable/field_input_border"
+                        android:imeOptions="actionNext"
                         android:inputType="text"
                         android:width="70sp"
                         android:paddingLeft="10px"
@@ -104,6 +105,7 @@
                     <AutoCompleteTextView
                         android:id="@+id/addFoodAbbr"
                         android:background="@drawable/field_input_border"
+                        android:imeOptions="actionNext"
                         android:inputType="text"
                         android:paddingLeft="10px"
                         android:paddingTop="40px"
@@ -162,8 +164,7 @@
                         android:paddingTop="20px"
                         android:paddingBottom="20px"
                         android:background="@drawable/field_input_border"
-                        android:gravity="right"
-                        android:entries="@array/amount" />
+                        android:gravity="right"/>
                 </TableRow>
 
                 <TableRow
@@ -189,8 +190,7 @@
                         android:paddingLeft="10px"
                         android:paddingTop="20px"
                         android:paddingBottom="20px"
-                        android:gravity="end"
-                        android:entries="@array/locations" />
+                        android:gravity="end" />
 
                 </TableRow>
 
@@ -235,18 +235,20 @@
                     android:paddingLeft="10dp">
 
                     <Button
+                        android:id="@+id/button_reset"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="RESET"
+                        android:textSize="25dp" />
+
+                    <Button
                         android:id="@+id/button_add_to_food_stock"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ADD FOOD"
                         android:textSize="25dp" />
 
-                    <Button
-                        android:id="@+id/button_reset"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="RESET"
-                        android:textSize="25dp" />
+
                 </TableRow>
             </TableLayout>
 

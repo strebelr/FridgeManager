@@ -259,6 +259,11 @@ public class DatabaseInteraction {
 
     /*
       Add new food or abbreviation to the library.
+      @param name of food
+      @param abbreviation of food
+      @param expected expiry for food
+      @param unit of the food (refer to defined selects)
+      @param location of food
      */
     public void addToLibrary(String name, String abb, int expiry, int unit, String location) {
         String root = readFile(LIBRARY_DEST);
@@ -270,7 +275,7 @@ public class DatabaseInteraction {
     }
 
     /*
-      TODO: Add new word to library.
+      Add new word to library.
      */
     private JSONObject addDefinition(String root, String name, String abbr, int expiry, int unit, String location) {
         try {
@@ -322,7 +327,8 @@ public class DatabaseInteraction {
             JSONObject newFood = new JSONObject();
             JSONArray newAbbr = new JSONArray();
             newFood.put("name", name);
-            newAbbr.put(abbr);
+            if(!abbr.equals(""))
+                newAbbr.put(abbr);
             newAbbr.put(name);
             newAbbr.put(name + "s");
             newFood.put("abb", newAbbr);
