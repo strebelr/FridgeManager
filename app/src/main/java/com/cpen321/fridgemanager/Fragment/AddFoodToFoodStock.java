@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -75,6 +76,8 @@ public class AddFoodToFoodStock extends Fragment {
 
         setWidth();
 
+        ((EditText) view.findViewById(R.id.addFoodAbbr)).setHint("Optional");
+
         SharedPreferences settings = getActivity().getSharedPreferences("prefs",0);
         boolean firstCamera = settings.getBoolean("firstScan",false);
         if (firstCamera == false) {
@@ -107,6 +110,7 @@ public class AddFoodToFoodStock extends Fragment {
     private void setWidth() {
         AutoCompleteTextView text = (AutoCompleteTextView) view.findViewById(R.id.addFoodName);
         final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
+
         final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
 
         float measure = text.getPaint().measureText("XXXXXXXXXX"); // Set width
@@ -184,15 +188,19 @@ public class AddFoodToFoodStock extends Fragment {
         final EditText foodItem =  (EditText) view.findViewById(R.id.addFoodName);
         final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
         final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
+        TextView expiryField =  (TextView) view.findViewById(R.id.expiry_date);
 
         if(addToValue.equals("Food Stock"))
         {
             foodItem.setImeOptions(EditorInfo.IME_ACTION_DONE);
             foodAbbr.setEnabled(false);
             foodAbbr.setText("XXXX");
+            foodAbbr.setHint("");
             amountEditText.setEnabled(true);
-            if (amountEditText.getText().toString().equals("XXXX"))
+            if (amountEditText.getText().toString().equals("XXXX")) {
                 amountEditText.setText("");
+            }
+            expiryField.setHint("");
         }
         else if(addToValue.equals("Library")) {
             foodItem.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -204,6 +212,7 @@ public class AddFoodToFoodStock extends Fragment {
             foodAbbr.setImeOptions(EditorInfo.IME_ACTION_DONE);
             amountEditText.setEnabled(false);
             amountEditText.setText("XXXX");
+            expiryField.setHint("Optional");
         }
         else if(addToValue.equals("Both")) {
             foodItem.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -214,18 +223,24 @@ public class AddFoodToFoodStock extends Fragment {
             }
             foodAbbr.setImeOptions(EditorInfo.IME_ACTION_NEXT);
             amountEditText.setEnabled(true);
-            if (amountEditText.getText().toString().equals("XXXX"))
+            if (amountEditText.getText().toString().equals("XXXX")) {
                 amountEditText.setText("");
+            }
+            expiryField.setHint("");
         }
         else {
             foodItem.setImeOptions(EditorInfo.IME_ACTION_NEXT);
             foodAbbr.setEnabled(true);
-            if (foodAbbr.getText().toString().equals("XXXX"))
+            if (foodAbbr.getText().toString().equals("XXXX")) {
                 foodAbbr.setText("");
+                foodAbbr.setHint("Optional");
+            }
             amountEditText.setEnabled(true);
             foodAbbr.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-            if (amountEditText.getText().toString().equals("XXXX"))
+            if (amountEditText.getText().toString().equals("XXXX")) {
                 amountEditText.setText("");
+            }
+            expiryField.setHint("");
         }
     }
 
@@ -315,80 +330,88 @@ public class AddFoodToFoodStock extends Fragment {
 
         String addToValue = addTo.getSelectedItem().toString();
 
-        boolean alert = false;
+        if(addToValue.equals("Select Manual Add Mode")) {
+            popDialog("Error", "Add Mode needs to be selected");
+        }
 
         if(name != null) {
             if(name.length() == 0) {
                 // Pop warning
                 popDialog("Error", "Food name needs to be entered");
-                alert = true;
+                return;
             }
         }
         else {
             // Pop warning
             popDialog("Error", "Food name needs to be entered");
-            alert = true;
+            return;
         }
 
-
-        if(amount <= 0 && !alert && !(addToValue.equals("Library"))) {
+        if(amount <= 0 && !(addToValue.equals("Library"))) {
             // Pop warning
             popDialog("Error", "A valid amount (non-zero) must be entered");
-            alert = true;
+            return;
         }
 
-        if(expiryDate.equals("") && !alert) {
+        if(expiryDate.equals("")  && !(addToValue.equals("Library"))) {
             popDialog("Error", "An expiry date must be entered");
-            alert = true;
+            return;
         }
 
 
         // Add Food to Selected Destination
-        if (!alert) {
-            if (addToValue.equals("Food Stock")) {
-                // Write to database interaction.
-                di.writeToStorage(name, amount, int_unit, location, difference);
-                viewPager.setCurrentItem(0);
 
-                Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to food stock.", Toast.LENGTH_SHORT);
-                toast.show();
+        if (addToValue.equals("Food Stock")) {
+            // Write to database interaction.
+            di.writeToStorage(name, amount, int_unit, location, difference);
+            viewPager.setCurrentItem(0);
 
-                // Set alarms
-                myAlarm.prepAlarm(myContext, view, myAlarm, di, difference, amount);
-            } else if (addToValue.equals("Library")) {
-                // Check if the food item in the library with the same name contains the
-                // abbreviation that is entered. Then add to the library. Amount is disabled.
-                final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
-                String abbr = foodAbbr.getText().toString();
+            Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to food stock.", Toast.LENGTH_SHORT);
+            toast.show();
 
-                // If all fields are entered
-                di.addToLibrary(name, abbr, difference, int_unit, location);
-                viewPager.setCurrentItem(0);
-
-                Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to library.", Toast.LENGTH_SHORT);
-                toast.show();
-
-            } else if (addToValue.equals("Both")) {
-                // Add to library if does not exist.
-
-                final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
-                String abbr = foodAbbr.getText().toString();
-
-                // If all fields are entered
-                di.writeToStorage(name, amount, int_unit, location, difference);
-                di.addToLibrary(name, abbr, difference, int_unit, location);
-                viewPager.setCurrentItem(0);
-                // Set alarms
-                myAlarm.prepAlarm(myContext, view, myAlarm, di, difference, amount);
-
-                Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to food stock and library.", Toast.LENGTH_SHORT);
-                toast.show();
-
-            } else {
-                // Pop Warning
-                popDialog("Error", "Add to desination must be specified");
-            }
+            // Set alarms
+            myAlarm.prepAlarm(myContext, view, myAlarm, di, difference, amount);
         }
+        else if (addToValue.equals("Library")) {
+            // Check if the food item in the library with the same name contains the
+            // abbreviation that is entered. Then add to the library. Amount is disabled.
+            final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
+            String abbr = foodAbbr.getText().toString();
+
+            // If all fields are entered
+
+            String message = "";
+
+            if(expiryDate.equals("")) {
+                difference = DatabaseInteraction.DEFAULT_EXPIRY;
+                message = "Expiry date not entered. Setting to default expiry: 7 days.\n";
+            }
+
+            di.addToLibrary(name, abbr, difference, int_unit, location);
+            viewPager.setCurrentItem(0);
+
+            Toast toast = Toast.makeText(getContext(), message + "Success: " + name + " added to library.", Toast.LENGTH_SHORT);
+            toast.show();
+
+        }
+        else if (addToValue.equals("Both")) {
+            // Add to library if does not exist.
+
+            final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
+            String abbr = foodAbbr.getText().toString();
+
+            // If all fields are entered
+            di.writeToStorage(name, amount, int_unit, location, difference);
+            di.addToLibrary(name, abbr, difference, int_unit, location);
+            viewPager.setCurrentItem(0);
+            // Set alarms
+            myAlarm.prepAlarm(myContext, view, myAlarm, di, difference, amount);
+
+            Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to food stock and library.", Toast.LENGTH_SHORT);
+            toast.show();
+
+        }
+
 
     }
 
