@@ -8,4 +8,5 @@
     <color name="navigationBarColor">#000000</color>
     <color name="red">#f41c09</color>
     <color name="light_grey">#afafaf</color>
+    <color name="dark_grey">#737373</color>
 </resources>

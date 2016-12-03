@@ -4,6 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.cpen321.fridgemanager.Fragment.AddFoodToFoodStock">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:gravity="start"
+        android:text="@string/add_food_frag"
+        android:paddingTop="20px"
+        android:layout_marginLeft="50px"
+        android:textSize="25sp" />
+
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -26,7 +36,7 @@
                 android:id="@+id/table_lib"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:layout_marginTop="40dip">
                 <TableRow
                     android:layout_width="wrap_content"
@@ -62,11 +72,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:gravity="left"
+                        android:layout_gravity="start"
+                        android:gravity="start"
                         android:text="Food Name"
                         android:paddingTop="20px"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:textColor="@android:color/black"
                         android:textColorHighlight="@android:color/primary_text_dark"
                         android:textSize="20sp" />
@@ -79,9 +89,12 @@
                         android:inputType="text"
                         android:width="70sp"
                         android:paddingLeft="10px"
-                        android:paddingTop="40px"
-                        android:gravity="end"
-                        android:textSize="20sp" />
+                        android:paddingTop="20px"
+                        android:paddingBottom="20px"
+                        android:textColor="@color/dark_grey"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1" />
 
                 </TableRow>
 
@@ -96,7 +109,7 @@
                         android:gravity="left"
                         android:text="Abbreviation"
                         android:paddingTop="20px"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:textColor="@android:color/black"
                         android:textColorHighlight="@android:color/primary_text_dark"
                         android:textSize="20dp" />
@@ -108,24 +121,28 @@
                         android:imeOptions="actionNext"
                         android:inputType="text"
                         android:paddingLeft="10px"
-                        android:paddingTop="40px"
-                        android:gravity="right"
+                        android:paddingTop="20px"
+                        android:paddingBottom="20px"
+                        android:textColor="@color/dark_grey"
+                        android:gravity="center"
                         android:textSize="20dp"
+                        android:layout_weight="1"
                         />
 
                 </TableRow>
 
                 <TableRow
-                    android:paddingLeft="10dp">
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:gravity="left"
+                        android:layout_gravity="start"
+                        android:gravity="start"
                         android:text="Amount"
                         android:paddingTop="20px"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:textColor="@android:color/black"
                         android:textColorHighlight="@android:color/primary_text_dark"
                         android:textSize="20dp" />
@@ -135,9 +152,14 @@
                         android:background="@drawable/field_input_border"
                         android:inputType="numberDecimal"
                         android:paddingLeft="10px"
-                        android:paddingTop="40px"
-                        android:gravity="right"
-                        android:textSize="20dp" />
+                        android:paddingTop="20px"
+                        android:paddingBottom="20px"
+                        android:paddingRight="@dimen/addFoodpadding_right"
+                        android:gravity="end"
+                        android:textSize="20dp"
+                        android:textColor="@color/dark_grey"
+                        android:layout_weight="1"
+                        android:maxLength="4"/>
 
                 </TableRow>
 
@@ -147,11 +169,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:gravity="left"
+                        android:layout_gravity="start"
+                        android:gravity="start"
                         android:text="Unit"
                         android:paddingTop="20px"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:textColor="@android:color/black"
                         android:textColorHighlight="@android:color/primary_text_dark"
                         android:textSize="20dp" />
@@ -163,8 +185,10 @@
                         android:paddingLeft="10px"
                         android:paddingTop="20px"
                         android:paddingBottom="20px"
+                        android:paddingRight="@dimen/addFoodpadding_right"
                         android:background="@drawable/field_input_border"
-                        android:gravity="right"/>
+                        android:gravity="end"
+                        android:layout_weight="1"/>
                 </TableRow>
 
                 <TableRow
@@ -177,7 +201,7 @@
                         android:gravity="start"
                         android:text="Location"
                         android:paddingTop="20px"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:textColor="@android:color/black"
                         android:textColorHighlight="@android:color/primary_text_dark"
                         android:textSize="20dp" />
@@ -190,7 +214,9 @@
                         android:paddingLeft="10px"
                         android:paddingTop="20px"
                         android:paddingBottom="20px"
-                        android:gravity="end" />
+                        android:paddingRight="@dimen/addFoodpadding_right"
+                        android:gravity="end"
+                        android:layout_weight="1"/>
 
                 </TableRow>
 
@@ -200,24 +226,24 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:gravity="left"
+                        android:layout_gravity="start"
+                        android:gravity="start"
                         android:text="Expiry Date"
                         android:paddingTop="20px"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:textColor="@android:color/black"
                         android:textColorHighlight="@android:color/primary_text_dark"
                         android:textSize="20dp" />
 
                     <TextView
                         android:id="@+id/expiry_date"
-                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10px"
                         android:paddingTop="40px"
                         android:background="@drawable/field_input_border"
-                        android:gravity="right"
-                        android:textSize="20dp" />
+                        android:gravity="center"
+                        android:textSize="20dp"
+                        android:layout_weight="1"/>
 
                 </TableRow>
 

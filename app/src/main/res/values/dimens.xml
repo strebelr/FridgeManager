@@ -7,4 +7,5 @@
     <dimen name="foodStock_paddingLeft">5dp</dimen>
     <dimen name="foodStock_paddingBottom">20dp</dimen>
     <dimen name="foodStock_paddingtoolbar">10dp</dimen>
+    <dimen name="addFoodpadding_right">10dp</dimen>
 </resources>

@@ -19,6 +19,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         app:fabSize = "normal"
+        android:adjustViewBounds="false"
         android:src="@android:drawable/ic_menu_camera"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

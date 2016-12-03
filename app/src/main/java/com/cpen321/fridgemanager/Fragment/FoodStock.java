@@ -212,7 +212,7 @@ public class FoodStock extends Fragment{
                 switch (Integer.parseInt(food.optString("unit").toString())) {
                     // CHANGE UNIT STRING IF NECESSARY
                     case DatabaseInteraction.UNIT:
-                        unit_name.setText("pcs");
+                        unit_name.setText(" pcs");
                         break;
                     case DatabaseInteraction.GRAM:
                         unit_name.setText(" g");

@@ -69,4 +69,5 @@
         <item>Both</item>
     </string-array>
     <string name="add_food">Add Food</string>
+    <string name="add_food_frag">Adding Food Manually</string>
 </resources>
