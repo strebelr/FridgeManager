@@ -323,6 +323,8 @@ public class DatabaseInteraction {
             JSONArray newAbbr = new JSONArray();
             newFood.put("name", name);
             newAbbr.put(abbr);
+            newAbbr.put(name);
+            newAbbr.put(name + "s");
             newFood.put("abb", newAbbr);
             newFood.put("expiry", expiry);
             newFood.put("unit", unit);

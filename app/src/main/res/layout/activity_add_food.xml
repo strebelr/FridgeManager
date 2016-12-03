@@ -7,108 +7,129 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:fillViewport="false"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="20dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_gravity="center"
+            android:layout_gravity="top"
             android:orientation="vertical"
             android:weightSum="1">
 
             <TableLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/table_lib"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginTop="40dip">
-
-                <TableRow>
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal">
 
                     <Spinner
                         android:id="@+id/spinner1_for_library"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingTop="20px"
+                        android:paddingBottom="20px"
                         android:textSize="20dp"
                         android:entries="@array/addtolocations" />
                 </TableRow>
 
-                <TableRow>
+            </TableLayout>
 
+            <TableLayout
+                android:id="@+id/table_fields"
+                android:layout_width="fill_parent"
+                android:layout_below="@id/table_lib"
+                android:layout_height="wrap_content"
+                android:background="@drawable/field_input_border">
+
+
+                <TableRow
+                    android:paddingLeft="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="left"
                         android:gravity="left"
-                        android:text="Food Item"
+                        android:text="Food Name"
+                        android:paddingTop="20px"
                         android:layout_weight="2"
                         android:textColor="@android:color/black"
-                        android:layout_centerVertical="true"
                         android:textColorHighlight="@android:color/primary_text_dark"
-                        android:textSize="20dp" />
+                        android:textSize="20sp" />
 
 
                     <AutoCompleteTextView
                         android:id="@+id/addFoodName"
                         android:background="@drawable/field_input_border"
                         android:inputType="text"
+                        android:width="70sp"
                         android:paddingLeft="10px"
                         android:paddingTop="40px"
-                        android:gravity="right"
-                        android:textSize="20dp" />
+                        android:gravity="end"
+                        android:textSize="20sp" />
 
                 </TableRow>
 
 
-                <TableRow>
+                <TableRow
+                    android:paddingLeft="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_gravity="left"
                         android:gravity="left"
-                        android:text="Food Abbreviation"
+                        android:text="Abbreviation"
+                        android:paddingTop="20px"
+                        android:layout_weight="2"
                         android:textColor="@android:color/black"
-                        android:layout_centerVertical="true"
                         android:textColorHighlight="@android:color/primary_text_dark"
                         android:textSize="20dp" />
 
 
                     <AutoCompleteTextView
                         android:id="@+id/addFoodAbbr"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:background="@drawable/field_input_border"
                         android:inputType="text"
                         android:paddingLeft="10px"
                         android:paddingTop="40px"
                         android:gravity="right"
-                        android:textSize="25dp"
-
+                        android:textSize="20dp"
                         />
 
                 </TableRow>
 
-                <TableRow>
+                <TableRow
+                    android:paddingLeft="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="left"
                         android:text="Amount"
+                        android:paddingTop="20px"
+                        android:layout_weight="2"
                         android:textColor="@android:color/black"
-                        android:layout_centerVertical="true"
                         android:textColorHighlight="@android:color/primary_text_dark"
                         android:textSize="20dp" />
 
                     <EditText
                         android:id="@+id/amounttext"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:background="@drawable/field_input_border"
                         android:inputType="numberDecimal"
                         android:paddingLeft="10px"
@@ -118,36 +139,44 @@
 
                 </TableRow>
 
-                <TableRow>
+                <TableRow
+                    android:paddingLeft="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="left"
                         android:gravity="left"
                         android:text="Unit"
+                        android:paddingTop="20px"
+                        android:layout_weight="2"
                         android:textColor="@android:color/black"
-                        android:layout_centerVertical="true"
                         android:textColorHighlight="@android:color/primary_text_dark"
                         android:textSize="20dp" />
 
                     <Spinner
                         android:id="@+id/amountspinner"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10px"
-                        android:paddingTop="40px"
+                        android:paddingTop="20px"
+                        android:paddingBottom="20px"
+                        android:background="@drawable/field_input_border"
                         android:gravity="right"
                         android:entries="@array/amount" />
                 </TableRow>
 
-                <TableRow>
+                <TableRow
+                    android:paddingLeft="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="left"
+                        android:layout_gravity="start"
+                        android:gravity="start"
                         android:text="Location"
+                        android:paddingTop="20px"
+                        android:layout_weight="2"
                         android:textColor="@android:color/black"
                         android:textColorHighlight="@android:color/primary_text_dark"
                         android:textSize="20dp" />
@@ -156,87 +185,78 @@
                         android:id="@+id/spinner1_for_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/field_input_border"
                         android:paddingLeft="10px"
-                        android:paddingTop="40px"
-                        android:gravity="right"
+                        android:paddingTop="20px"
+                        android:paddingBottom="20px"
+                        android:gravity="end"
                         android:entries="@array/locations" />
 
                 </TableRow>
 
+                <TableRow
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="left"
+                        android:text="Expiry Date"
+                        android:paddingTop="20px"
+                        android:layout_weight="2"
+                        android:textColor="@android:color/black"
+                        android:textColorHighlight="@android:color/primary_text_dark"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/expiry_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10px"
+                        android:paddingTop="40px"
+                        android:background="@drawable/field_input_border"
+                        android:gravity="right"
+                        android:textSize="20dp" />
+
+                </TableRow>
 
             </TableLayout>
 
-
-            <LinearLayout
+            <TableLayout
                 android:layout_width="fill_parent"
+                android:layout_below="@id/table_fields"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="20px">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:paddingLeft="10px"
-                    android:paddingTop="40px"
-                    android:text="Expiry Date"
-                    android:textColor="@android:color/black"
-                    android:textColorHighlight="@android:color/primary_text_dark"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/expiry_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="40px"
-                    android:layout_marginRight="40px"
-                    android:layout_marginTop="20px"
-                    android:layout_weight="4"
-                    android:background="@drawable/field_input_border"
-                    android:gravity="center"
+                android:layout_gravity="start">
+                <TableRow
+                    android:paddingTop="10dip"
+                    android:gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:paddingBottom="10px"
-                    android:paddingTop="10px"
-                    android:textSize="20dp" />
+                    android:paddingLeft="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="top"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/btn_image"
+                    <Button
+                        android:id="@+id/button_add_to_food_stock"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_calendar"
-                        android:text="Pick Date" />
-                </LinearLayout>
+                        android:text="ADD FOOD"
+                        android:textSize="25dp" />
 
-            </LinearLayout>
+                    <Button
+                        android:id="@+id/button_reset"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="RESET"
+                        android:textSize="25dp" />
+                </TableRow>
+            </TableLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dip"
-                android:layout_weight="1"
-                android:gravity="center|bottom"
-                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/button_add_to_food_stock"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
 
-                    android:text="ADD FOOD"
-                    android:textSize="25dp" />
-                ... />
 
-            </LinearLayout>
-        </LinearLayout>
+
+
+
+        </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

@@ -41,6 +41,10 @@
         \n\nPress the back key on your phone to drop your scan.
         \n\nIf there are more foods to scan, click "Take More".
         \n\nOnce all fields are entered and are ready to be added, click "Add All".</string>
+    <string name="manualentry_explanation">Select the manual add mode from "Food Stock", "Library", or "Both".
+        \n\nAdd to the food stock to display your food item in the "Food Stock" UI.
+        \n\nAdd to the library to make Fridge Manager recognize the food name during Scan.
+        \n\nEnter all shown fields before adding.</string>
     <string name="add_nofood">"No food added: Returning to Main Menu"</string>
     <string name="alert_initial">"Invalid amount for item: "</string>
     <string name="alert_reenter">"\nRe-enter to try again."</string>
@@ -59,7 +63,7 @@
         <item>Freezer</item>
     </string-array>
     <string-array name="addtolocations">
-        <item>Add To</item>
+        <item>Select Manual Add Mode</item>
         <item>Food Stock</item>
         <item>Library</item>
         <item>Both</item>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cpen321.fridgemanager.Database.DatabaseInteraction;
 import com.cpen321.fridgemanager.Notification.Alarm;
@@ -58,10 +60,31 @@ public class AddFoodToFoodStock extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                Bundle savedInstanceState ){
-        this.view = inflater.inflate(R.layout.activity_add_food, container, false);
 
+        this.view = inflater.inflate(R.layout.activity_add_food, container, false);
+        viewPager = (ViewPager) getActivity().findViewById(R.id.viewpager);
+        myAlarm = new Alarm();
         di = new DatabaseInteraction(view.getContext());
 
+        initializeAddButton();
+        initializeAutoComplete();
+        initializeExpiryButton();
+        initializeResetButton();
+
+        SharedPreferences settings = getActivity().getSharedPreferences("prefs",0);
+        boolean firstCamera = settings.getBoolean("firstScan",false);
+        if (firstCamera == false) {
+            SharedPreferences.Editor editor= settings.edit();
+            editor.putBoolean("firstScan",true);
+            editor.commit();
+
+            popDialog("Manual Entry", getString(R.string.manualentry_explanation));
+        }
+
+        return view;
+    }
+
+    private void initializeAddButton() {
         Button btnAddFoodToFoodStock = (Button) view.findViewById(R.id.button_add_to_food_stock);
         btnAddFoodToFoodStock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,9 +105,30 @@ public class AddFoodToFoodStock extends Fragment {
 
             }
         });
+    }
 
+    private void initializeExpiryButton() {
+        TextView expiryField =  (TextView) view.findViewById(R.id.expiry_date);
+        expiryField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+    }
+
+    private void initializeResetButton() {
+        Button btnReset = (Button) view.findViewById(R.id.button_reset);
+        btnReset.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                reset();
+            }
+        });
+    }
+
+    private void initializeAutoComplete() {
         text = (AutoCompleteTextView) view.findViewById(R.id.addFoodName);
-        DatabaseInteraction di = new DatabaseInteraction(view.getContext());
         List<String>  list = new ArrayList<>();
         JSONArray jsonArray = di.getArray("Library");
         if (jsonArray != null) {
@@ -99,20 +143,6 @@ public class AddFoodToFoodStock extends Fragment {
         ArrayAdapter adapter = new ArrayAdapter(getContext(), R.layout.list_item, list);
         text.setAdapter(adapter);
         text.setThreshold(2);
-
-        ImageButton button = (ImageButton) view.findViewById(R.id.btn_image);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog();
-            }
-        });
-
-        viewPager = (ViewPager) getActivity().findViewById(R.id.viewpager);
-
-        myAlarm = new Alarm();
-
-        return view;
     }
 
     private void hideFields(View view) {
@@ -127,11 +157,13 @@ public class AddFoodToFoodStock extends Fragment {
             foodAbbr.setEnabled(false);
             foodAbbr.setText("XXXX");
             amountEditText.setEnabled(true);
-            amountEditText.setText("");
+            if (amountEditText.getText().toString().equals("XXXX"))
+                amountEditText.setText("");
         }
         else if(addToValue.equals("Library")) {
             foodAbbr.setEnabled(true);
-            foodAbbr.setText("");
+            if (foodAbbr.getText().toString().equals("XXXX"))
+                foodAbbr.setText("");
             amountEditText.setEnabled(false);
             amountEditText.setText("XXXX");
         }
@@ -143,6 +175,30 @@ public class AddFoodToFoodStock extends Fragment {
             if (amountEditText.getText().toString().equals("XXXX"))
                 amountEditText.setText("");
         }
+    }
+
+    private void reset() {
+        Spinner addTo = (Spinner) view.findViewById(R.id.spinner1_for_library);
+
+        final EditText foodItem =  (EditText) view.findViewById(R.id.addFoodName);
+        final EditText foodAbbr = (EditText) view.findViewById(R.id.addFoodAbbr);
+        final EditText amountEditText = (EditText) view.findViewById(R.id.amounttext);
+        Spinner amountSpinner = (Spinner) view.findViewById(R.id.amountspinner);
+        Spinner locationSpinner = (Spinner) view.findViewById(R.id.spinner1_for_location);
+        TextView expiryField =  (TextView) view.findViewById(R.id.expiry_date);
+
+        addTo.setSelection(0);
+        foodItem.setText("");
+        foodAbbr.setEnabled(true);
+        foodAbbr.setText("");
+        amountEditText.setEnabled(true);
+        amountEditText.setText("");
+        amountSpinner.setSelection(0);
+        locationSpinner.setSelection(0);
+        expiryField.setText("");
+
+        Toast toast = Toast.makeText(getContext(), "Reset Success", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override
@@ -192,7 +248,6 @@ public class AddFoodToFoodStock extends Fragment {
         Calendar expiry = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
 
-        // TODO: CHECK VALID EXPIRY
         int difference = 0;
         if (expiryDate.length() != 0) {
             strings = expiryDate.split("-");
@@ -243,6 +298,9 @@ public class AddFoodToFoodStock extends Fragment {
                 di.writeToStorage(name, amount, int_unit, location, difference);
                 viewPager.setCurrentItem(0);
 
+                Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to food stock.", Toast.LENGTH_SHORT);
+                toast.show();
+
                 // Set alarms
                 myAlarm.prepAlarm(myContext, view, myAlarm, di, difference, amount);
             } else if (addToValue.equals("Library")) {
@@ -259,6 +317,9 @@ public class AddFoodToFoodStock extends Fragment {
                         // If all fields are entered
                         di.addToLibrary(name, abbr, difference, int_unit, location);
                         viewPager.setCurrentItem(0);
+
+                        Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to library.", Toast.LENGTH_SHORT);
+                        toast.show();
                     }
                 } else {
                     // Pop warning
@@ -282,6 +343,9 @@ public class AddFoodToFoodStock extends Fragment {
                         viewPager.setCurrentItem(0);
                         // Set alarms
                         myAlarm.prepAlarm(myContext, view, myAlarm, di, difference, amount);
+
+                        Toast toast = Toast.makeText(getContext(), "Success: " + name + " added to food stock and library.", Toast.LENGTH_SHORT);
+                        toast.show();
                     }
                 } else {
                     // Pop warning
