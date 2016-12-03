@@ -296,13 +296,13 @@ public class AddFoodToFoodStock extends Fragment {
         } catch (NumberFormatException e) {}
 
         int int_unit;
-        if (amountUnitsValue.equals("units"))
+        if (amountUnitsValue.equals("Units"))
             int_unit = DatabaseInteraction.UNIT;
-        else if (amountUnitsValue.equals("grams"))
+        else if (amountUnitsValue.equals("Grams"))
             int_unit = DatabaseInteraction.GRAM;
-        else if (amountUnitsValue.equals("kilograms"))
+        else if (amountUnitsValue.equals("Kilograms"))
             int_unit = DatabaseInteraction.KG;
-        else if (amountUnitsValue.equals("liters"))
+        else if (amountUnitsValue.equals("Liters"))
             int_unit = DatabaseInteraction.L;
         else
             int_unit = DatabaseInteraction.CUP;
